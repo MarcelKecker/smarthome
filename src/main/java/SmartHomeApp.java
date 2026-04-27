@@ -37,6 +37,7 @@ public class SmartHomeApp extends Application {
         HBox topBar = new HBox(10);
         topBar.setPadding(new Insets(10));
         topBar.setAlignment(Pos.CENTER_LEFT);
+        topBar.getStyleClass().add("topBar");
 
         Label header = new Label("Dashboard");
         header.getStyleClass().add("header");
@@ -44,9 +45,24 @@ public class SmartHomeApp extends Application {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
+        Button openBtn = new Button("📂 Öffnen");
+        Button saveBtn = new Button("💾 Speichern");
+
+        openBtn.setOnAction(e -> {
+            System.out.println("Öffnen geklickt");
+        });
+
+        saveBtn.setOnAction(e -> {
+            System.out.println("Speichern geklickt");
+        });
+
         Button runScenario = new Button("▶ Szenario ausführen");
 
-        topBar.getChildren().addAll(header, spacer, runScenario);
+        runScenario.setOnAction(e -> {
+            System.out.println("Szenario geklickt");
+        });
+
+        topBar.getChildren().addAll(header, openBtn, saveBtn, spacer, runScenario);
 
         // ===== Center Dashboard =====
         GridPane dashboard = new GridPane();
@@ -57,8 +73,6 @@ public class SmartHomeApp extends Application {
         dashboard.add(createCard("Licht", "Wohnzimmer", "30%"), 0, 0);
         dashboard.add(createCard("Heizung", "Bad", "22°C"), 1, 0);
         dashboard.add(createCard("Rollladen", "Schlafzimmer", "0%"), 2, 0);
-
-
 
         // ===== Log Panel =====
         VBox logPanel = new VBox(10);
