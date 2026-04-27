@@ -1,12 +1,15 @@
 
 import atlantafx.base.theme.PrimerLight;
 import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import model.device.Device;
+import model.room.Raum;
 
 public class SmartHomeApp extends Application {
 
@@ -31,6 +34,9 @@ public class SmartHomeApp extends Application {
         });
 
         Button devicesBtn = new Button("🔌 Geräte");
+        devicesBtn.setOnAction(e -> {
+            openDevices();
+        });
         Button scenariosBtn = new Button("🎬 Szenarien");
 
         roomsBtn.setMaxWidth(Double.MAX_VALUE);
@@ -68,7 +74,7 @@ public class SmartHomeApp extends Application {
         saveBtn.setOnAction(e -> {
             System.out.println("Speichern geklickt");
         });
-
+        //Dropdown für Szenarien?
         Button runScenario = new Button("▶ Szenario ausführen");
 
         runScenario.setOnAction(e -> {
@@ -117,6 +123,57 @@ public class SmartHomeApp extends Application {
         stage.show();
     }
 
+    private void openDevices() {
+        VBox roomsView = new VBox(10);
+        roomsView.setPadding(new Insets(20));
+
+        Label title = new Label("Geräte");
+        title.getStyleClass().add("header");
+
+        TableView<Device> table = new TableView<>();
+        TableColumn<Device, String> nameCol = new TableColumn<>("Name");
+        nameCol.setCellValueFactory(data ->
+                new SimpleStringProperty(data.getValue().getName())
+        );
+
+        TableColumn<Device, String> typeCol = new TableColumn<>("Typ");
+        typeCol.setCellValueFactory(data ->
+                new SimpleStringProperty(data.getValue().getType())
+        );
+
+        TableColumn<Device, String> roomCol = new TableColumn<>("Raum");
+        roomCol.setCellValueFactory(data ->
+                new SimpleStringProperty(data.getValue().getRoom().getName())
+        );
+
+        TableColumn<Device, String> stateCol = new TableColumn<>("Zustand");
+        stateCol.setCellValueFactory(data ->
+                new SimpleStringProperty(data.getValue().getState())
+        );
+
+        table.getColumns().addAll(nameCol, typeCol, roomCol, stateCol);
+
+        Button addDevice = new Button("Neu");
+        addDevice.setOnAction(e -> {});
+
+        Button viewDevice = new Button("Anzeigen");
+        viewDevice.setOnAction(e -> {});
+
+        Button changeDevice = new Button("Bearbeiten");
+        changeDevice.setOnAction(e -> {});
+
+        Button deleteDevice = new Button("Löschen");
+        deleteDevice.setOnAction(e -> {});
+
+        HBox buttonBar = new HBox(10);
+        buttonBar.setPadding(new Insets(10));
+        buttonBar.getChildren().addAll(addDevice, viewDevice, changeDevice, deleteDevice);
+
+        roomsView.getChildren().addAll(title, table, buttonBar);
+
+        root.setCenter(roomsView);
+    }
+
     private void openRooms() {
         VBox roomsView = new VBox(10);
         roomsView.setPadding(new Insets(20));
@@ -125,9 +182,9 @@ public class SmartHomeApp extends Application {
         title.getStyleClass().add("header");
 
         ListView<String> roomList = new ListView<>();
-        // roomList.getItems().addAll("Wohnzimmer", "Küche", "Bad"); Beispiele
+        roomList.getItems().addAll("Wohnzimmer", "Küche", "Bad"); //Beispiele
 
-        Button addRoom = new Button("Neuer Raum");
+        Button addRoom = new Button("Neu");
         addRoom.setOnAction(e -> {});
 
         Button viewRoom = new Button("Anzeigen");

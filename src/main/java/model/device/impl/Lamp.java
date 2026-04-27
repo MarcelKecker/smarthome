@@ -2,6 +2,7 @@ package model.device.impl;
 
 import model.device.Device;
 import model.device.DeviceAction;
+import model.room.Raum;
 
 public class Lamp implements Device {
 
@@ -29,6 +30,11 @@ public class Lamp implements Device {
     @Override
     public String getState() {
         return isOn ? "An (" + brightness + "%)" : "Aus";
+    }
+    //TODO
+    @Override
+    public Raum getRoom() {
+        return null;
     }
 
     @Override public String getId() { return id; }
