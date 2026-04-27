@@ -10,9 +10,11 @@ import javafx.stage.Stage;
 
 public class SmartHomeApp extends Application {
 
+    private BorderPane root;
+
     @Override
     public void start(Stage stage) {
-        BorderPane root = new BorderPane();
+        root = new BorderPane();
 
         // ===== Sidebar =====
         VBox sidebar = new VBox(15);
@@ -24,6 +26,10 @@ public class SmartHomeApp extends Application {
         title.getStyleClass().add("title");
 
         Button roomsBtn = new Button("🏠 Räume");
+        roomsBtn.setOnAction(e -> {
+            openRooms();
+        });
+
         Button devicesBtn = new Button("🔌 Geräte");
         Button scenariosBtn = new Button("🎬 Szenarien");
 
@@ -45,12 +51,19 @@ public class SmartHomeApp extends Application {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
+        Button neuBtn = new Button("\uD83D\uDDD2 Neu");
+
+        neuBtn.setOnAction(e -> {
+            System.out.println("Neu geklickt");
+        });
+
         Button openBtn = new Button("📂 Öffnen");
-        Button saveBtn = new Button("💾 Speichern");
 
         openBtn.setOnAction(e -> {
             System.out.println("Öffnen geklickt");
         });
+
+        Button saveBtn = new Button("💾 Speichern");
 
         saveBtn.setOnAction(e -> {
             System.out.println("Speichern geklickt");
@@ -62,7 +75,7 @@ public class SmartHomeApp extends Application {
             System.out.println("Szenario geklickt");
         });
 
-        topBar.getChildren().addAll(header, openBtn, saveBtn, spacer, runScenario);
+        topBar.getChildren().addAll(header, neuBtn, openBtn, saveBtn, spacer, runScenario);
 
         // ===== Center Dashboard =====
         GridPane dashboard = new GridPane();
@@ -70,6 +83,7 @@ public class SmartHomeApp extends Application {
         dashboard.setHgap(20);
         dashboard.setVgap(20);
 
+        //Beipsiele:
         dashboard.add(createCard("Licht", "Wohnzimmer", "30%"), 0, 0);
         dashboard.add(createCard("Heizung", "Bad", "22°C"), 1, 0);
         dashboard.add(createCard("Rollladen", "Schlafzimmer", "0%"), 2, 0);
@@ -101,6 +115,34 @@ public class SmartHomeApp extends Application {
         stage.setTitle("Smart Home Pro");
         stage.setScene(scene);
         stage.show();
+    }
+
+    private void openRooms() {
+        VBox roomsView = new VBox(10);
+        roomsView.setPadding(new Insets(20));
+
+        Label title = new Label("Räume");
+        title.getStyleClass().add("header");
+
+        ListView<String> roomList = new ListView<>();
+        // roomList.getItems().addAll("Wohnzimmer", "Küche", "Bad"); Beispiele
+
+        Button addRoom = new Button("Neuer Raum");
+        addRoom.setOnAction(e -> {});
+
+        Button viewRoom = new Button("Anzeigen");
+        viewRoom.setOnAction(e -> {});
+
+        Button deleteRoom = new Button("Löschen");
+        deleteRoom.setOnAction(e -> {});
+
+        HBox buttonBar = new HBox(10);
+        buttonBar.setPadding(new Insets(10));
+        buttonBar.getChildren().addAll(addRoom, viewRoom, deleteRoom);
+
+        roomsView.getChildren().addAll(title, roomList, buttonBar);
+
+        root.setCenter(roomsView);
     }
 
     private VBox createCard(String type, String room, String value) {
