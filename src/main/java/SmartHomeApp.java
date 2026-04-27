@@ -1,104 +1,225 @@
+
+import atlantafx.base.theme.PrimerLight;
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import model.device.Device;
+import model.room.Raum;
 
 public class SmartHomeApp extends Application {
 
+    private BorderPane root;
+
     @Override
     public void start(Stage stage) {
-        BorderPane root = new BorderPane();
+        root = new BorderPane();
 
-        // Top Toolbar
-        ToolBar toolBar = new ToolBar(
-                new Button("Neu"),
-                new Button("Speichern"),
-                new Button("Laden"),
-                new Separator(),
-                new Button("Szenario ausführen")
-        );
-        root.setTop(toolBar);
+        // ===== Sidebar =====
+        VBox sidebar = new VBox(15);
+        sidebar.setPadding(new Insets(20));
+        sidebar.setPrefWidth(220);
+        sidebar.getStyleClass().add("sidebar");
 
-        // Left Navigation
-        TreeItem<String> rootItem = new TreeItem<>("Smart Home");
-        TreeItem<String> rooms = new TreeItem<>("Räume");
-        TreeItem<String> devices = new TreeItem<>("Geräte");
-        TreeItem<String> scenarios = new TreeItem<>("Szenarien");
+        Label title = new Label("Smart Home");
+        title.getStyleClass().add("title");
 
-        rootItem.getChildren().addAll(rooms, devices, scenarios);
-        TreeView<String> navigation = new TreeView<>(rootItem);
-        navigation.setPrefWidth(200);
-        root.setLeft(navigation);
+        Button roomsBtn = new Button("🏠 Räume");
+        roomsBtn.setOnAction(e -> {
+            openRooms();
+        });
 
-        // Center Content
-        TabPane mainTabs = new TabPane();
+        Button devicesBtn = new Button("🔌 Geräte");
+        devicesBtn.setOnAction(e -> {
+            openDevices();
+        });
+        Button scenariosBtn = new Button("🎬 Szenarien");
 
-        // Device Table
-        TableView<Device> deviceTable = new TableView<>();
+        roomsBtn.setMaxWidth(Double.MAX_VALUE);
+        devicesBtn.setMaxWidth(Double.MAX_VALUE);
+        scenariosBtn.setMaxWidth(Double.MAX_VALUE);
+
+        sidebar.getChildren().addAll(title, roomsBtn, devicesBtn, scenariosBtn);
+
+        // ===== Top Bar =====
+        HBox topBar = new HBox(10);
+        topBar.setPadding(new Insets(10));
+        topBar.setAlignment(Pos.CENTER_LEFT);
+        topBar.getStyleClass().add("topBar");
+
+        Label header = new Label("Dashboard");
+        header.getStyleClass().add("header");
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        Button neuBtn = new Button("\uD83D\uDDD2 Neu");
+
+        neuBtn.setOnAction(e -> {
+            System.out.println("Neu geklickt");
+        });
+
+        Button openBtn = new Button("📂 Öffnen");
+
+        openBtn.setOnAction(e -> {
+            System.out.println("Öffnen geklickt");
+        });
+
+        Button saveBtn = new Button("💾 Speichern");
+
+        saveBtn.setOnAction(e -> {
+            System.out.println("Speichern geklickt");
+        });
+        //Dropdown für Szenarien?
+        Button runScenario = new Button("▶ Szenario ausführen");
+
+        runScenario.setOnAction(e -> {
+            System.out.println("Szenario geklickt");
+        });
+
+        topBar.getChildren().addAll(header, neuBtn, openBtn, saveBtn, spacer, runScenario);
+
+        // ===== Center Dashboard =====
+        GridPane dashboard = new GridPane();
+        dashboard.setPadding(new Insets(20));
+        dashboard.setHgap(20);
+        dashboard.setVgap(20);
+
+        //Beipsiele:
+        dashboard.add(createCard("Licht", "Wohnzimmer", "30%"), 0, 0);
+        dashboard.add(createCard("Heizung", "Bad", "22°C"), 1, 0);
+        dashboard.add(createCard("Rollladen", "Schlafzimmer", "0%"), 2, 0);
+
+        // ===== Log Panel =====
+        VBox logPanel = new VBox(10);
+        logPanel.setPadding(new Insets(15));
+        logPanel.setPrefWidth(250);
+
+        Label logTitle = new Label("Aktivität");
+        TextArea logArea = new TextArea();
+        logArea.setEditable(false);
+
+        logPanel.getChildren().addAll(logTitle, logArea);
+
+        root.setLeft(sidebar);
+        root.setTop(topBar);
+        root.setCenter(dashboard);
+        root.setRight(logPanel);
+
+        Scene scene = new Scene(root, 1200, 700);
+
+        // Atlantafx Theme
+        scene.getStylesheets().add(new PrimerLight().getUserAgentStylesheet());
+
+        // Custom styling
+        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+
+        stage.setTitle("Smart Home Pro");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    private void openDevices() {
+        VBox roomsView = new VBox(10);
+        roomsView.setPadding(new Insets(20));
+
+        Label title = new Label("Geräte");
+        title.getStyleClass().add("header");
+
+        TableView<Device> table = new TableView<>();
         TableColumn<Device, String> nameCol = new TableColumn<>("Name");
         nameCol.setCellValueFactory(data ->
                 new SimpleStringProperty(data.getValue().getName())
         );
 
-        deviceTable.getColumns().add(nameCol);
-        
-        deviceTable.getColumns().add(new TableColumn<>("Name"));
-        deviceTable.getColumns().add(new TableColumn<>("Typ"));
-        deviceTable.getColumns().add(new TableColumn<>("Raum"));
-        deviceTable.getColumns().add(new TableColumn<>("Zustand"));
+        TableColumn<Device, String> typeCol = new TableColumn<>("Typ");
+        typeCol.setCellValueFactory(data ->
+                new SimpleStringProperty(data.getValue().getType())
+        );
 
-        Tab deviceTab = new Tab("Geräte", deviceTable);
+        TableColumn<Device, String> roomCol = new TableColumn<>("Raum");
+        roomCol.setCellValueFactory(data ->
+                new SimpleStringProperty(data.getValue().getRoom().getName())
+        );
 
-        // Scenario Table
-        TableView<String> scenarioTable = new TableView<>();
-        scenarioTable.getColumns().add(new TableColumn<>("Name"));
-        scenarioTable.getColumns().add(new TableColumn<>("Beschreibung"));
-        scenarioTable.getColumns().add(new TableColumn<>("Aktionen"));
+        TableColumn<Device, String> stateCol = new TableColumn<>("Zustand");
+        stateCol.setCellValueFactory(data ->
+                new SimpleStringProperty(data.getValue().getState())
+        );
 
-        Tab scenarioTab = new Tab("Szenarien", scenarioTable);
+        table.getColumns().addAll(nameCol, typeCol, roomCol, stateCol);
 
-        mainTabs.getTabs().addAll(deviceTab, scenarioTab);
-        root.setCenter(mainTabs);
+        Button addDevice = new Button("Neu");
+        addDevice.setOnAction(e -> {});
 
-        // Right Log Panel
-        TextArea logArea = new TextArea();
-        logArea.setEditable(false);
-        logArea.setPrefWidth(250);
-        logArea.setPromptText("Protokoll...");
-        root.setRight(logArea);
+        Button viewDevice = new Button("Anzeigen");
+        viewDevice.setOnAction(e -> {});
 
-        // Bottom Status Bar
-        Label statusLabel = new Label("Bereit");
-        HBox statusBar = new HBox(statusLabel);
-        statusBar.setPadding(new Insets(5));
-        root.setBottom(statusBar);
+        Button changeDevice = new Button("Bearbeiten");
+        changeDevice.setOnAction(e -> {});
 
-        Scene scene = new Scene(root, 1000, 600);
-        stage.setTitle("Smart Home Szenario Editor");
-        stage.setScene(scene);
-        stage.show();
+        Button deleteDevice = new Button("Löschen");
+        deleteDevice.setOnAction(e -> {});
 
-        navigation.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal.getValue().equals("Geräte")) {
-                mainTabs.getSelectionModel().select(deviceTab);
-            }
-        });
-        /*
-        executeButton.setOnAction(e -> {
-            scenarioController.executeScenario(selectedScenario);
-            logArea.appendText("Szenario ausgeführt\\n");
-        });
+        HBox buttonBar = new HBox(10);
+        buttonBar.setPadding(new Insets(10));
+        buttonBar.getChildren().addAll(addDevice, viewDevice, changeDevice, deleteDevice);
 
-         */
-        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+        roomsView.getChildren().addAll(title, table, buttonBar);
+
+        root.setCenter(roomsView);
+    }
+
+    private void openRooms() {
+        VBox roomsView = new VBox(10);
+        roomsView.setPadding(new Insets(20));
+
+        Label title = new Label("Räume");
+        title.getStyleClass().add("header");
+
+        ListView<String> roomList = new ListView<>();
+        roomList.getItems().addAll("Wohnzimmer", "Küche", "Bad"); //Beispiele
+
+        Button addRoom = new Button("Neu");
+        addRoom.setOnAction(e -> {});
+
+        Button viewRoom = new Button("Anzeigen");
+        viewRoom.setOnAction(e -> {});
+
+        Button deleteRoom = new Button("Löschen");
+        deleteRoom.setOnAction(e -> {});
+
+        HBox buttonBar = new HBox(10);
+        buttonBar.setPadding(new Insets(10));
+        buttonBar.getChildren().addAll(addRoom, viewRoom, deleteRoom);
+
+        roomsView.getChildren().addAll(title, roomList, buttonBar);
+
+        root.setCenter(roomsView);
+    }
+
+    private VBox createCard(String type, String room, String value) {
+        VBox card = new VBox(10);
+        card.setPadding(new Insets(15));
+        card.setPrefSize(200, 120);
+        card.getStyleClass().add("card");
+
+        Label typeLabel = new Label(type);
+        typeLabel.getStyleClass().add("card-title");
+
+        Label roomLabel = new Label(room);
+        Label valueLabel = new Label(value);
+        valueLabel.getStyleClass().add("card-value");
+
+        card.getChildren().addAll(typeLabel, roomLabel, valueLabel);
+        return card;
     }
 
     public static void main(String[] args) {
         launch();
     }
 }
-
