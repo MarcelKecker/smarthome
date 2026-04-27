@@ -1,11 +1,12 @@
+
+import atlantafx.base.theme.PrimerLight;
 import javafx.application.Application;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import model.device.Device;
 
 public class SmartHomeApp extends Application {
 
@@ -13,92 +14,99 @@ public class SmartHomeApp extends Application {
     public void start(Stage stage) {
         BorderPane root = new BorderPane();
 
-        // Top Toolbar
-        ToolBar toolBar = new ToolBar(
-                new Button("Neu"),
-                new Button("Speichern"),
-                new Button("Laden"),
-                new Separator(),
-                new Button("Szenario ausführen")
-        );
-        root.setTop(toolBar);
+        // ===== Sidebar =====
+        VBox sidebar = new VBox(15);
+        sidebar.setPadding(new Insets(20));
+        sidebar.setPrefWidth(220);
+        sidebar.getStyleClass().add("sidebar");
 
-        // Left Navigation
-        TreeItem<String> rootItem = new TreeItem<>("Smart Home");
-        TreeItem<String> rooms = new TreeItem<>("Räume");
-        TreeItem<String> devices = new TreeItem<>("Geräte");
-        TreeItem<String> scenarios = new TreeItem<>("Szenarien");
+        Label title = new Label("Smart Home");
+        title.getStyleClass().add("title");
 
-        rootItem.getChildren().addAll(rooms, devices, scenarios);
-        TreeView<String> navigation = new TreeView<>(rootItem);
-        navigation.setPrefWidth(200);
-        root.setLeft(navigation);
+        Button roomsBtn = new Button("🏠 Räume");
+        Button devicesBtn = new Button("🔌 Geräte");
+        Button scenariosBtn = new Button("🎬 Szenarien");
 
-        // Center Content
-        TabPane mainTabs = new TabPane();
+        roomsBtn.setMaxWidth(Double.MAX_VALUE);
+        devicesBtn.setMaxWidth(Double.MAX_VALUE);
+        scenariosBtn.setMaxWidth(Double.MAX_VALUE);
 
-        // Device Table
-        TableView<Device> deviceTable = new TableView<>();
-        TableColumn<Device, String> nameCol = new TableColumn<>("Name");
-        nameCol.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getName())
-        );
+        sidebar.getChildren().addAll(title, roomsBtn, devicesBtn, scenariosBtn);
 
-        deviceTable.getColumns().add(nameCol);
-        
-        deviceTable.getColumns().add(new TableColumn<>("Name"));
-        deviceTable.getColumns().add(new TableColumn<>("Typ"));
-        deviceTable.getColumns().add(new TableColumn<>("Raum"));
-        deviceTable.getColumns().add(new TableColumn<>("Zustand"));
+        // ===== Top Bar =====
+        HBox topBar = new HBox(10);
+        topBar.setPadding(new Insets(10));
+        topBar.setAlignment(Pos.CENTER_LEFT);
 
-        Tab deviceTab = new Tab("Geräte", deviceTable);
+        Label header = new Label("Dashboard");
+        header.getStyleClass().add("header");
 
-        // Scenario Table
-        TableView<String> scenarioTable = new TableView<>();
-        scenarioTable.getColumns().add(new TableColumn<>("Name"));
-        scenarioTable.getColumns().add(new TableColumn<>("Beschreibung"));
-        scenarioTable.getColumns().add(new TableColumn<>("Aktionen"));
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        Tab scenarioTab = new Tab("Szenarien", scenarioTable);
+        Button runScenario = new Button("▶ Szenario ausführen");
 
-        mainTabs.getTabs().addAll(deviceTab, scenarioTab);
-        root.setCenter(mainTabs);
+        topBar.getChildren().addAll(header, spacer, runScenario);
 
-        // Right Log Panel
+        // ===== Center Dashboard =====
+        GridPane dashboard = new GridPane();
+        dashboard.setPadding(new Insets(20));
+        dashboard.setHgap(20);
+        dashboard.setVgap(20);
+
+        dashboard.add(createCard("Licht", "Wohnzimmer", "30%"), 0, 0);
+        dashboard.add(createCard("Heizung", "Bad", "22°C"), 1, 0);
+        dashboard.add(createCard("Rollladen", "Schlafzimmer", "0%"), 2, 0);
+
+
+
+        // ===== Log Panel =====
+        VBox logPanel = new VBox(10);
+        logPanel.setPadding(new Insets(15));
+        logPanel.setPrefWidth(250);
+
+        Label logTitle = new Label("Aktivität");
         TextArea logArea = new TextArea();
         logArea.setEditable(false);
-        logArea.setPrefWidth(250);
-        logArea.setPromptText("Protokoll...");
-        root.setRight(logArea);
 
-        // Bottom Status Bar
-        Label statusLabel = new Label("Bereit");
-        HBox statusBar = new HBox(statusLabel);
-        statusBar.setPadding(new Insets(5));
-        root.setBottom(statusBar);
+        logPanel.getChildren().addAll(logTitle, logArea);
 
-        Scene scene = new Scene(root, 1000, 600);
-        stage.setTitle("Smart Home Szenario Editor");
+        root.setLeft(sidebar);
+        root.setTop(topBar);
+        root.setCenter(dashboard);
+        root.setRight(logPanel);
+
+        Scene scene = new Scene(root, 1200, 700);
+
+        // Atlantafx Theme
+        scene.getStylesheets().add(new PrimerLight().getUserAgentStylesheet());
+
+        // Custom styling
+        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+
+        stage.setTitle("Smart Home Pro");
         stage.setScene(scene);
         stage.show();
+    }
 
-        navigation.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal.getValue().equals("Geräte")) {
-                mainTabs.getSelectionModel().select(deviceTab);
-            }
-        });
-        /*
-        executeButton.setOnAction(e -> {
-            scenarioController.executeScenario(selectedScenario);
-            logArea.appendText("Szenario ausgeführt\\n");
-        });
+    private VBox createCard(String type, String room, String value) {
+        VBox card = new VBox(10);
+        card.setPadding(new Insets(15));
+        card.setPrefSize(200, 120);
+        card.getStyleClass().add("card");
 
-         */
-        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+        Label typeLabel = new Label(type);
+        typeLabel.getStyleClass().add("card-title");
+
+        Label roomLabel = new Label(room);
+        Label valueLabel = new Label(value);
+        valueLabel.getStyleClass().add("card-value");
+
+        card.getChildren().addAll(typeLabel, roomLabel, valueLabel);
+        return card;
     }
 
     public static void main(String[] args) {
         launch();
     }
 }
-
