@@ -9,11 +9,15 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import model.device.Device;
+import model.room.Raum;
 import model.scenario.Scenario;
+import service.RoomService;
 
 public class SmartHomeApp extends Application {
 
     private BorderPane root;
+
+    private RoomService roomService = new RoomService();
 
     @Override
     public void start(Stage stage) {
@@ -121,7 +125,7 @@ public class SmartHomeApp extends Application {
         // Custom styling
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
 
-        stage.setTitle("Smart Home Pro");
+        stage.setTitle("Smart Home");
         stage.setScene(scene);
         stage.show();
     }
@@ -184,17 +188,62 @@ public class SmartHomeApp extends Application {
         Label title = new Label("Räume");
         title.getStyleClass().add("header");
 
-        ListView<String> roomList = new ListView<>();
-        roomList.getItems().addAll("Wohnzimmer", "Küche", "Bad"); //Beispiele
+        ListView<Raum> roomList = new ListView<>();
+        roomList.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(Raum room, boolean empty) {
+                super.updateItem(room, empty);
+
+                if (empty || room == null) {
+                    setText(null);
+                } else {
+                    setText(room.getName());
+                }
+            }
+        });
+        roomList.getItems().addAll(roomService.getAllRooms());
 
         Button addRoom = new Button("Neu");
-        addRoom.setOnAction(e -> {});
+        addRoom.setOnAction(e -> {
+            VBox newRoom = new VBox(10);
+            newRoom.setPadding(new Insets(20));
+
+            TextField roomName = new TextField();
+            roomName.setPromptText("Name");
+
+            Button addRoomBtn = new Button("Erstellen");
+            addRoomBtn.setOnAction(f -> {
+                if (roomName.getText().isEmpty()) {
+                    //log
+                }else{
+                    roomService.addRoom(new Raum(roomName.getText()));
+                    openRooms();
+                }
+            });
+            Button backtoView = new Button("Zurück");
+            backtoView.setOnAction(f -> {
+                openRooms();
+            });
+
+            HBox buttonBar = new HBox(10);
+            buttonBar.setPadding(new Insets(10));
+            Region spacer = new Region();
+            HBox.setHgrow(spacer, Priority.ALWAYS);
+            buttonBar.getChildren().addAll(backtoView, spacer, addRoomBtn);
+
+            newRoom.getChildren().addAll(title, roomName, buttonBar);
+            root.setCenter(newRoom);
+        });
 
         Button viewRoom = new Button("Anzeigen");
-        viewRoom.setOnAction(e -> {});
+        viewRoom.setOnAction(e -> {
+            openRoomEditor(false);
+        });
 
         Button changeRoom = new Button("Bearbeiten");
-        changeRoom.setOnAction(e -> {});
+        changeRoom.setOnAction(e -> {
+            openRoomEditor(true);
+        });
 
         Button deleteRoom = new Button("Löschen");
         deleteRoom.setOnAction(e -> {});
@@ -206,6 +255,10 @@ public class SmartHomeApp extends Application {
         roomsView.getChildren().addAll(title, roomList, buttonBar);
 
         root.setCenter(roomsView);
+    }
+
+    private void openRoomEditor(boolean edit) {
+
     }
 
     private void openScenarios(){
@@ -245,9 +298,15 @@ public class SmartHomeApp extends Application {
         Button deleteScenario = new Button("Löschen");
         deleteScenario.setOnAction(e -> {});
 
+        Button runScenario = new Button("Ausführen");
+        runScenario.setOnAction(e -> {});
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
         HBox buttonBar = new HBox(10);
         buttonBar.setPadding(new Insets(10));
-        buttonBar.getChildren().addAll(addScenario, viewScenario, changeScenario, deleteScenario);
+        buttonBar.getChildren().addAll(addScenario, viewScenario, changeScenario, deleteScenario, spacer, runScenario);
 
         scenariosView.getChildren().addAll(title, table, buttonBar);
         root.setCenter(scenariosView);

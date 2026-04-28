@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2ee234e0-05c6-4263-9101-2c08fd03ccf2" name="Changes" comment="raum übersicht gui">
+    <list default="true" id="2ee234e0-05c6-4263-9101-2c08fd03ccf2" name="Changes" comment="gui scenarios">
+      <change afterPath="$PROJECT_DIR$/src/main/java/service/RoomService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/SmartHomeApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SmartHomeApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/scenario/Scenario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/scenario/Scenario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/room/Raum.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/room/Raum.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,7 +117,7 @@
       <workItem from="1776073976919" duration="14000" />
       <workItem from="1776417752766" duration="3442000" />
       <workItem from="1777292222428" duration="9722000" />
-      <workItem from="1777363730084" duration="3134000" />
+      <workItem from="1777363730084" duration="7939000" />
     </task>
     <task id="LOCAL-00001" summary="erste anlage">
       <option name="closed" value="true" />
@@ -157,7 +159,15 @@
       <option name="project" value="LOCAL" />
       <updated>1777302753326</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="gui scenarios">
+      <option name="closed" value="true" />
+      <created>1777368101774</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1777368101774</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -178,6 +188,7 @@
     <MESSAGE value="erste anlage" />
     <MESSAGE value="ui update" />
     <MESSAGE value="raum übersicht gui" />
-    <option name="LAST_COMMIT_MESSAGE" value="raum übersicht gui" />
+    <MESSAGE value="gui scenarios" />
+    <option name="LAST_COMMIT_MESSAGE" value="gui scenarios" />
   </component>
 </project>
