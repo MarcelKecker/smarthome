@@ -9,7 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import model.device.Device;
-import model.room.Raum;
+import model.scenario.Scenario;
 
 public class SmartHomeApp extends Application {
 
@@ -38,6 +38,9 @@ public class SmartHomeApp extends Application {
             openDevices();
         });
         Button scenariosBtn = new Button("🎬 Szenarien");
+        scenariosBtn.setOnAction(e -> {
+            openScenarios();
+        });
 
         roomsBtn.setMaxWidth(Double.MAX_VALUE);
         devicesBtn.setMaxWidth(Double.MAX_VALUE);
@@ -124,8 +127,8 @@ public class SmartHomeApp extends Application {
     }
 
     private void openDevices() {
-        VBox roomsView = new VBox(10);
-        roomsView.setPadding(new Insets(20));
+        VBox devicesView = new VBox(10);
+        devicesView.setPadding(new Insets(20));
 
         Label title = new Label("Geräte");
         title.getStyleClass().add("header");
@@ -169,9 +172,9 @@ public class SmartHomeApp extends Application {
         buttonBar.setPadding(new Insets(10));
         buttonBar.getChildren().addAll(addDevice, viewDevice, changeDevice, deleteDevice);
 
-        roomsView.getChildren().addAll(title, table, buttonBar);
+        devicesView.getChildren().addAll(title, table, buttonBar);
 
-        root.setCenter(roomsView);
+        root.setCenter(devicesView);
     }
 
     private void openRooms() {
@@ -190,17 +193,66 @@ public class SmartHomeApp extends Application {
         Button viewRoom = new Button("Anzeigen");
         viewRoom.setOnAction(e -> {});
 
+        Button changeRoom = new Button("Bearbeiten");
+        changeRoom.setOnAction(e -> {});
+
         Button deleteRoom = new Button("Löschen");
         deleteRoom.setOnAction(e -> {});
 
         HBox buttonBar = new HBox(10);
         buttonBar.setPadding(new Insets(10));
-        buttonBar.getChildren().addAll(addRoom, viewRoom, deleteRoom);
+        buttonBar.getChildren().addAll(addRoom, viewRoom, changeRoom, deleteRoom);
 
         roomsView.getChildren().addAll(title, roomList, buttonBar);
 
         root.setCenter(roomsView);
     }
+
+    private void openScenarios(){
+        VBox scenariosView = new VBox(10);
+        scenariosView.setPadding(new Insets(20));
+
+        Label title = new Label("Szenarien");
+        title.getStyleClass().add("header");
+
+        TableView<Scenario> table = new TableView<>();
+        TableColumn<Scenario, String> nameCol = new TableColumn<>("Name");
+        nameCol.setCellValueFactory(data ->
+                new SimpleStringProperty(data.getValue().getName())
+        );
+
+        TableColumn<Scenario, String> descCol = new TableColumn<>("Kurzbeschreibung");
+        descCol.setCellValueFactory(data ->
+                new SimpleStringProperty(data.getValue().getDescription())
+        );
+
+        TableColumn<Scenario, String> actionsCol = new TableColumn<>("Anzahl enthaltener Aktionen");
+        actionsCol.setCellValueFactory(data ->
+                new SimpleStringProperty(String.valueOf(data.getValue().getCommands().size()))
+        );
+
+        table.getColumns().addAll(nameCol, descCol, actionsCol);
+
+        Button addScenario = new Button("Neu");
+        addScenario.setOnAction(e -> {});
+
+        Button viewScenario = new Button("Anzeigen");
+        viewScenario.setOnAction(e -> {});
+
+        Button changeScenario = new Button("Bearbeiten");
+        changeScenario.setOnAction(e -> {});
+
+        Button deleteScenario = new Button("Löschen");
+        deleteScenario.setOnAction(e -> {});
+
+        HBox buttonBar = new HBox(10);
+        buttonBar.setPadding(new Insets(10));
+        buttonBar.getChildren().addAll(addScenario, viewScenario, changeScenario, deleteScenario);
+
+        scenariosView.getChildren().addAll(title, table, buttonBar);
+        root.setCenter(scenariosView);
+    }
+
 
     private VBox createCard(String type, String room, String value) {
         VBox card = new VBox(10);
