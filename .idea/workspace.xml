@@ -4,12 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2ee234e0-05c6-4263-9101-2c08fd03ccf2" name="Changes" comment="gui scenarios">
-      <change afterPath="$PROJECT_DIR$/src/main/java/service/RoomService.java" afterDir="false" />
+    <list default="true" id="2ee234e0-05c6-4263-9101-2c08fd03ccf2" name="Changes" comment="gui raum erstellen">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/SmartHomeApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SmartHomeApp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/model/room/Raum.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/room/Raum.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/service/RoomService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/RoomService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/style.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +117,9 @@
       <workItem from="1776073976919" duration="14000" />
       <workItem from="1776417752766" duration="3442000" />
       <workItem from="1777292222428" duration="9722000" />
-      <workItem from="1777363730084" duration="7939000" />
+      <workItem from="1777363730084" duration="8348000" />
+      <workItem from="1777377015981" duration="6451000" />
+      <workItem from="1777896141258" duration="1983000" />
     </task>
     <task id="LOCAL-00001" summary="erste anlage">
       <option name="closed" value="true" />
@@ -167,7 +169,15 @@
       <option name="project" value="LOCAL" />
       <updated>1777368101774</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="gui raum erstellen">
+      <option name="closed" value="true" />
+      <created>1777373267419</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1777373267419</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -189,6 +199,7 @@
     <MESSAGE value="ui update" />
     <MESSAGE value="raum übersicht gui" />
     <MESSAGE value="gui scenarios" />
-    <option name="LAST_COMMIT_MESSAGE" value="gui scenarios" />
+    <MESSAGE value="gui raum erstellen" />
+    <option name="LAST_COMMIT_MESSAGE" value="gui raum erstellen" />
   </component>
 </project>

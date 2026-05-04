@@ -30,3 +30,14 @@
 .topBar {
     -fx-background-color: #abb8cc;
 }
+
+.readonly-field {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: #545659;
+}
+
+.editable-field {
+    -fx-background-color: -fx-control-inner-background;
+    -fx-border-color: #7b898f;
+}

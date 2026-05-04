@@ -16,4 +16,9 @@ public class RoomService {
         return rooms;
     }
 
+    public void deleteRoom(Raum room) {
+        rooms.remove(room);
+    }
+
+
 }

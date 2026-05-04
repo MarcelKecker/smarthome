@@ -1,6 +1,8 @@
 
 import atlantafx.base.theme.PrimerLight;
 import javafx.application.Application;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -237,16 +239,30 @@ public class SmartHomeApp extends Application {
 
         Button viewRoom = new Button("Anzeigen");
         viewRoom.setOnAction(e -> {
-            openRoomEditor(false);
+            Raum room = roomList.getSelectionModel().getSelectedItem();
+            if (room != null) {
+                openRoomEditor(false, room);
+            }
+           //todo log
         });
 
         Button changeRoom = new Button("Bearbeiten");
         changeRoom.setOnAction(e -> {
-            openRoomEditor(true);
+            Raum room = roomList.getSelectionModel().getSelectedItem();
+            if (room != null) {
+                openRoomEditor(true, room);
+            }
+            //log
         });
 
         Button deleteRoom = new Button("Löschen");
-        deleteRoom.setOnAction(e -> {});
+        deleteRoom.setOnAction(e -> {
+            Raum room = roomList.getSelectionModel().getSelectedItem();
+            if (room != null) {
+                roomService.deleteRoom(room);
+                openRooms();
+            }
+        });
 
         HBox buttonBar = new HBox(10);
         buttonBar.setPadding(new Insets(10));
@@ -257,8 +273,60 @@ public class SmartHomeApp extends Application {
         root.setCenter(roomsView);
     }
 
-    private void openRoomEditor(boolean edit) {
+    private void openRoomEditor(boolean edit, Raum room) {
+        VBox roomEditor = new VBox(10);
+        roomEditor.setPadding(new Insets(20));
 
+        Label title = new Label("Raum");
+        title.getStyleClass().add("header");
+
+        Label nameLabel = new Label("Raumname:");
+        TextField nameField = new TextField(room.getName());
+
+        // Zustand
+        final boolean[] isEditing = {edit};
+
+        nameField.setEditable(isEditing[0]);
+
+        HBox raumnamebar = new HBox(10);
+        raumnamebar.setPadding(new Insets(20));
+        raumnamebar.getChildren().addAll(nameLabel, nameField);
+
+        Label idLabel = new Label("Id: " + room.getId());
+        idLabel.setPadding(new Insets(20));
+
+        Button backtoView = new Button("Zurück");
+        backtoView.setOnAction(f -> openRooms());
+
+        Button editBtn = new Button();
+
+        editBtn.setText(isEditing[0] ? "Speichern" : "Bearbeiten");
+
+        editBtn.setOnAction(e -> {
+            if (isEditing[0]) {
+                room.setName(nameField.getText());
+
+                isEditing[0] = false;
+                nameField.setEditable(false);
+                editBtn.setText("Bearbeiten");
+
+            } else {
+                isEditing[0] = true;
+                nameField.setEditable(true);
+                editBtn.setText("Speichern");
+            }
+        });
+
+        HBox buttonBar = new HBox(10);
+        buttonBar.setPadding(new Insets(10));
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        buttonBar.getChildren().addAll(backtoView, spacer, editBtn);
+
+        roomEditor.getChildren().addAll(title, idLabel, raumnamebar, buttonBar);
+
+        root.setCenter(roomEditor);
     }
 
     private void openScenarios(){
