@@ -5,15 +5,16 @@ import model.device.DeviceAction;
 import model.room.Raum;
 
 public class Lamp implements Device {
-
     private String id;
     private String name;
+    private Raum room;
     private boolean isOn;
     private int brightness;
 
-    public Lamp(String id, String name) {
+    public Lamp(String id,String name, Raum room) {
         this.id = id;
         this.name = name;
+        this.room = room;
         this.isOn = false;
         this.brightness = 0;
     }
@@ -31,14 +32,40 @@ public class Lamp implements Device {
     public String getState() {
         return isOn ? "An (" + brightness + "%)" : "Aus";
     }
-    //TODO
+
     @Override
     public Raum getRoom() {
-        return null;
+        return room;
+    }
+
+    @Override
+    public void setRoom(Raum room){
+        this.room = room;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+    @Override
+    public void setState(String state) {
+        if ("Aus".equals(state)) {
+            isOn = false;
+        } else if ("An".equals(state)) {
+            isOn = true;
+        }
     }
 
     @Override public String getId() { return id; }
     @Override public String getName() { return name; }
-    @Override public String getType() { return "Lamp"; }
+    @Override public String getType() { return "Lampe"; }
+
+    public int getBrightness() {
+        return brightness;
+    }
+
+    public void setBrightness(int brightness) {
+        this.brightness = brightness;
+    }
 }
 
