@@ -10,6 +10,12 @@ public interface Device {
     void executeAction(DeviceAction action);
 
     String getState();
+    void setState(String state);
 
     Raum getRoom();
+
+    void setName(String name);
+
+    void setRoom(Raum room);
+
 }
