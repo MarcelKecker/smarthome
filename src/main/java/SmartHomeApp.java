@@ -860,19 +860,19 @@ public class SmartHomeApp extends Application {
 
         Button addCommandBtn = new Button("Aktion hinzufügen");
         addCommandBtn.setOnAction(e -> {
-            //scenario.addCommand();
+            //TODO: Command hinzufügen
             openScenarioEditor(edit, scenario);
         });
 
         Button changeCommandBtn = new Button("Aktion ändern");
         changeCommandBtn.setOnAction(e -> {
-
+            //TODO: Command ändern
             openScenarioEditor(edit, scenario);
         });
 
         Button deleteCommandBtn = new Button("Aktion löschen");
         deleteCommandBtn.setOnAction(e -> {
-
+            //TODO: Command loeschen
             openScenarioEditor(edit, scenario);
         });
 
@@ -907,6 +907,9 @@ public class SmartHomeApp extends Application {
         HBox buttonBar = new HBox(
                 10,
                 backBtn,
+                addCommandBtn,
+                changeCommandBtn,
+                deleteCommandBtn,
                 spacer,
                 editBtn
         );
