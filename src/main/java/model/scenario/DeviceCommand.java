@@ -17,4 +17,8 @@ public class DeviceCommand  implements Command {
     public void execute() {
         device.executeAction(action);
     }
+    @Override
+    public String toString() {
+        return device.getName() + " → " + action.getActionType();
+    }
 }

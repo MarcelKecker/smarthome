@@ -2,8 +2,6 @@
 import atlantafx.base.theme.PrimerLight;
 import factory.DeviceFactory;
 import javafx.application.Application;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -15,11 +13,16 @@ import javafx.stage.Stage;
 import model.device.Device;
 import model.device.impl.Heating;
 import model.device.impl.Lamp;
+import model.device.impl.Shutter;
 import model.room.Raum;
+import model.scenario.Command;
+import model.scenario.DeviceCommand;
 import model.scenario.Scenario;
 import service.DeviceService;
 import service.RoomService;
+import service.ScenarioService;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,6 +33,8 @@ public class SmartHomeApp extends Application {
     private RoomService roomService = new RoomService();
 
     private DeviceService deviceService = new DeviceService();
+
+    private ScenarioService scenarioService = new ScenarioService();
 
     @Override
     public void start(Stage stage) {
@@ -248,10 +253,16 @@ public class SmartHomeApp extends Application {
         Label stateLabel = new Label("Zustand:");
 
         ToggleButton stateToggle = new ToggleButton();
-        if (device.getState() == "Aus"){
+        if (Objects.equals(device.getState(), "Oben")){
+            stateToggle.setText("Oben");
+        } else if (device.getState().startsWith("Unten")){
+            stateToggle.setText("Unten");
+        } else if (Objects.equals(device.getState(), "Aus")){
             stateToggle.setText("Aus");
-        } else {
+        } else if (device.getState().startsWith("An")){
             stateToggle.setText("An");
+        } else {
+            throw new RuntimeException("State nicht bekannt: " +  device.getState());
         }
 
         stateToggle.setDisable(!isEditing[0]);
@@ -385,6 +396,61 @@ public class SmartHomeApp extends Application {
 
                             editBtn.setText("Speichern");
                         }
+            });
+        } else if (device instanceof Shutter shutter) {
+
+            Label positionLabel = new Label("Positon:");
+
+            Slider positionSlider =
+                    new Slider(0, 100, shutter.getRolledDownPercent());
+            positionSlider.setShowTickLabels(true);
+            positionSlider.setDisable(true);
+
+            HBox brightnessBar = new HBox(
+                    10,
+                    positionLabel,
+                    positionSlider
+            );
+            deviceEditor.getChildren().addAll(brightnessBar);
+            stateToggle.setOnAction(e -> {
+                if (stateToggle.getText().equals("Oben")) {
+                    stateToggle.setText("Unten");
+                    positionSlider.setDisable(false);
+                } else {
+                    stateToggle.setText("Oben");
+                    positionSlider.setDisable(true);
+                }
+            });
+            editBtn.setOnAction(e -> {
+                if (isEditing[0]) {
+
+                    device.setName(nameField.getText());
+                    device.setRoom(roomBox.getValue());
+                    device.setState(stateToggle.getText());
+                    shutter.setRolledDownPercent((int) positionSlider.getValue());
+
+                    isEditing[0] = false;
+
+                    nameField.setEditable(false);
+                    roomBox.setDisable(true);
+                    stateToggle.setDisable(true);
+                    positionSlider.setDisable(true);
+
+                    editBtn.setText("Bearbeiten");
+
+                } else {
+
+                    isEditing[0] = true;
+
+                    nameField.setEditable(true);
+                    roomBox.setDisable(false);
+                    stateToggle.setDisable(false);
+                    if (stateToggle.getText().equals("Unten")){
+                        positionSlider.setDisable(false);
+                    }
+
+                    editBtn.setText("Speichern");
+                }
             });
         }
 
@@ -649,21 +715,47 @@ public class SmartHomeApp extends Application {
         );
 
         table.getColumns().addAll(nameCol, descCol, actionsCol);
+        table.setItems(scenarioService.getScenarios());
 
         Button addScenario = new Button("Neu");
-        addScenario.setOnAction(e -> {});
+        addScenario.setOnAction(e -> {openAddScenario();});
 
         Button viewScenario = new Button("Anzeigen");
-        viewScenario.setOnAction(e -> {});
+        viewScenario.setOnAction(e -> {
+            Scenario scenario = table.getSelectionModel().getSelectedItem();
+            if (null != scenario){
+                openScenarioEditor(false, scenario);
+            }
+            //log
+        });
 
         Button changeScenario = new Button("Bearbeiten");
-        changeScenario.setOnAction(e -> {});
+        changeScenario.setOnAction(e -> {
+            Scenario scenario = table.getSelectionModel().getSelectedItem();
+            if (null != scenario){
+                openScenarioEditor(true, scenario);
+            }
+            //log
+        });
 
         Button deleteScenario = new Button("Löschen");
-        deleteScenario.setOnAction(e -> {});
+        deleteScenario.setOnAction(e -> {
+            Scenario scenario = table.getSelectionModel().getSelectedItem();
+            if (null != scenario){
+                scenarioService.deleteScenario(scenario);
+                openScenarios();
+            }
+            //log
+        });
 
         Button runScenario = new Button("Ausführen");
-        runScenario.setOnAction(e -> {});
+        runScenario.setOnAction(e -> {
+            Scenario scenario = table.getSelectionModel().getSelectedItem();
+            if (null != scenario){
+                scenario.execute();
+                openScenarios();
+            }
+        });
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -674,6 +766,152 @@ public class SmartHomeApp extends Application {
 
         scenariosView.getChildren().addAll(title, table, buttonBar);
         root.setCenter(scenariosView);
+
+    }
+
+    private void openAddScenario() {
+        VBox newScenario = new VBox(10);
+        newScenario.setPadding(new Insets(20));
+
+        Label title = new Label("Szenarien");
+        title.getStyleClass().add("header");
+
+        TextField scenarioName = new TextField();
+        scenarioName.setPromptText("Name");
+
+        TextField scenarioDescription = new TextField();
+        scenarioDescription.setPromptText("Beschreibung");
+
+        Button addScenarioBtn = new Button("Erstellen");
+        addScenarioBtn.setOnAction(f -> {
+            if (scenarioName.getText().isEmpty()) {
+                TextField errorField = new TextField("Bitte einen Namen eingeben");
+                newScenario.getChildren().add(errorField);
+                errorField.setEditable(false);
+                scenarioName.requestFocus();
+                //log
+            }
+            else{
+                scenarioService.addScenario(new Scenario(scenarioName.getText(), scenarioDescription.getText()));
+                openScenarios();
+            }
+            //else if ob der name bereits verwendet wird?
+        });
+        Button backtoView = new Button("Zurück");
+        backtoView.setOnAction(f -> {
+            openScenarios();
+        });
+
+        HBox buttonBar = new HBox(10);
+        buttonBar.setPadding(new Insets(10));
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        buttonBar.getChildren().addAll(backtoView, spacer, addScenarioBtn);
+
+        newScenario.getChildren().addAll(title, scenarioName, scenarioDescription, buttonBar);
+        root.setCenter(newScenario);
+    }
+
+    private void openScenarioEditor(boolean edit, Scenario scenario) {
+
+        VBox scenarioEditor = new VBox(15);
+        scenarioEditor.setPadding(new Insets(20));
+
+        Label title = new Label("Szenario");
+        title.getStyleClass().add("header");
+
+        final boolean[] isEditing = {edit};
+
+        Label nameLabel = new Label("Name:");
+        TextField nameField = new TextField(scenario.getName());
+        nameField.setEditable(isEditing[0]);
+        HBox nameBar = new HBox(10, nameLabel, nameField);
+
+        Label descriptionLabel = new Label("Beschreibung:");
+        TextField descriptionField = new TextField(scenario.getDescription());
+        descriptionField.setEditable(isEditing[0]);
+        HBox descriptionBar = new HBox(10, descriptionLabel, descriptionField);
+        // ===== Liste Aktionen =====
+
+        ListView<Command> commandList = new ListView<>();
+        commandList.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(Command command, boolean empty) {
+                super.updateItem(command, empty);
+
+                if (empty || command == null) {
+                    setText(null);
+                } else {
+                    setText(command.toString());
+                }
+            }
+        });
+        commandList.getItems().addAll(scenario.getCommands());
+
+
+        scenarioEditor.getChildren().addAll(
+                title,
+                nameBar,
+                descriptionBar,
+                commandList);
+        // ===== Buttons =====
+        Button backBtn = new Button("Zurück");
+        backBtn.setOnAction(e -> openScenarios());
+
+        Button addCommandBtn = new Button("Aktion hinzufügen");
+        addCommandBtn.setOnAction(e -> {
+            //scenario.addCommand();
+            openScenarioEditor(edit, scenario);
+        });
+
+        Button changeCommandBtn = new Button("Aktion ändern");
+        changeCommandBtn.setOnAction(e -> {
+
+            openScenarioEditor(edit, scenario);
+        });
+
+        Button deleteCommandBtn = new Button("Aktion löschen");
+        deleteCommandBtn.setOnAction(e -> {
+
+            openScenarioEditor(edit, scenario);
+        });
+
+        Button editBtn = new Button();
+
+        editBtn.setText(isEditing[0]
+                ? "Speichern"
+                : "Bearbeiten"
+        );
+
+        editBtn.setOnAction(e -> {
+            if (isEditing[0]) {
+                scenario.setName(nameField.getText());
+                scenario.setDescription(descriptionField.getText());
+
+                isEditing[0] = false;
+                nameField.setEditable(false);
+                descriptionField.setEditable(false);
+                editBtn.setText("Bearbeiten");
+
+            } else {
+                isEditing[0] = true;
+                nameField.setEditable(true);
+                descriptionField.setEditable(true);
+                editBtn.setText("Speichern");
+            }
+        });
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        HBox buttonBar = new HBox(
+                10,
+                backBtn,
+                spacer,
+                editBtn
+        );
+        scenarioEditor.getChildren().addAll(buttonBar);
+        root.setCenter(scenarioEditor);
     }
 
 
