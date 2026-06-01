@@ -17,6 +17,7 @@ import model.device.impl.Lamp;
 import model.device.impl.Shutter;
 import model.room.Raum;
 import model.scenario.DeviceCommand;
+import model.scenario.Command;
 import model.scenario.Scenario;
 import service.DeviceCommandService;
 import service.DeviceService;
@@ -394,40 +395,52 @@ public class SmartHomeApp extends Application {
             });
         } else if (device instanceof Heating heating) {
 
-            Label brightnessLabel = new Label("Temperatur: ");
+            Label tempLabel = new Label("Temperatur: ");
 
-            TextField temperaturField = new TextField();
-            temperaturField.setText(String.valueOf(heating.getTemperature()));
-            temperaturField.setEditable(false);
+            Slider tempSlider = new Slider();
+
+            boolean heatingOn = device.getState().startsWith("An");
+            boolean isEditingg = edit;
+            tempSlider.setDisable(!isEditingg || !heatingOn);
+            stateToggle.setText(heatingOn ? "An" : "Aus");
+
+            tempSlider.setShowTickLabels(true);
+            tempSlider.setMin(new Double(10));
+            tempSlider.setMax(new Double(35));
+            tempSlider.setValue(new Double(heating.getTemperature()));
 
             HBox temperatureBar = new HBox(
                     10,
-                    brightnessLabel,
-                    temperaturField
+                    tempLabel,
+                    tempSlider
             );
+
             deviceEditor.getChildren().addAll(temperatureBar);
+            Runnable syncState = () -> {
+                boolean on = stateToggle.getText().equals("An");
+                tempSlider.setDisable(!isEditing[0] || !on);
+            };
             stateToggle.setOnAction(e -> {
-                if (stateToggle.getText().equals("Aus")) {
-                    stateToggle.setText("An");
-                    temperaturField.setDisable(false);
-                } else {
-                    stateToggle.setText("Aus");
-                    temperaturField.setDisable(true);
-                }
+                stateToggle.setText(
+                        stateToggle.getText().equals("An") ? "Aus" : "An"
+                );
+                syncState.run();
             });
+
             editBtn.setOnAction(e -> {
                         if (isEditing[0]) {
 
                             device.setName(nameField.getText());
                             device.setRoom(roomBox.getValue());
                             device.setState(stateToggle.getText());
+                            heating.setTemperature((int) tempSlider.getValue());
 
                             isEditing[0] = false;
 
                             nameField.setEditable(false);
                             roomBox.setDisable(true);
                             stateToggle.setDisable(true);
-                            temperaturField.setDisable(true);
+                            tempSlider.setDisable(true);
 
                             editBtn.setText("Bearbeiten");
 
@@ -439,12 +452,13 @@ public class SmartHomeApp extends Application {
                             roomBox.setDisable(false);
                             stateToggle.setDisable(false);
                             if (stateToggle.getText().equals("An")){
-                                temperaturField.setDisable(false);
+                                tempSlider.setDisable(false);
                             }
 
                             editBtn.setText("Speichern");
                         }
             });
+            syncState.run();
         } else if (device instanceof Shutter shutter) {
 
             Label positionLabel = new Label("Positon:");
