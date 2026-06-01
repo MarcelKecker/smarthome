@@ -41,7 +41,7 @@ public class Heating implements Device {
 
     @Override
     public String getState() {
-        return isOn ? "An" : "Aus";
+        return isOn ? "An und auf " + this.getTemperature() + "°" : "Aus";
     }
 
     @Override
