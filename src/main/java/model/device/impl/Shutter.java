@@ -9,27 +9,29 @@ public class Shutter implements Device {
     private String name;
     private Raum room;
     private boolean isRolledDown;
-    private int rolledDownPercent;
+    private int position;
 
     public Shutter(String id, String name, Raum room) {
         this.id = id;
         this.name = name;
         this.room = room;
         this.isRolledDown = false;
-        this.rolledDownPercent = 0;
+        this.position = 0;
     }
 
     @Override
     public void executeAction(DeviceAction action) {
-        if (action.getActionType().equals("SET_POSITION")) {
-            rolledDownPercent = (int) action.getValue();
-            isRolledDown = rolledDownPercent != 0;
+        switch (action.getActionType()) {
+            case "Hochfahren" -> isRolledDown = false;
+            case "Herunterfahren" -> isRolledDown = true;
+            case "Position setzen" -> position = Integer.parseInt(action.getValue().toString());
+            default -> throw new IllegalArgumentException("Unknown action type " + action.getActionType());
         }
     }
 
     @Override
     public String getState() {
-        return isRolledDown ? "Unten (" + rolledDownPercent + "%)" : "Oben";
+        return isRolledDown ? "Unten (" + position + "%)" : "Oben";
     }
 
     @Override
@@ -65,12 +67,12 @@ public class Shutter implements Device {
         return name + " | Rollladen in Raum " + room;
     }
 
-    public int getRolledDownPercent() {
-        return rolledDownPercent;
+    public int getPosition() {
+        return position;
     }
 
-    public void setRolledDownPercent(int rolledDownPercent) {
-        this.rolledDownPercent = rolledDownPercent;
+    public void setPosition(int position) {
+        this.position = position;
     }
 }
 

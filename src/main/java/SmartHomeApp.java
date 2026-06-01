@@ -38,6 +38,8 @@ public class SmartHomeApp extends Application {
 
     private ScenarioService scenarioService = new ScenarioService();
 
+    private Runnable currentRefreshAction;
+
     @Override
     public void start(Stage stage) {
         root = new BorderPane();
@@ -100,15 +102,52 @@ public class SmartHomeApp extends Application {
         saveBtn.setOnAction(e -> {
             System.out.println("Speichern geklickt");
         });
-        //Dropdown für Szenarien?
-        Button runScenario = new Button("▶ Szenario ausführen");
 
-        runScenario.setOnAction(e -> {
-            System.out.println("Szenario geklickt");
+        ComboBox<Scenario> scenarioSelect = new ComboBox<>();
+        scenarioSelect.setPrefWidth(200);
+
+// LIVE-BINDING (wichtig!)
+        scenarioSelect.setItems(scenarioService.getScenarios());
+
+// Anzeige schön machen
+        scenarioSelect.setCellFactory(lv -> new ListCell<>() {
+            @Override
+            protected void updateItem(Scenario item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? null : item.getName());
+            }
         });
 
-        topBar.getChildren().addAll(header, neuBtn, openBtn, saveBtn, spacer, runScenario);
+        scenarioSelect.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(Scenario item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? "Szenario auswählen" : item.getName());
+            }
+        });
 
+// BUTTON wieder hinzufügen
+        Button runScenario = new Button("▶ Ausführen");
+
+        runScenario.setOnAction(e -> {
+
+            Scenario selected = scenarioSelect.getValue();
+            if (selected != null) {
+                selected.execute();
+                refreshCurrentView();
+            }
+
+        });
+
+        topBar.getChildren().addAll(
+                header,
+                neuBtn,
+                openBtn,
+                saveBtn,
+                spacer,
+                scenarioSelect,
+                runScenario
+        );
         // ===== Center Dashboard =====
         GridPane dashboard = new GridPane();
         dashboard.setPadding(new Insets(20));
@@ -149,7 +188,14 @@ public class SmartHomeApp extends Application {
         stage.show();
     }
 
+    private void refreshCurrentView() {
+        if (currentRefreshAction != null) {
+            currentRefreshAction.run();
+        }
+    }
+
     private void openDevices() {
+        currentRefreshAction = this::openDevices;
         VBox devicesView = new VBox(10);
         devicesView.setPadding(new Insets(20));
 
@@ -221,7 +267,7 @@ public class SmartHomeApp extends Application {
     }
 
     private void openDeviceEditor(boolean edit, Device device) {
-
+        currentRefreshAction = () -> openDeviceEditor(edit, device);
         VBox deviceEditor = new VBox(15);
         deviceEditor.setPadding(new Insets(20));
 
@@ -404,7 +450,7 @@ public class SmartHomeApp extends Application {
             Label positionLabel = new Label("Positon:");
 
             Slider positionSlider =
-                    new Slider(0, 100, shutter.getRolledDownPercent());
+                    new Slider(0, 100, shutter.getPosition());
             positionSlider.setShowTickLabels(true);
             positionSlider.setDisable(true);
 
@@ -429,7 +475,7 @@ public class SmartHomeApp extends Application {
                     device.setName(nameField.getText());
                     device.setRoom(roomBox.getValue());
                     device.setState(stateToggle.getText());
-                    shutter.setRolledDownPercent((int) positionSlider.getValue());
+                    shutter.setPosition((int) positionSlider.getValue());
 
                     isEditing[0] = false;
 
@@ -469,7 +515,9 @@ public class SmartHomeApp extends Application {
         deviceEditor.getChildren().addAll(buttonBar);
         root.setCenter(deviceEditor);
     }
+
     private void openAddDevice() {
+        currentRefreshAction = this::openAddDevice;
         Dialog<Device> dialog = new Dialog<>();
         dialog.setTitle("Neues Gerät");
 
@@ -535,6 +583,7 @@ public class SmartHomeApp extends Application {
     }
 
     private void openRooms() {
+        currentRefreshAction = this::openRooms;
         VBox roomsView = new VBox(10);
         roomsView.setPadding(new Insets(20));
 
@@ -598,6 +647,7 @@ public class SmartHomeApp extends Application {
     }
 
     private void openAddRoom() {
+        currentRefreshAction = this::openAddRoom;
         VBox newRoom = new VBox(10);
         newRoom.setPadding(new Insets(20));
 
@@ -638,6 +688,7 @@ public class SmartHomeApp extends Application {
     }
 
     private void openRoomEditor(boolean edit, Raum room) {
+        currentRefreshAction = () -> openRoomEditor(edit, room);
         VBox roomEditor = new VBox(10);
         roomEditor.setPadding(new Insets(20));
 
@@ -694,6 +745,7 @@ public class SmartHomeApp extends Application {
     }
 
     private void openScenarios(){
+        currentRefreshAction = this::openScenarios;
         VBox scenariosView = new VBox(10);
         scenariosView.setPadding(new Insets(20));
 
@@ -754,7 +806,35 @@ public class SmartHomeApp extends Application {
         runScenario.setOnAction(e -> {
             Scenario scenario = table.getSelectionModel().getSelectedItem();
             if (null != scenario){
-                scenario.execute();
+                if (scenario.getCommands().get(0).getDevice().getType().equals("Heizung")){
+                    Heating heating = (Heating) scenario.getCommands().get(0).getDevice();
+                    System.out.println(heating.toString());
+                    System.out.println(heating.getState());
+                    System.out.println(heating.getTemperature());
+                    scenario.execute();
+                    System.out.println(heating.toString());
+                    System.out.println(heating.getState());
+                    System.out.println(heating.getTemperature());
+                } else if (scenario.getCommands().get(0).getDevice().getType().equals("Rollladen")){
+                    Shutter shutter = (Shutter) scenario.getCommands().get(0).getDevice();
+                    System.out.println(shutter.toString());
+                    System.out.println(shutter.getState());
+                    System.out.println(shutter.getPosition());
+                    scenario.execute();
+                    System.out.println(shutter.toString());
+                    System.out.println(shutter.getState());
+                    System.out.println(shutter.getPosition());
+                } else if (scenario.getCommands().get(0).getDevice().getType().equals("Lampe")){
+                    Lamp lamp = (Lamp) scenario.getCommands().get(0).getDevice();
+                    System.out.println(lamp.toString());
+                    System.out.println(lamp.getState());
+                    System.out.println(lamp.getBrightness());
+                    scenario.execute();
+                    System.out.println(lamp.toString());
+                    System.out.println(lamp.getState());
+                    System.out.println(lamp.getBrightness());
+                }
+
                 openScenarios();
             }
         });
@@ -772,6 +852,7 @@ public class SmartHomeApp extends Application {
     }
 
     private void openAddScenario() {
+        currentRefreshAction = this::openAddScenario;
         VBox newScenario = new VBox(10);
         newScenario.setPadding(new Insets(20));
 
@@ -815,7 +896,7 @@ public class SmartHomeApp extends Application {
     }
 
     private void openScenarioEditor(boolean edit, Scenario scenario) {
-
+        currentRefreshAction = () -> openScenarioEditor(edit, scenario);
         VBox scenarioEditor = new VBox(15);
         scenarioEditor.setPadding(new Insets(20));
 
@@ -950,6 +1031,7 @@ public class SmartHomeApp extends Application {
     }
 
     private void openAddCommand(Scenario scenario) {
+        currentRefreshAction = () -> openAddCommand(scenario);
 
         Dialog<DeviceCommand> dialog = new Dialog<>();
         dialog.setTitle("Aktion hinzufügen");
@@ -1157,6 +1239,12 @@ public class SmartHomeApp extends Application {
                                    boolean edit,
                                    Scenario scenario,
                                    boolean editScenario) {
+        currentRefreshAction = () -> openCommandEditor(
+                deviceCommand,
+                edit,
+                scenario,
+                editScenario
+        );
 
         VBox editor = new VBox(15);
         editor.setPadding(new Insets(20));
