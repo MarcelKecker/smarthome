@@ -67,6 +67,12 @@ public class Heating implements Device {
     public void setRoom(Raum room) {
         this.room = room;
     }
+    @Override public String toString() {
+        if (room == null) {
+            return name + " | Heizung";
+        }
+        return name + " | Heizung in Raum " + room;
+    }
 
     public void setTemperature(int temperature) {
         this.temperature = temperature;

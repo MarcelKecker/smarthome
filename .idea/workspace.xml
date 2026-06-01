@@ -4,9 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2ee234e0-05c6-4263-9101-2c08fd03ccf2" name="Changes" comment="gui raum übersicht">
+    <list default="true" id="2ee234e0-05c6-4263-9101-2c08fd03ccf2" name="Changes" comment="Rolläden + Szenarien">
+      <change afterPath="$PROJECT_DIR$/src/main/java/service/DeviceCommandService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/SmartHomeApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SmartHomeApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/device/Device.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/device/Device.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/device/DeviceAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/device/DeviceAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/device/impl/Heating.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/device/impl/Heating.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/device/impl/Lamp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/device/impl/Lamp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/device/impl/Shutter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/device/impl/Shutter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/scenario/DeviceCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/scenario/DeviceCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/scenario/Scenario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/scenario/Scenario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/service/DeviceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/DeviceService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,12 +44,12 @@
     &quot;assignee&quot;: &quot;Vvnillacola&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/MarcelKecker/smarthome",
-    "accountId": "e81f2ebe-cbe5-4ac2-9bdb-e1d3d279126d"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/MarcelKecker/smarthome&quot;,
+    &quot;accountId&quot;: &quot;e81f2ebe-cbe5-4ac2-9bdb-e1d3d279126d&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
 }</component>
@@ -89,6 +98,7 @@
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="service" />
+      <recent name="factory" />
       <recent name="model.device.impl" />
     </key>
   </component>
@@ -203,7 +213,15 @@
       <option name="project" value="LOCAL" />
       <updated>1780061191025</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Rolläden + Szenarien">
+      <option name="closed" value="true" />
+      <created>1780061804821</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1780061804821</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

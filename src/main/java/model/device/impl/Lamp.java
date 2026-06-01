@@ -59,6 +59,12 @@ public class Lamp implements Device {
     @Override public String getId() { return id; }
     @Override public String getName() { return name; }
     @Override public String getType() { return "Lampe"; }
+    @Override public String toString() {
+        if (room == null) {
+            return name + " | Lampe";
+        }
+        return name + " | Lampe in Raum " + room;
+    }
 
     public int getBrightness() {
         return brightness;

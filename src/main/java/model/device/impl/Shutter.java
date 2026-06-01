@@ -58,6 +58,12 @@ public class Shutter implements Device {
     @Override public String getId() { return id; }
     @Override public String getName() { return name; }
     @Override public String getType() { return "Rollladen"; }
+    @Override public String toString() {
+        if (room == null) {
+            return name + " | Rollladen";
+        }
+        return name + " | Rollladen in Raum " + room;
+    }
 
     public int getRolledDownPercent() {
         return rolledDownPercent;
