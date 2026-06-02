@@ -2,12 +2,13 @@ package model.scenario;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import model.action.Command;
 
 public class Scenario {
 
     private String name;
     private String description;
-    private ObservableList<DeviceCommand> commands;
+    private ObservableList<Command> commands;
 
     public Scenario(String name, String description) {
         this.name = name;
@@ -15,7 +16,7 @@ public class Scenario {
         this.commands = FXCollections.observableArrayList();
     }
 
-    public void addCommand(DeviceCommand command) {
+    public void addCommand(Command command) {
         commands.add(command);
     }
 
@@ -25,7 +26,7 @@ public class Scenario {
         }
     }
 
-    public ObservableList<DeviceCommand> getCommands() {
+    public ObservableList<Command> getCommands() {
         return commands;
     }
 
@@ -43,7 +44,15 @@ public class Scenario {
         this.description = description;
     }
 
-    public void setCommands(ObservableList<DeviceCommand> commands) {
+    public void setCommands(ObservableList<Command> commands) {
         this.commands = commands;
+    }
+
+    public void replaceCommand(Command oldCommand, Command newCommand) {
+        for (int i = 0; i < commands.size(); i++) {
+            if (oldCommand.getID().equals(commands.get(i).getID())) {
+                commands.set(i, newCommand);
+            }
+        }
     }
 }

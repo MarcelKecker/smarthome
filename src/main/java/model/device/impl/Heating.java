@@ -1,21 +1,23 @@
 package model.device.impl;
 
+import model.DeviceType;
 import model.device.Device;
-import model.device.DeviceAction;
+import model.State;
 import model.room.Raum;
+import model.action.Command;
 
 public class Heating implements Device {
     private String id;
     private String name;
     private Raum room;
-    private boolean isOn;
-    private int temperature;
+    private State state;
+    private double temperature;
 
     public Heating(String id, String name, Raum room) {
         this.id = id;
         this.name = name;
         this.room = room;
-        isOn = false;
+        state = State.TURNED_OFF;
         temperature = 0;
     }
 
@@ -30,32 +32,23 @@ public class Heating implements Device {
     }
 
     @Override
-    public String getType() {
-        return "Heizung";
+    public DeviceType getType() {
+        return DeviceType.HEATING;
     }
 
     @Override
-    public void executeAction(DeviceAction action) {
-        switch (action.getActionType()) {
-            case "Ausschalten" -> isOn = false;
-            case "Anschalten" -> isOn = true;
-            case "Temperatur setzen" -> temperature = Integer.parseInt(action.getValue().toString());
-            default -> throw new IllegalArgumentException("Unknown action type " + action.getActionType());
-        }
+    public void executeAction(Command command) {
+        command.execute();
     }
 
     @Override
-    public String getState() {
-        return isOn ? "An und auf " + this.getTemperature() + "°" : "Aus";
+    public State getState() {
+        return state;
     }
 
     @Override
-    public void setState(String state) {
-        if ("An".equals(state)) {
-            isOn = true;
-        }else if ("Aus".equals(state)) {
-            isOn = false;
-        }
+    public void setState(State state) {
+        this.state = state;
     }
 
     @Override
@@ -74,16 +67,16 @@ public class Heating implements Device {
     }
     @Override public String toString() {
         if (room == null) {
-            return name + " | Heizung";
+            return name + " | " + getType();
         }
-        return name + " | Heizung in Raum " + room;
+        return name + " | " + getType() + " in Raum " + room;
     }
 
-    public void setTemperature(int temperature) {
+    public void setTemperature(double temperature) {
         this.temperature = temperature;
     }
 
-    public int getTemperature() {
+    public double getTemperature() {
         return temperature;
     }
 }

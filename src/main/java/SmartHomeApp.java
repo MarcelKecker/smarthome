@@ -1,5 +1,6 @@
 
 import atlantafx.base.theme.PrimerLight;
+import factory.CommandFactory;
 import factory.DeviceFactory;
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
@@ -10,16 +11,19 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import model.ActionType;
+import model.DeviceType;
+import model.State;
+import model.action.impl.SetBrightnessLampCommand;
+import model.action.impl.SetPositionShutterCommand;
+import model.action.impl.SetTemperatureHeatingCommand;
 import model.device.Device;
-import model.device.DeviceAction;
 import model.device.impl.Heating;
 import model.device.impl.Lamp;
 import model.device.impl.Shutter;
 import model.room.Raum;
-import model.scenario.DeviceCommand;
-import model.scenario.Command;
+import model.action.Command;
 import model.scenario.Scenario;
-import service.DeviceCommandService;
 import service.DeviceService;
 import service.RoomService;
 import service.ScenarioService;
@@ -33,9 +37,6 @@ public class SmartHomeApp extends Application {
     private RoomService roomService = new RoomService();
 
     private DeviceService deviceService = new DeviceService();
-
-    private DeviceCommandService deviceCommandService = new DeviceCommandService();
-
 
     private ScenarioService scenarioService = new ScenarioService();
 
@@ -210,7 +211,7 @@ public class SmartHomeApp extends Application {
 
         TableColumn<Device, String> typeCol = new TableColumn<>("Typ");
         typeCol.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getType())
+                new SimpleStringProperty(data.getValue().getType().toString())
         );
 
         TableColumn<Device, String> roomCol = new TableColumn<>("Raum");
@@ -226,7 +227,7 @@ public class SmartHomeApp extends Application {
 
         TableColumn<Device, String> stateCol = new TableColumn<>("Zustand");
         stateCol.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getState())
+                new SimpleStringProperty(data.getValue().getState().toString())
         );
 
         table.getColumns().addAll(nameCol, typeCol, roomCol, stateCol);
@@ -302,17 +303,7 @@ public class SmartHomeApp extends Application {
         Label stateLabel = new Label("Zustand:");
 
         ToggleButton stateToggle = new ToggleButton();
-        if (Objects.equals(device.getState(), "Oben")){
-            stateToggle.setText("Oben");
-        } else if (device.getState().startsWith("Unten")){
-            stateToggle.setText("Unten");
-        } else if (Objects.equals(device.getState(), "Aus")){
-            stateToggle.setText("Aus");
-        } else if (device.getState().startsWith("An")){
-            stateToggle.setText("An");
-        } else {
-            throw new RuntimeException("State nicht bekannt: " +  device.getState());
-        }
+        stateToggle.setText(device.getState().toString());
 
         stateToggle.setDisable(!isEditing[0]);
         HBox stateBar = new HBox(10, stateLabel, stateToggle);
@@ -354,11 +345,11 @@ public class SmartHomeApp extends Application {
             );
             deviceEditor.getChildren().addAll(brightnessBar);
             stateToggle.setOnAction(e -> {
-                if (stateToggle.getText().equals("Aus")) {
-                    stateToggle.setText("An");
+                if (State.valueOf(stateToggle.getText()) == State.TURNED_OFF) {
+                    stateToggle.setText(State.TURNED_ON.toString());
                     brightnessSlider.setDisable(false);
                 } else {
-                    stateToggle.setText("Aus");
+                    stateToggle.setText(State.TURNED_OFF.toString());
                     brightnessSlider.setDisable(true);
                 }
             });
@@ -367,7 +358,7 @@ public class SmartHomeApp extends Application {
 
                     device.setName(nameField.getText());
                     device.setRoom(roomBox.getValue());
-                    device.setState(stateToggle.getText());
+                    device.setState(State.valueOf(stateToggle.getText()));
                     lamp.setBrightness((int) brightnessSlider.getValue());
 
                     isEditing[0] = false;
@@ -386,7 +377,7 @@ public class SmartHomeApp extends Application {
                     nameField.setEditable(true);
                     roomBox.setDisable(false);
                     stateToggle.setDisable(false);
-                    if (stateToggle.getText().equals("An")){
+                    if (State.valueOf(stateToggle.getText()) ==  State.TURNED_ON) {
                         brightnessSlider.setDisable(false);
                     }
 
@@ -399,10 +390,10 @@ public class SmartHomeApp extends Application {
 
             Slider tempSlider = new Slider();
 
-            boolean heatingOn = device.getState().startsWith("An");
+            State heatingState = device.getState();
             boolean isEditingg = edit;
-            tempSlider.setDisable(!isEditingg || !heatingOn);
-            stateToggle.setText(heatingOn ? "An" : "Aus");
+            tempSlider.setDisable(!isEditingg || heatingState == State.TURNED_OFF);
+            stateToggle.setText(heatingState.toString());
 
             tempSlider.setShowTickLabels(true);
             tempSlider.setMin(new Double(10));
@@ -417,12 +408,11 @@ public class SmartHomeApp extends Application {
 
             deviceEditor.getChildren().addAll(temperatureBar);
             Runnable syncState = () -> {
-                boolean on = stateToggle.getText().equals("An");
-                tempSlider.setDisable(!isEditing[0] || !on);
+                tempSlider.setDisable(!isEditing[0] || heatingState == State.TURNED_OFF);
             };
             stateToggle.setOnAction(e -> {
                 stateToggle.setText(
-                        stateToggle.getText().equals("An") ? "Aus" : "An"
+                        heatingState == State.TURNED_ON ? State.TURNED_OFF.toString() : State.TURNED_ON.toString()
                 );
                 syncState.run();
             });
@@ -432,7 +422,7 @@ public class SmartHomeApp extends Application {
 
                             device.setName(nameField.getText());
                             device.setRoom(roomBox.getValue());
-                            device.setState(stateToggle.getText());
+                            device.setState(State.valueOf(stateToggle.getText()));
                             heating.setTemperature((int) tempSlider.getValue());
 
                             isEditing[0] = false;
@@ -451,7 +441,7 @@ public class SmartHomeApp extends Application {
                             nameField.setEditable(true);
                             roomBox.setDisable(false);
                             stateToggle.setDisable(false);
-                            if (stateToggle.getText().equals("An")){
+                            if (State.valueOf(stateToggle.getText()) ==  State.TURNED_ON) {
                                 tempSlider.setDisable(false);
                             }
 
@@ -475,11 +465,11 @@ public class SmartHomeApp extends Application {
             );
             deviceEditor.getChildren().addAll(brightnessBar);
             stateToggle.setOnAction(e -> {
-                if (stateToggle.getText().equals("Oben")) {
-                    stateToggle.setText("Unten");
+                if (State.valueOf(stateToggle.getText()) == State.ROLLED_UP) {
+                    stateToggle.setText(State.ROLLED_DOWN.toString());
                     positionSlider.setDisable(false);
                 } else {
-                    stateToggle.setText("Oben");
+                    stateToggle.setText(State.ROLLED_UP.toString());
                     positionSlider.setDisable(true);
                 }
             });
@@ -488,7 +478,7 @@ public class SmartHomeApp extends Application {
 
                     device.setName(nameField.getText());
                     device.setRoom(roomBox.getValue());
-                    device.setState(stateToggle.getText());
+                    device.setState(State.valueOf(stateToggle.getText()));
                     shutter.setPosition((int) positionSlider.getValue());
 
                     isEditing[0] = false;
@@ -507,7 +497,7 @@ public class SmartHomeApp extends Application {
                     nameField.setEditable(true);
                     roomBox.setDisable(false);
                     stateToggle.setDisable(false);
-                    if (stateToggle.getText().equals("Unten")){
+                    if (State.valueOf(stateToggle.getText()) ==  State.ROLLED_DOWN) {
                         positionSlider.setDisable(false);
                     }
 
@@ -550,8 +540,8 @@ public class SmartHomeApp extends Application {
 
 
         TextField nameField = new TextField();
-        ComboBox<String> typeBox = new ComboBox<>();
-        typeBox.getItems().addAll("Lampe", "Heizung", "Rollladen");
+        ComboBox<DeviceType> typeBox = new ComboBox<>();
+        typeBox.getItems().addAll(DeviceType.values());
 
         Runnable validate = () -> {
             boolean invalid =
@@ -581,10 +571,10 @@ public class SmartHomeApp extends Application {
         dialog.setResultConverter(button -> {
             if (button == saveButtonType) {
                 String name = nameField.getText();
-                String type = typeBox.getValue();
+                DeviceType deviceType = typeBox.getValue();
                 Raum room = roomBox.getValue();
 
-                return DeviceFactory.create(type, UUID.randomUUID().toString(), name, room);
+                return DeviceFactory.create(deviceType, UUID.randomUUID().toString(), name, room);
             }
             return null;
         });
@@ -819,38 +809,8 @@ public class SmartHomeApp extends Application {
         Button runScenario = new Button("Ausführen");
         runScenario.setOnAction(e -> {
             Scenario scenario = table.getSelectionModel().getSelectedItem();
-            if (null != scenario){
-                if (scenario.getCommands().get(0).getDevice().getType().equals("Heizung")){
-                    Heating heating = (Heating) scenario.getCommands().get(0).getDevice();
-                    System.out.println(heating.toString());
-                    System.out.println(heating.getState());
-                    System.out.println(heating.getTemperature());
-                    scenario.execute();
-                    System.out.println(heating.toString());
-                    System.out.println(heating.getState());
-                    System.out.println(heating.getTemperature());
-                } else if (scenario.getCommands().get(0).getDevice().getType().equals("Rollladen")){
-                    Shutter shutter = (Shutter) scenario.getCommands().get(0).getDevice();
-                    System.out.println(shutter.toString());
-                    System.out.println(shutter.getState());
-                    System.out.println(shutter.getPosition());
-                    scenario.execute();
-                    System.out.println(shutter.toString());
-                    System.out.println(shutter.getState());
-                    System.out.println(shutter.getPosition());
-                } else if (scenario.getCommands().get(0).getDevice().getType().equals("Lampe")){
-                    Lamp lamp = (Lamp) scenario.getCommands().get(0).getDevice();
-                    System.out.println(lamp.toString());
-                    System.out.println(lamp.getState());
-                    System.out.println(lamp.getBrightness());
-                    scenario.execute();
-                    System.out.println(lamp.toString());
-                    System.out.println(lamp.getState());
-                    System.out.println(lamp.getBrightness());
-                }
-
-                openScenarios();
-            }
+            scenario.execute();
+            openScenarios();
         });
 
         Region spacer = new Region();
@@ -930,13 +890,13 @@ public class SmartHomeApp extends Application {
         HBox descriptionBar = new HBox(10, descriptionLabel, descriptionField);
         // ===== Liste Aktionen =====
 
-        TableView<DeviceCommand> tableDeviceCommands = new TableView<>();
-        TableColumn<DeviceCommand, String> orderCol = new TableColumn<>("Reihenfolge");
+        TableView<Command> tableDeviceCommands = new TableView<>();
+        TableColumn<Command, String> orderCol = new TableColumn<>("Reihenfolge");
         orderCol.setCellValueFactory(data ->
                 new SimpleStringProperty(Integer.toString(data.getValue().getOrderIndex()))
         );
 
-        TableColumn<DeviceCommand, String> deviceCommandCol = new TableColumn<>("Aktion");
+        TableColumn<Command, String> deviceCommandCol = new TableColumn<>("Aktion");
         deviceCommandCol.setCellValueFactory(data ->
                 new SimpleStringProperty(data.getValue().toString())
         );
@@ -956,6 +916,8 @@ public class SmartHomeApp extends Application {
 
         Button addCommandBtn = new Button("Aktion hinzufügen");
         addCommandBtn.setOnAction(e -> {
+            scenario.setName(nameField.getText());
+            scenario.setDescription(descriptionField.getText());
             openAddCommand(scenario);
             openScenarioEditor(isEditing[0], scenario);
         });
@@ -963,32 +925,38 @@ public class SmartHomeApp extends Application {
 
         Button viewCommandBtn = new Button("Aktion anzeigen");
         viewCommandBtn.setOnAction(e -> {
-            DeviceCommand deviceCommand = tableDeviceCommands.getSelectionModel().getSelectedItem();
-            if (null != deviceCommand){
-                openCommandEditor(deviceCommand, false, scenario, edit);
+            scenario.setName(nameField.getText());
+            scenario.setDescription(descriptionField.getText());
+            Command command = tableDeviceCommands.getSelectionModel().getSelectedItem();
+            if (null != command){
+                openCommandEditor(command, false, scenario, edit);
             }
         });
         viewCommandBtn.setDisable(!isEditing[0]);
 
         Button changeCommandBtn = new Button("Aktion ändern");
         changeCommandBtn.setOnAction(e -> {
-            DeviceCommand deviceCommand = tableDeviceCommands.getSelectionModel().getSelectedItem();
-            if (null != deviceCommand){
-                openCommandEditor(deviceCommand, true, scenario, edit);
+            scenario.setName(nameField.getText());
+            scenario.setDescription(descriptionField.getText());
+            Command command = tableDeviceCommands.getSelectionModel().getSelectedItem();
+            if (null != command){
+                openCommandEditor(command, true, scenario, edit);
             }
         });
         changeCommandBtn.setDisable(!isEditing[0]);
 
         Button deleteCommandBtn = new Button("Aktion löschen");
         deleteCommandBtn.setOnAction(e -> {
-            DeviceCommand deviceCommand = tableDeviceCommands.getSelectionModel().getSelectedItem();
-            if (deviceCommand != null) {
-                for (DeviceCommand deviceCommand2 : tableDeviceCommands.getItems()) {
-                    if (deviceCommand2.getOrderIndex() > deviceCommand.getOrderIndex()) {
-                        deviceCommand2.setOrderIndex(deviceCommand2.getOrderIndex() - 1);
+            scenario.setName(nameField.getText());
+            scenario.setDescription(descriptionField.getText());
+            Command command = tableDeviceCommands.getSelectionModel().getSelectedItem();
+            if (command != null) {
+                for (Command command2 : tableDeviceCommands.getItems()) {
+                    if (command2.getOrderIndex() > command.getOrderIndex()) {
+                        command2.setOrderIndex(command2.getOrderIndex() - 1);
                     }
                 }
-                scenario.getCommands().remove(deviceCommand);
+                scenario.getCommands().remove(command);
                 openScenarioEditor(isEditing[0], scenario);
             }
         });
@@ -1047,7 +1015,7 @@ public class SmartHomeApp extends Application {
     private void openAddCommand(Scenario scenario) {
         currentRefreshAction = () -> openAddCommand(scenario);
 
-        Dialog<DeviceCommand> dialog = new Dialog<>();
+        Dialog<Command> dialog = new Dialog<>();
         dialog.setTitle("Aktion hinzufügen");
 
         ButtonType saveButtonType = new ButtonType("Speichern", ButtonBar.ButtonData.OK_DONE);
@@ -1077,22 +1045,22 @@ public class SmartHomeApp extends Application {
 
             switch (newDevice.getType()) {
 
-                case "Heizung" -> actionTypeBox.getItems().addAll(
-                        "Ausschalten",
-                        "Anschalten",
-                        "Temperatur setzen"
+                case HEATING -> actionTypeBox.getItems().addAll(
+                        ActionType.TURN_OFF.toString(),
+                        ActionType.TURN_ON.toString(),
+                        ActionType.SET_TEMPERATURE.toString()
                 );
 
-                case "Lampe" -> actionTypeBox.getItems().addAll(
-                        "Ausschalten",
-                        "Anschalten",
-                        "Helligkeit setzen"
+                case LAMP -> actionTypeBox.getItems().addAll(
+                        ActionType.TURN_OFF.toString(),
+                        ActionType.TURN_ON.toString(),
+                        ActionType.SET_BRIGHTNESS.toString()
                 );
 
-                case "Rollladen" -> actionTypeBox.getItems().addAll(
-                        "Herunterfahren",
-                        "Hochfahren",
-                        "Position setzen"
+                case SHUTTER -> actionTypeBox.getItems().addAll(
+                        ActionType.ROLL_UP.toString(),
+                        ActionType.ROLL_DOWN.toString(),
+                        ActionType.SET_POSITION.toString()
                 );
             }
         });
@@ -1103,20 +1071,20 @@ public class SmartHomeApp extends Application {
         // ===== VALUE TYPE LOGIC =====
         enum ValueType { NONE, INT, DOUBLE }
 
-        java.util.function.Function<String, ValueType> getValueType = (actionType) -> {
+        java.util.function.Function<ActionType, ValueType> getValueType = (actionType) -> {
             if (actionType == null) return ValueType.NONE;
 
             return switch (actionType) {
-                case "Temperatur setzen" -> ValueType.DOUBLE;
-                case "Helligkeit setzen",
-                     "Position setzen" -> ValueType.INT;
+                case SET_TEMPERATURE -> ValueType.DOUBLE;
+                case SET_BRIGHTNESS,
+                     SET_POSITION -> ValueType.INT;
                 default -> ValueType.NONE;
             };
         };
 
         Runnable applyValueState = () -> {
 
-            ValueType type = getValueType.apply(actionTypeBox.getValue());
+            ValueType type = getValueType.apply(ActionType.valueOf(actionTypeBox.getValue()));
             boolean requiresValue = type != ValueType.NONE;
 
             valueBox.setDisable(!requiresValue);
@@ -1130,13 +1098,17 @@ public class SmartHomeApp extends Application {
         Runnable validate = () -> {
 
             Device device = deviceBox.getValue();
-            String actionType = actionTypeBox.getValue();
 
-            ValueType type = getValueType.apply(actionType);
+            ActionType actionType = null;
+            if (actionTypeBox.getValue() != null) {
+                actionType = ActionType.valueOf(actionTypeBox.getValue());
+            }
+
+            ValueType valueType = getValueType.apply(actionType);
 
             String text = valueBox.getText() == null ? "" : valueBox.getText().trim();
 
-            boolean valueValid = switch (type) {
+            boolean valueValid = switch (valueType) {
 
                 case NONE -> true;
 
@@ -1185,28 +1157,18 @@ public class SmartHomeApp extends Application {
             if (button == saveButtonType) {
 
                 Device device = deviceBox.getValue();
-                String actionType = actionTypeBox.getValue();
-
-                DeviceAction deviceAction = new DeviceAction(
-                        actionType,
-                        valueBox.getText()
-                );
+                ActionType actionType = ActionType.valueOf(actionTypeBox.getValue());
 
                 int orderIndex = scenario.getCommands().size();
 
-                DeviceCommand command = new DeviceCommand(
-                        device,
-                        deviceAction,
-                        orderIndex
-                );
-
+                Command command = CommandFactory.create(device, actionType, valueBox.getText(), scenario.getCommands().size());
                 scenario.getCommands().add(command);
             }
 
             return null;
         });
 
-        Optional<DeviceCommand> result = dialog.showAndWait();
+        Optional<Command> result = dialog.showAndWait();
 
         result.ifPresent(deviceCommand -> {
             scenario.getCommands().add(deviceCommand);
@@ -1225,36 +1187,35 @@ public class SmartHomeApp extends Application {
         };
     }
 
-    private List<String> getActionsForDevice(Device device) {
+    private List<ActionType> getActionsForDevice(Device device) {
         return switch (device.getType()) {
-            case "Heizung" -> List.of(
-                    "Ausschalten",
-                    "Anschalten",
-                    "Temperatur setzen"
+            case HEATING -> List.of(
+                    ActionType.TURN_OFF,
+                    ActionType.TURN_ON,
+                    ActionType.SET_TEMPERATURE
             );
 
-            case "Lampe" -> List.of(
-                    "Ausschalten",
-                    "Anschalten",
-                    "Helligkeit setzen"
+            case LAMP -> List.of(
+                    ActionType.TURN_OFF,
+                    ActionType.TURN_ON,
+                    ActionType.SET_BRIGHTNESS
             );
 
-            case "Rollladen" -> List.of(
-                    "Hochfahren",
-                    "Herunterfahren",
-                    "Position setzen"
+            case SHUTTER -> List.of(
+                    ActionType.ROLL_UP,
+                    ActionType.ROLL_DOWN,
+                    ActionType.SET_POSITION
             );
-
-            default -> List.of();
         };
     }
 
-    private void openCommandEditor(DeviceCommand deviceCommand,
+    private void openCommandEditor(Command command,
                                    boolean edit,
                                    Scenario scenario,
                                    boolean editScenario) {
+
         currentRefreshAction = () -> openCommandEditor(
-                deviceCommand,
+                command,
                 edit,
                 scenario,
                 editScenario
@@ -1269,37 +1230,48 @@ public class SmartHomeApp extends Application {
         final boolean[] isEditing = {edit};
 
         Label deviceLabel = new Label(
-                "Gerät: " + deviceCommand.getDevice().getName()
+                "Gerät: " + command.getDevice().getName()
         );
 
-        // ===== VALUE TYPES =====
-        enum ValueType { NONE, INT, DOUBLE }
+        // =====================================================
+        // ACTION TYPE (ENUM statt String/DeviceAction)
+        // =====================================================
 
-        Runnable validate;
-
-        // ===== ACTION TYPE =====
         Label actionTypeLabel = new Label("Aktionstyp:");
 
-        ComboBox<String> actionTypeBox = new ComboBox<>();
+        ComboBox<ActionType> actionTypeBox = new ComboBox<>();
+
         actionTypeBox.getItems().addAll(
-                getActionsForDevice(deviceCommand.getDevice())
+                ActionType.forDevice(command.getDevice())
         );
 
-        actionTypeBox.setValue(deviceCommand.getAction().getActionType());
+        // 🔥 Command selbst liefert KEIN ActionType mehr
+        // -> wir bestimmen ihn über den konkreten Command-Typ
+        actionTypeBox.setValue(command.getActionType()); // <-- NEU (siehe Hinweis unten)
+
         actionTypeBox.setDisable(!isEditing[0]);
 
         HBox actionTypeBar = new HBox(10, actionTypeLabel, actionTypeBox);
 
-        // ===== VALUE =====
-        Label valueLabel = new Label("Wert:");
+        // =====================================================
+        // VALUE (abhängig vom ActionType)
+        // =====================================================
 
-        TextField valueField = new TextField(
-                deviceCommand.getAction().getValue() == null
-                        ? ""
-                        : String.valueOf(deviceCommand.getAction().getValue())
-        );
+        Label valueLabel = new Label("Wert:");
+        TextField valueField = new TextField();
 
         valueField.setDisable(!isEditing[0]);
+
+        // 🔥 Initialwert aus Command-Typ
+        if (command instanceof SetBrightnessLampCommand c) {
+            valueField.setText(String.valueOf(c.getBrightness()));
+        } else if (command instanceof SetPositionShutterCommand c) {
+            valueField.setText(String.valueOf(c.getPosition()));
+        } else if (command instanceof SetTemperatureHeatingCommand c) {
+            valueField.setText(String.valueOf(c.getTemperature()));
+        } else {
+            valueField.setText("");
+        }
 
         HBox valueBar = new HBox(10, valueLabel, valueField);
 
@@ -1310,23 +1282,34 @@ public class SmartHomeApp extends Application {
                 valueBar
         );
 
-        // ===== BACK BUTTON =====
+        // =====================================================
+        // BACK
+        // =====================================================
+
         Button backBtn = new Button("Zurück");
         backBtn.setOnAction(e -> openScenarioEditor(editScenario, scenario));
 
-        // ===== VALUE TYPE MAPPING =====
-        java.util.function.Function<String, ValueType> getValueType = (actionType) -> {
-            if (actionType == null) return ValueType.NONE;
+        // =====================================================
+        // VALUE TYPE MAPPING (bleibt sinnvoll für Validation)
+        // =====================================================
 
-            return switch (actionType) {
-                case "Temperatur setzen" -> ValueType.DOUBLE;
-                case "Helligkeit setzen",
-                     "Position setzen" -> ValueType.INT;
+        enum ValueType { NONE, INT, DOUBLE }
+
+        java.util.function.Function<ActionType, ValueType> getValueType = (type) -> {
+            if (type == null) return ValueType.NONE;
+
+            return switch (type) {
+                case SET_TEMPERATURE -> ValueType.DOUBLE;
+                case SET_BRIGHTNESS,
+                     SET_POSITION -> ValueType.INT;
                 default -> ValueType.NONE;
             };
         };
 
-        // ===== APPLY VALUE STATE =====
+        // =====================================================
+        // APPLY VALUE STATE
+        // =====================================================
+
         Runnable applyValueState = () -> {
             ValueType type = getValueType.apply(actionTypeBox.getValue());
             boolean requiresValue = type != ValueType.NONE;
@@ -1338,16 +1321,28 @@ public class SmartHomeApp extends Application {
             }
         };
 
-        // ===== EDIT BUTTON =====
+        // =====================================================
+        // SAVE / EDIT BUTTON
+        // =====================================================
+
         Button editBtn = new Button(isEditing[0] ? "Speichern" : "Bearbeiten");
 
         editBtn.setOnAction(e -> {
 
             if (isEditing[0]) {
 
-                // ===== SAVE =====
-                deviceCommand.getAction().setActionType(actionTypeBox.getValue());
-                deviceCommand.getAction().setValue(valueField.getText());
+                // =================================================
+                // 🔥 WICHTIG: NEUEN COMMAND ERZEUGEN statt mutieren
+                // =================================================
+
+                Device device = command.getDevice();
+                ActionType type = actionTypeBox.getValue();
+                String value = valueField.getText();
+
+                Command newCommand =
+                        CommandFactory.create(device, type, value, command.getOrderIndex());
+
+                scenario.replaceCommand(command, newCommand);
 
                 isEditing[0] = false;
 
@@ -1356,42 +1351,50 @@ public class SmartHomeApp extends Application {
 
                 editBtn.setText("Bearbeiten");
 
-            } else {
-
-                // ===== EDIT MODE =====
-                isEditing[0] = true;
-
-                actionTypeBox.setDisable(false);
-                applyValueState.run();
-
-                editBtn.setText("Speichern");
+                openScenarioEditor(editScenario, scenario);
+                return;
             }
+
+            // EDIT MODE
+            isEditing[0] = true;
+
+            actionTypeBox.setDisable(false);
+            applyValueState.run();
+
+            editBtn.setText("Speichern");
         });
 
-        // ===== VALIDATION =====
-        validate = () -> {
+        // =====================================================
+        // VALIDATION
+        // =====================================================
 
-            String actionType = actionTypeBox.getValue();
-            ValueType type = getValueType.apply(actionType);
+        Runnable validate = () -> {
 
-            String text = valueField.getText() == null ? "" : valueField.getText().trim();
+            ActionType type = actionTypeBox.getValue();
+            ValueType valueType = getValueType.apply(type);
 
-            boolean valueValid = switch (type) {
+            String text = valueField.getText() == null
+                    ? ""
+                    : valueField.getText().trim();
+
+            boolean valueValid = switch (valueType) {
 
                 case NONE -> true;
-
                 case INT -> text.matches("^\\d+$");
-
                 case DOUBLE -> text.matches("^\\d+(\\.\\d+)?$");
             };
 
             boolean invalid =
-                    actionType == null
+                    type == null
                             || !valueValid;
+
             editBtn.setDisable(invalid);
         };
 
-        // ===== LISTENERS =====
+        // =====================================================
+        // LISTENERS
+        // =====================================================
+
         actionTypeBox.valueProperty().addListener((obs, o, n) -> {
             applyValueState.run();
             validate.run();
@@ -1401,8 +1404,10 @@ public class SmartHomeApp extends Application {
             validate.run();
         });
 
+        // =====================================================
+        // INITIAL STATE
+        // =====================================================
 
-        // ===== INITIAL STATE =====
         applyValueState.run();
         validate.run();
 

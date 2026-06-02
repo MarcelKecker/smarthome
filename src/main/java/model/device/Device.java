@@ -1,16 +1,19 @@
 package model.device;
 
+import model.DeviceType;
+import model.State;
 import model.room.Raum;
+import model.action.Command;
 
 public interface Device {
     String getName();
     String getId();
-    String getType();
+    DeviceType getType();
 
-    void executeAction(DeviceAction action);
+    void executeAction(Command command);
 
-    String getState();
-    void setState(String state);
+    State getState();
+    void setState(State state);
 
     Raum getRoom();
 
