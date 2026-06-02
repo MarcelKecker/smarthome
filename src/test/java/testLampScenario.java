@@ -1,9 +1,3 @@
-import model.device.DeviceAction;
-import model.device.impl.Lamp;
-import model.scenario.DeviceCommand;
-import model.scenario.Scenario;
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 
 public class testLampScenario {

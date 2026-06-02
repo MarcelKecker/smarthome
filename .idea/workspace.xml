@@ -5,9 +5,35 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2ee234e0-05c6-4263-9101-2c08fd03ccf2" name="Changes" comment="Aktionen hinzugefügt">
+      <change afterPath="$PROJECT_DIR$/src/main/java/factory/CommandFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/model/ActionType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/model/DeviceType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/model/State.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/model/action/BaseCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/model/action/Command.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/model/action/impl/RollDownShutterCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/model/action/impl/RollUpShutterCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/model/action/impl/SetBrightnessLampCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/model/action/impl/SetPositionShutterCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/model/action/impl/SetTemperatureHeatingCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/model/action/impl/TurnOFfLampCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/model/action/impl/TurnOffHeatingCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/model/action/impl/TurnOnHeatingCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/model/action/impl/TurnOnLampCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/SmartHomeApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SmartHomeApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/factory/DeviceFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/factory/DeviceFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/device/Device.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/device/Device.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/device/DeviceAction.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/model/device/impl/Heating.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/device/impl/Heating.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/device/impl/Lamp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/device/impl/Lamp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/device/impl/Shutter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/device/impl/Shutter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/scenario/Command.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/scenario/DeviceCommand.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/scenario/Scenario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/scenario/Scenario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/service/DeviceCommandService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/service/DeviceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/DeviceService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/testLampScenario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/testLampScenario.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,6 +44,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
+        <option value="Enum" />
         <option value="Class" />
       </list>
     </option>
@@ -63,7 +90,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "AddCommandsAndFinishScenarios",
     "ignore.virus.scanning.warn.message": "true",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
@@ -89,8 +116,10 @@
       <recent name="" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="service" />
       <recent name="factory" />
+      <recent name="model" />
+      <recent name="model.action.impl" />
+      <recent name="service" />
       <recent name="model.device.impl" />
     </key>
   </component>
