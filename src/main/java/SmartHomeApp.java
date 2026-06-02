@@ -11,19 +11,20 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import model.device.Device;
+import model.device.DeviceAction;
 import model.device.impl.Heating;
 import model.device.impl.Lamp;
 import model.device.impl.Shutter;
 import model.room.Raum;
+import model.scenario.DeviceCommand;
 import model.scenario.Command;
 import model.scenario.Scenario;
+import service.DeviceCommandService;
 import service.DeviceService;
 import service.RoomService;
 import service.ScenarioService;
 
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class SmartHomeApp extends Application {
 
@@ -33,7 +34,12 @@ public class SmartHomeApp extends Application {
 
     private DeviceService deviceService = new DeviceService();
 
+    private DeviceCommandService deviceCommandService = new DeviceCommandService();
+
+
     private ScenarioService scenarioService = new ScenarioService();
+
+    private Runnable currentRefreshAction;
 
     @Override
     public void start(Stage stage) {
@@ -97,15 +103,52 @@ public class SmartHomeApp extends Application {
         saveBtn.setOnAction(e -> {
             System.out.println("Speichern geklickt");
         });
-        //Dropdown für Szenarien?
-        Button runScenario = new Button("▶ Szenario ausführen");
 
-        runScenario.setOnAction(e -> {
-            System.out.println("Szenario geklickt");
+        ComboBox<Scenario> scenarioSelect = new ComboBox<>();
+        scenarioSelect.setPrefWidth(200);
+
+// LIVE-BINDING (wichtig!)
+        scenarioSelect.setItems(scenarioService.getScenarios());
+
+// Anzeige schön machen
+        scenarioSelect.setCellFactory(lv -> new ListCell<>() {
+            @Override
+            protected void updateItem(Scenario item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? null : item.getName());
+            }
         });
 
-        topBar.getChildren().addAll(header, neuBtn, openBtn, saveBtn, spacer, runScenario);
+        scenarioSelect.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(Scenario item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? "Szenario auswählen" : item.getName());
+            }
+        });
 
+// BUTTON wieder hinzufügen
+        Button runScenario = new Button("▶ Ausführen");
+
+        runScenario.setOnAction(e -> {
+
+            Scenario selected = scenarioSelect.getValue();
+            if (selected != null) {
+                selected.execute();
+                refreshCurrentView();
+            }
+
+        });
+
+        topBar.getChildren().addAll(
+                header,
+                neuBtn,
+                openBtn,
+                saveBtn,
+                spacer,
+                scenarioSelect,
+                runScenario
+        );
         // ===== Center Dashboard =====
         GridPane dashboard = new GridPane();
         dashboard.setPadding(new Insets(20));
@@ -146,7 +189,14 @@ public class SmartHomeApp extends Application {
         stage.show();
     }
 
+    private void refreshCurrentView() {
+        if (currentRefreshAction != null) {
+            currentRefreshAction.run();
+        }
+    }
+
     private void openDevices() {
+        currentRefreshAction = this::openDevices;
         VBox devicesView = new VBox(10);
         devicesView.setPadding(new Insets(20));
 
@@ -218,7 +268,7 @@ public class SmartHomeApp extends Application {
     }
 
     private void openDeviceEditor(boolean edit, Device device) {
-
+        currentRefreshAction = () -> openDeviceEditor(edit, device);
         VBox deviceEditor = new VBox(15);
         deviceEditor.setPadding(new Insets(20));
 
@@ -414,7 +464,7 @@ public class SmartHomeApp extends Application {
             Label positionLabel = new Label("Positon:");
 
             Slider positionSlider =
-                    new Slider(0, 100, shutter.getRolledDownPercent());
+                    new Slider(0, 100, shutter.getPosition());
             positionSlider.setShowTickLabels(true);
             positionSlider.setDisable(true);
 
@@ -439,7 +489,7 @@ public class SmartHomeApp extends Application {
                     device.setName(nameField.getText());
                     device.setRoom(roomBox.getValue());
                     device.setState(stateToggle.getText());
-                    shutter.setRolledDownPercent((int) positionSlider.getValue());
+                    shutter.setPosition((int) positionSlider.getValue());
 
                     isEditing[0] = false;
 
@@ -479,7 +529,9 @@ public class SmartHomeApp extends Application {
         deviceEditor.getChildren().addAll(buttonBar);
         root.setCenter(deviceEditor);
     }
+
     private void openAddDevice() {
+        currentRefreshAction = this::openAddDevice;
         Dialog<Device> dialog = new Dialog<>();
         dialog.setTitle("Neues Gerät");
 
@@ -545,6 +597,7 @@ public class SmartHomeApp extends Application {
     }
 
     private void openRooms() {
+        currentRefreshAction = this::openRooms;
         VBox roomsView = new VBox(10);
         roomsView.setPadding(new Insets(20));
 
@@ -608,6 +661,7 @@ public class SmartHomeApp extends Application {
     }
 
     private void openAddRoom() {
+        currentRefreshAction = this::openAddRoom;
         VBox newRoom = new VBox(10);
         newRoom.setPadding(new Insets(20));
 
@@ -648,6 +702,7 @@ public class SmartHomeApp extends Application {
     }
 
     private void openRoomEditor(boolean edit, Raum room) {
+        currentRefreshAction = () -> openRoomEditor(edit, room);
         VBox roomEditor = new VBox(10);
         roomEditor.setPadding(new Insets(20));
 
@@ -704,6 +759,7 @@ public class SmartHomeApp extends Application {
     }
 
     private void openScenarios(){
+        currentRefreshAction = this::openScenarios;
         VBox scenariosView = new VBox(10);
         scenariosView.setPadding(new Insets(20));
 
@@ -764,7 +820,35 @@ public class SmartHomeApp extends Application {
         runScenario.setOnAction(e -> {
             Scenario scenario = table.getSelectionModel().getSelectedItem();
             if (null != scenario){
-                scenario.execute();
+                if (scenario.getCommands().get(0).getDevice().getType().equals("Heizung")){
+                    Heating heating = (Heating) scenario.getCommands().get(0).getDevice();
+                    System.out.println(heating.toString());
+                    System.out.println(heating.getState());
+                    System.out.println(heating.getTemperature());
+                    scenario.execute();
+                    System.out.println(heating.toString());
+                    System.out.println(heating.getState());
+                    System.out.println(heating.getTemperature());
+                } else if (scenario.getCommands().get(0).getDevice().getType().equals("Rollladen")){
+                    Shutter shutter = (Shutter) scenario.getCommands().get(0).getDevice();
+                    System.out.println(shutter.toString());
+                    System.out.println(shutter.getState());
+                    System.out.println(shutter.getPosition());
+                    scenario.execute();
+                    System.out.println(shutter.toString());
+                    System.out.println(shutter.getState());
+                    System.out.println(shutter.getPosition());
+                } else if (scenario.getCommands().get(0).getDevice().getType().equals("Lampe")){
+                    Lamp lamp = (Lamp) scenario.getCommands().get(0).getDevice();
+                    System.out.println(lamp.toString());
+                    System.out.println(lamp.getState());
+                    System.out.println(lamp.getBrightness());
+                    scenario.execute();
+                    System.out.println(lamp.toString());
+                    System.out.println(lamp.getState());
+                    System.out.println(lamp.getBrightness());
+                }
+
                 openScenarios();
             }
         });
@@ -782,6 +866,7 @@ public class SmartHomeApp extends Application {
     }
 
     private void openAddScenario() {
+        currentRefreshAction = this::openAddScenario;
         VBox newScenario = new VBox(10);
         newScenario.setPadding(new Insets(20));
 
@@ -825,7 +910,7 @@ public class SmartHomeApp extends Application {
     }
 
     private void openScenarioEditor(boolean edit, Scenario scenario) {
-
+        currentRefreshAction = () -> openScenarioEditor(edit, scenario);
         VBox scenarioEditor = new VBox(15);
         scenarioEditor.setPadding(new Insets(20));
 
@@ -845,48 +930,69 @@ public class SmartHomeApp extends Application {
         HBox descriptionBar = new HBox(10, descriptionLabel, descriptionField);
         // ===== Liste Aktionen =====
 
-        ListView<Command> commandList = new ListView<>();
-        commandList.setCellFactory(param -> new ListCell<>() {
-            @Override
-            protected void updateItem(Command command, boolean empty) {
-                super.updateItem(command, empty);
+        TableView<DeviceCommand> tableDeviceCommands = new TableView<>();
+        TableColumn<DeviceCommand, String> orderCol = new TableColumn<>("Reihenfolge");
+        orderCol.setCellValueFactory(data ->
+                new SimpleStringProperty(Integer.toString(data.getValue().getOrderIndex()))
+        );
 
-                if (empty || command == null) {
-                    setText(null);
-                } else {
-                    setText(command.toString());
-                }
-            }
-        });
-        commandList.getItems().addAll(scenario.getCommands());
+        TableColumn<DeviceCommand, String> deviceCommandCol = new TableColumn<>("Aktion");
+        deviceCommandCol.setCellValueFactory(data ->
+                new SimpleStringProperty(data.getValue().toString())
+        );
+
+        tableDeviceCommands.getColumns().addAll(orderCol, deviceCommandCol);
+        tableDeviceCommands.setItems(scenario.getCommands());
 
 
         scenarioEditor.getChildren().addAll(
                 title,
                 nameBar,
                 descriptionBar,
-                commandList);
+                tableDeviceCommands);
         // ===== Buttons =====
         Button backBtn = new Button("Zurück");
         backBtn.setOnAction(e -> openScenarios());
 
         Button addCommandBtn = new Button("Aktion hinzufügen");
         addCommandBtn.setOnAction(e -> {
-            //TODO: Command hinzufügen
-            openScenarioEditor(edit, scenario);
+            openAddCommand(scenario);
+            openScenarioEditor(isEditing[0], scenario);
         });
+        addCommandBtn.setDisable(!isEditing[0]);
+
+        Button viewCommandBtn = new Button("Aktion anzeigen");
+        viewCommandBtn.setOnAction(e -> {
+            DeviceCommand deviceCommand = tableDeviceCommands.getSelectionModel().getSelectedItem();
+            if (null != deviceCommand){
+                openCommandEditor(deviceCommand, false, scenario, edit);
+            }
+        });
+        viewCommandBtn.setDisable(!isEditing[0]);
 
         Button changeCommandBtn = new Button("Aktion ändern");
         changeCommandBtn.setOnAction(e -> {
-            //TODO: Command ändern
-            openScenarioEditor(edit, scenario);
+            DeviceCommand deviceCommand = tableDeviceCommands.getSelectionModel().getSelectedItem();
+            if (null != deviceCommand){
+                openCommandEditor(deviceCommand, true, scenario, edit);
+            }
         });
+        changeCommandBtn.setDisable(!isEditing[0]);
 
         Button deleteCommandBtn = new Button("Aktion löschen");
         deleteCommandBtn.setOnAction(e -> {
-            //TODO: Command loeschen
-            openScenarioEditor(edit, scenario);
+            DeviceCommand deviceCommand = tableDeviceCommands.getSelectionModel().getSelectedItem();
+            if (deviceCommand != null) {
+                for (DeviceCommand deviceCommand2 : tableDeviceCommands.getItems()) {
+                    if (deviceCommand2.getOrderIndex() > deviceCommand.getOrderIndex()) {
+                        deviceCommand2.setOrderIndex(deviceCommand2.getOrderIndex() - 1);
+                    }
+                }
+                scenario.getCommands().remove(deviceCommand);
+                openScenarioEditor(isEditing[0], scenario);
+            }
         });
+        deleteCommandBtn.setDisable(!isEditing[0]);
 
         Button editBtn = new Button();
 
@@ -903,12 +1009,20 @@ public class SmartHomeApp extends Application {
                 isEditing[0] = false;
                 nameField.setEditable(false);
                 descriptionField.setEditable(false);
+                addCommandBtn.setDisable(true);
+                changeCommandBtn.setDisable(true);
+                viewCommandBtn.setDisable(true);
+                deleteCommandBtn.setDisable(true);
                 editBtn.setText("Bearbeiten");
 
             } else {
                 isEditing[0] = true;
                 nameField.setEditable(true);
                 descriptionField.setEditable(true);
+                addCommandBtn.setDisable(false);
+                changeCommandBtn.setDisable(false);
+                viewCommandBtn.setDisable(false);
+                deleteCommandBtn.setDisable(false);
                 editBtn.setText("Speichern");
             }
         });
@@ -920,6 +1034,7 @@ public class SmartHomeApp extends Application {
                 10,
                 backBtn,
                 addCommandBtn,
+                viewCommandBtn,
                 changeCommandBtn,
                 deleteCommandBtn,
                 spacer,
@@ -929,6 +1044,382 @@ public class SmartHomeApp extends Application {
         root.setCenter(scenarioEditor);
     }
 
+    private void openAddCommand(Scenario scenario) {
+        currentRefreshAction = () -> openAddCommand(scenario);
+
+        Dialog<DeviceCommand> dialog = new Dialog<>();
+        dialog.setTitle("Aktion hinzufügen");
+
+        ButtonType saveButtonType = new ButtonType("Speichern", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
+
+        Node saveButton = dialog.getDialogPane().lookupButton(saveButtonType);
+        saveButton.setDisable(true);
+
+        // ===== FORM =====
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20));
+
+        // ===== DEVICE =====
+        ComboBox<Device> deviceBox = new ComboBox<>();
+        deviceBox.getItems().addAll(deviceService.getDevices());
+
+        // ===== ACTION TYPE =====
+        ComboBox<String> actionTypeBox = new ComboBox<>();
+
+        deviceBox.valueProperty().addListener((obs, oldDevice, newDevice) -> {
+
+            actionTypeBox.getItems().clear();
+
+            if (newDevice == null) return;
+
+            switch (newDevice.getType()) {
+
+                case "Heizung" -> actionTypeBox.getItems().addAll(
+                        "Ausschalten",
+                        "Anschalten",
+                        "Temperatur setzen"
+                );
+
+                case "Lampe" -> actionTypeBox.getItems().addAll(
+                        "Ausschalten",
+                        "Anschalten",
+                        "Helligkeit setzen"
+                );
+
+                case "Rollladen" -> actionTypeBox.getItems().addAll(
+                        "Herunterfahren",
+                        "Hochfahren",
+                        "Position setzen"
+                );
+            }
+        });
+
+        // ===== VALUE =====
+        TextField valueBox = new TextField();
+
+        // ===== VALUE TYPE LOGIC =====
+        enum ValueType { NONE, INT, DOUBLE }
+
+        java.util.function.Function<String, ValueType> getValueType = (actionType) -> {
+            if (actionType == null) return ValueType.NONE;
+
+            return switch (actionType) {
+                case "Temperatur setzen" -> ValueType.DOUBLE;
+                case "Helligkeit setzen",
+                     "Position setzen" -> ValueType.INT;
+                default -> ValueType.NONE;
+            };
+        };
+
+        Runnable applyValueState = () -> {
+
+            ValueType type = getValueType.apply(actionTypeBox.getValue());
+            boolean requiresValue = type != ValueType.NONE;
+
+            valueBox.setDisable(!requiresValue);
+
+            if (!requiresValue) {
+                valueBox.clear();
+            }
+        };
+
+        // ===== VALIDATION (FIXED INT/DOUBLE) =====
+        Runnable validate = () -> {
+
+            Device device = deviceBox.getValue();
+            String actionType = actionTypeBox.getValue();
+
+            ValueType type = getValueType.apply(actionType);
+
+            String text = valueBox.getText() == null ? "" : valueBox.getText().trim();
+
+            boolean valueValid = switch (type) {
+
+                case NONE -> true;
+
+                case INT -> text.matches("^\\d+$");
+
+                case DOUBLE -> text.matches("^\\d+(\\.\\d+)?$");
+            };
+
+            boolean invalid =
+                    device == null
+                            || actionType == null
+                            || !valueValid;
+
+            saveButton.setDisable(invalid);
+        };
+
+        // ===== LISTENERS =====
+        actionTypeBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            applyValueState.run();
+            validate.run();
+        });
+
+        deviceBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            validate.run();
+        });
+
+        valueBox.textProperty().addListener((obs, oldVal, newVal) -> {
+            validate.run();
+        });
+
+        // ===== UI =====
+        grid.add(new Label("Gerät:"), 0, 0);
+        grid.add(deviceBox, 1, 0);
+
+        grid.add(new Label("Aktionstyp:"), 0, 1);
+        grid.add(actionTypeBox, 1, 1);
+
+        grid.add(new Label("Wert:"), 0, 2);
+        grid.add(valueBox, 1, 2);
+
+        dialog.getDialogPane().setContent(grid);
+
+        // ===== RESULT =====
+        dialog.setResultConverter(button -> {
+
+            if (button == saveButtonType) {
+
+                Device device = deviceBox.getValue();
+                String actionType = actionTypeBox.getValue();
+
+                DeviceAction deviceAction = new DeviceAction(
+                        actionType,
+                        valueBox.getText()
+                );
+
+                int orderIndex = scenario.getCommands().size();
+
+                DeviceCommand command = new DeviceCommand(
+                        device,
+                        deviceAction,
+                        orderIndex
+                );
+
+                scenario.getCommands().add(command);
+            }
+
+            return null;
+        });
+
+        Optional<DeviceCommand> result = dialog.showAndWait();
+
+        result.ifPresent(deviceCommand -> {
+            scenario.getCommands().add(deviceCommand);
+        });
+    }
+
+    private boolean needsValue(String actionType) {
+        if (actionType == null) {
+            return false;
+        }
+        return switch (actionType) {
+            case "Temperatur setzen",
+                 "Helligkeit setzen",
+                 "Position setzen" -> true;
+            default -> false;
+        };
+    }
+
+    private List<String> getActionsForDevice(Device device) {
+        return switch (device.getType()) {
+            case "Heizung" -> List.of(
+                    "Ausschalten",
+                    "Anschalten",
+                    "Temperatur setzen"
+            );
+
+            case "Lampe" -> List.of(
+                    "Ausschalten",
+                    "Anschalten",
+                    "Helligkeit setzen"
+            );
+
+            case "Rollladen" -> List.of(
+                    "Hochfahren",
+                    "Herunterfahren",
+                    "Position setzen"
+            );
+
+            default -> List.of();
+        };
+    }
+
+    private void openCommandEditor(DeviceCommand deviceCommand,
+                                   boolean edit,
+                                   Scenario scenario,
+                                   boolean editScenario) {
+        currentRefreshAction = () -> openCommandEditor(
+                deviceCommand,
+                edit,
+                scenario,
+                editScenario
+        );
+
+        VBox editor = new VBox(15);
+        editor.setPadding(new Insets(20));
+
+        Label title = new Label("Aktion");
+        title.getStyleClass().add("header");
+
+        final boolean[] isEditing = {edit};
+
+        Label deviceLabel = new Label(
+                "Gerät: " + deviceCommand.getDevice().getName()
+        );
+
+        // ===== VALUE TYPES =====
+        enum ValueType { NONE, INT, DOUBLE }
+
+        Runnable validate;
+
+        // ===== ACTION TYPE =====
+        Label actionTypeLabel = new Label("Aktionstyp:");
+
+        ComboBox<String> actionTypeBox = new ComboBox<>();
+        actionTypeBox.getItems().addAll(
+                getActionsForDevice(deviceCommand.getDevice())
+        );
+
+        actionTypeBox.setValue(deviceCommand.getAction().getActionType());
+        actionTypeBox.setDisable(!isEditing[0]);
+
+        HBox actionTypeBar = new HBox(10, actionTypeLabel, actionTypeBox);
+
+        // ===== VALUE =====
+        Label valueLabel = new Label("Wert:");
+
+        TextField valueField = new TextField(
+                deviceCommand.getAction().getValue() == null
+                        ? ""
+                        : String.valueOf(deviceCommand.getAction().getValue())
+        );
+
+        valueField.setDisable(!isEditing[0]);
+
+        HBox valueBar = new HBox(10, valueLabel, valueField);
+
+        editor.getChildren().addAll(
+                title,
+                deviceLabel,
+                actionTypeBar,
+                valueBar
+        );
+
+        // ===== BACK BUTTON =====
+        Button backBtn = new Button("Zurück");
+        backBtn.setOnAction(e -> openScenarioEditor(editScenario, scenario));
+
+        // ===== VALUE TYPE MAPPING =====
+        java.util.function.Function<String, ValueType> getValueType = (actionType) -> {
+            if (actionType == null) return ValueType.NONE;
+
+            return switch (actionType) {
+                case "Temperatur setzen" -> ValueType.DOUBLE;
+                case "Helligkeit setzen",
+                     "Position setzen" -> ValueType.INT;
+                default -> ValueType.NONE;
+            };
+        };
+
+        // ===== APPLY VALUE STATE =====
+        Runnable applyValueState = () -> {
+            ValueType type = getValueType.apply(actionTypeBox.getValue());
+            boolean requiresValue = type != ValueType.NONE;
+
+            valueField.setDisable(!isEditing[0] || !requiresValue);
+
+            if (!requiresValue && isEditing[0]) {
+                valueField.clear();
+            }
+        };
+
+        // ===== EDIT BUTTON =====
+        Button editBtn = new Button(isEditing[0] ? "Speichern" : "Bearbeiten");
+
+        editBtn.setOnAction(e -> {
+
+            if (isEditing[0]) {
+
+                // ===== SAVE =====
+                deviceCommand.getAction().setActionType(actionTypeBox.getValue());
+                deviceCommand.getAction().setValue(valueField.getText());
+
+                isEditing[0] = false;
+
+                actionTypeBox.setDisable(true);
+                valueField.setDisable(true);
+
+                editBtn.setText("Bearbeiten");
+
+            } else {
+
+                // ===== EDIT MODE =====
+                isEditing[0] = true;
+
+                actionTypeBox.setDisable(false);
+                applyValueState.run();
+
+                editBtn.setText("Speichern");
+            }
+        });
+
+        // ===== VALIDATION =====
+        validate = () -> {
+
+            String actionType = actionTypeBox.getValue();
+            ValueType type = getValueType.apply(actionType);
+
+            String text = valueField.getText() == null ? "" : valueField.getText().trim();
+
+            boolean valueValid = switch (type) {
+
+                case NONE -> true;
+
+                case INT -> text.matches("^\\d+$");
+
+                case DOUBLE -> text.matches("^\\d+(\\.\\d+)?$");
+            };
+
+            boolean invalid =
+                    actionType == null
+                            || !valueValid;
+            editBtn.setDisable(invalid);
+        };
+
+        // ===== LISTENERS =====
+        actionTypeBox.valueProperty().addListener((obs, o, n) -> {
+            applyValueState.run();
+            validate.run();
+        });
+
+        valueField.textProperty().addListener((obs, o, n) -> {
+            validate.run();
+        });
+
+
+        // ===== INITIAL STATE =====
+        applyValueState.run();
+        validate.run();
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        HBox buttonBar = new HBox(
+                10,
+                backBtn,
+                spacer,
+                editBtn
+        );
+
+        editor.getChildren().add(buttonBar);
+
+        root.setCenter(editor);
+    }
 
     private VBox createCard(String type, String room, String value) {
         VBox card = new VBox(10);

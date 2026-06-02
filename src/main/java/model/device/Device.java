@@ -18,4 +18,7 @@ public interface Device {
 
     void setRoom(Raum room);
 
+    @Override
+    public String toString();
+
 }

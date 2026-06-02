@@ -11,6 +11,14 @@ public class DeviceService {
         return devices;
     }
 
+    public ObservableList<String> getDeviceNames() {
+        ObservableList<String> deviceNames = FXCollections.observableArrayList();
+        for (Device device : devices) {
+            deviceNames.add(device.getName());
+        }
+        return deviceNames;
+    }
+
     public void addDevice(Device device) {
         devices.add(device);
     }

@@ -11,4 +11,6 @@ public class DeviceAction {
 
     public String getActionType() { return actionType; }
     public Object getValue() { return value; }
+    public void setActionType(String actionType) { this.actionType = actionType; }
+    public void setValue(Object value) { this.value = value; }
 }

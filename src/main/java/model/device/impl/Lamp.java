@@ -22,9 +22,9 @@ public class Lamp implements Device {
     @Override
     public void executeAction(DeviceAction action) {
         switch (action.getActionType()) {
-            case "TURN_ON" -> isOn = true;
-            case "TURN_OFF" -> isOn = false;
-            case "SET_BRIGHTNESS" -> brightness = (int) action.getValue();
+            case "Anschalten" -> isOn = true;
+            case "Ausschalten" -> isOn = false;
+            case "Helligkeit setzen" -> brightness = Integer.parseInt(action.getValue().toString());
         }
     }
 
@@ -59,6 +59,12 @@ public class Lamp implements Device {
     @Override public String getId() { return id; }
     @Override public String getName() { return name; }
     @Override public String getType() { return "Lampe"; }
+    @Override public String toString() {
+        if (room == null) {
+            return name + " | Lampe";
+        }
+        return name + " | Lampe in Raum " + room;
+    }
 
     public int getBrightness() {
         return brightness;

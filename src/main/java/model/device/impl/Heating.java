@@ -36,7 +36,12 @@ public class Heating implements Device {
 
     @Override
     public void executeAction(DeviceAction action) {
-
+        switch (action.getActionType()) {
+            case "Ausschalten" -> isOn = false;
+            case "Anschalten" -> isOn = true;
+            case "Temperatur setzen" -> temperature = Integer.parseInt(action.getValue().toString());
+            default -> throw new IllegalArgumentException("Unknown action type " + action.getActionType());
+        }
     }
 
     @Override
@@ -66,6 +71,12 @@ public class Heating implements Device {
     @Override
     public void setRoom(Raum room) {
         this.room = room;
+    }
+    @Override public String toString() {
+        if (room == null) {
+            return name + " | Heizung";
+        }
+        return name + " | Heizung in Raum " + room;
     }
 
     public void setTemperature(int temperature) {
