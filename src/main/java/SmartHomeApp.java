@@ -1,4 +1,3 @@
-
 import atlantafx.base.theme.PrimerLight;
 import factory.CommandFactory;
 import factory.DeviceFactory;
@@ -28,6 +27,8 @@ import service.DeviceService;
 import service.RoomService;
 import service.ScenarioService;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class SmartHomeApp extends Application {
@@ -41,6 +42,16 @@ public class SmartHomeApp extends Application {
     private ScenarioService scenarioService = new ScenarioService();
 
     private Runnable currentRefreshAction;
+
+    private TextArea logArea;
+    private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+    private void log(String message) {
+        if (logArea != null) {
+            String timestamp = LocalTime.now().format(timeFormatter);
+            logArea.appendText("[" + timestamp + "] " + message + "\n");
+        }
+    }
 
     @Override
     public void start(Stage stage) {
@@ -91,27 +102,30 @@ public class SmartHomeApp extends Application {
 
         neuBtn.setOnAction(e -> {
             System.out.println("Neu geklickt");
+            log("Neues Projekt erstellt/angefordert.");
         });
 
         Button openBtn = new Button("📂 Öffnen");
 
         openBtn.setOnAction(e -> {
             System.out.println("Öffnen geklickt");
+            log("Projekt geöffnet.");
         });
 
         Button saveBtn = new Button("💾 Speichern");
 
         saveBtn.setOnAction(e -> {
             System.out.println("Speichern geklickt");
+            log("Projekt gespeichert.");
         });
 
         ComboBox<Scenario> scenarioSelect = new ComboBox<>();
         scenarioSelect.setPrefWidth(200);
 
-// LIVE-BINDING (wichtig!)
+        // LIVE-BINDING (wichtig!)
         scenarioSelect.setItems(scenarioService.getScenarios());
 
-// Anzeige schön machen
+        // Anzeige schön machen
         scenarioSelect.setCellFactory(lv -> new ListCell<>() {
             @Override
             protected void updateItem(Scenario item, boolean empty) {
@@ -128,17 +142,16 @@ public class SmartHomeApp extends Application {
             }
         });
 
-// BUTTON wieder hinzufügen
+        // BUTTON wieder hinzufügen
         Button runScenario = new Button("▶ Ausführen");
 
         runScenario.setOnAction(e -> {
-
             Scenario selected = scenarioSelect.getValue();
             if (selected != null) {
                 selected.execute();
+                log("Szenario '" + selected.getName() + "' über TopBar ausgeführt.");
                 refreshCurrentView();
             }
-
         });
 
         topBar.getChildren().addAll(
@@ -167,8 +180,10 @@ public class SmartHomeApp extends Application {
         logPanel.setPrefWidth(250);
 
         Label logTitle = new Label("Aktivität");
-        TextArea logArea = new TextArea();
+
+        logArea = new TextArea();
         logArea.setEditable(false);
+        logArea.setWrapText(true);
 
         logPanel.getChildren().addAll(logTitle, logArea);
 
@@ -188,6 +203,8 @@ public class SmartHomeApp extends Application {
         stage.setTitle("Smart Home");
         stage.setScene(scene);
         stage.show();
+
+        log("Anwendung erfolgreich gestartet.");
     }
 
     private void refreshCurrentView() {
@@ -242,9 +259,9 @@ public class SmartHomeApp extends Application {
         viewDevice.setOnAction(e -> {
             Device gerät = table.getSelectionModel().getSelectedItem();
             if (null != gerät){
+                log("Gerät details angezeigt: " + gerät.getName());
                 openDeviceEditor(false, gerät);
             }
-
         });
 
 
@@ -257,7 +274,14 @@ public class SmartHomeApp extends Application {
         });
 
         Button deleteDevice = new Button("Löschen");
-        deleteDevice.setOnAction(e -> {});
+        deleteDevice.setOnAction(e -> {
+            Device gerät = table.getSelectionModel().getSelectedItem();
+            if (gerät != null) {
+                log("Gerät gelöscht: " + gerät.getName());
+                deviceService.getDevices().remove(gerät);
+                openDevices();
+            }
+        });
 
         HBox buttonBar = new HBox(10);
         buttonBar.setPadding(new Insets(10));
@@ -317,7 +341,7 @@ public class SmartHomeApp extends Application {
                 stateBar );
 
 
-            // ===== Buttons =====
+        // ===== Buttons =====
         Button backBtn = new Button("Zurück");
         backBtn.setOnAction(e -> openDevices());
 
@@ -360,6 +384,8 @@ public class SmartHomeApp extends Application {
                     device.setRoom(roomBox.getValue());
                     device.setState(State.valueOf(stateToggle.getText()));
                     lamp.setBrightness((int) brightnessSlider.getValue());
+
+                    log("Lampen-Änderungen gespeichert: " + device.getName() + " (Helligkeit: " + lamp.getBrightness() + "%, Status: " + device.getState() + ")");
 
                     isEditing[0] = false;
 
@@ -412,43 +438,43 @@ public class SmartHomeApp extends Application {
             };
             stateToggle.setOnAction(e -> {
                 stateToggle.setText(
-                        heatingState == State.TURNED_ON ? State.TURNED_OFF.toString() : State.TURNED_ON.toString()
+                        stateToggle.getText().equals(State.TURNED_ON.toString()) ? State.TURNED_OFF.toString() : State.TURNED_ON.toString()
                 );
-                syncState.run();
             });
 
             editBtn.setOnAction(e -> {
-                        if (isEditing[0]) {
+                if (isEditing[0]) {
 
-                            device.setName(nameField.getText());
-                            device.setRoom(roomBox.getValue());
-                            device.setState(State.valueOf(stateToggle.getText()));
-                            heating.setTemperature((int) tempSlider.getValue());
+                    device.setName(nameField.getText());
+                    device.setRoom(roomBox.getValue());
+                    device.setState(State.valueOf(stateToggle.getText()));
+                    heating.setTemperature((int) tempSlider.getValue());
 
-                            isEditing[0] = false;
+                    log("Heizungs-Änderungen gespeichert: " + device.getName() + " (" + heating.getTemperature() + "°C, Status: " + device.getState() + ")");
 
-                            nameField.setEditable(false);
-                            roomBox.setDisable(true);
-                            stateToggle.setDisable(true);
-                            tempSlider.setDisable(true);
+                    isEditing[0] = false;
 
-                            editBtn.setText("Bearbeiten");
+                    nameField.setEditable(false);
+                    roomBox.setDisable(true);
+                    stateToggle.setDisable(true);
+                    tempSlider.setDisable(true);
 
-                        } else {
+                    editBtn.setText("Bearbeiten");
 
-                            isEditing[0] = true;
+                } else {
 
-                            nameField.setEditable(true);
-                            roomBox.setDisable(false);
-                            stateToggle.setDisable(false);
-                            if (State.valueOf(stateToggle.getText()) ==  State.TURNED_ON) {
-                                tempSlider.setDisable(false);
-                            }
+                    isEditing[0] = true;
 
-                            editBtn.setText("Speichern");
-                        }
+                    nameField.setEditable(true);
+                    roomBox.setDisable(false);
+                    stateToggle.setDisable(false);
+                    if (State.valueOf(stateToggle.getText()) ==  State.TURNED_ON) {
+                        tempSlider.setDisable(false);
+                    }
+
+                    editBtn.setText("Speichern");
+                }
             });
-            syncState.run();
         } else if (device instanceof Shutter shutter) {
 
             Label positionLabel = new Label("Positon:");
@@ -480,6 +506,8 @@ public class SmartHomeApp extends Application {
                     device.setRoom(roomBox.getValue());
                     device.setState(State.valueOf(stateToggle.getText()));
                     shutter.setPosition((int) positionSlider.getValue());
+
+                    log("Rollladen-Änderungen gespeichert: " + device.getName() + " (Position: " + shutter.getPosition() + "%, Status: " + device.getState() + ")");
 
                     isEditing[0] = false;
 
@@ -537,8 +565,6 @@ public class SmartHomeApp extends Application {
         grid.setVgap(10);
         grid.setPadding(new Insets(20));
 
-
-
         TextField nameField = new TextField();
         ComboBox<DeviceType> typeBox = new ComboBox<>();
         typeBox.getItems().addAll(DeviceType.values());
@@ -583,6 +609,7 @@ public class SmartHomeApp extends Application {
 
         result.ifPresent(device -> {
             deviceService.addDevice(device);
+            log("Neues Gerät hinzugefügt: " + device.getName() + " (" + device.getType() + ")");
         });
     }
 
@@ -618,24 +645,25 @@ public class SmartHomeApp extends Application {
         viewRoom.setOnAction(e -> {
             Raum room = roomList.getSelectionModel().getSelectedItem();
             if (room != null) {
+                log("Raum details angezeigt: " + room.getName());
                 openRoomEditor(false, room);
             }
-           //todo log
         });
 
         Button changeRoom = new Button("Bearbeiten");
         changeRoom.setOnAction(e -> {
             Raum room = roomList.getSelectionModel().getSelectedItem();
             if (room != null) {
+                log("Raum '" + room.getName() + "' wird bearbeitet.");
                 openRoomEditor(true, room);
             }
-            //log
         });
 
         Button deleteRoom = new Button("Löschen");
         deleteRoom.setOnAction(e -> {
             Raum room = roomList.getSelectionModel().getSelectedItem();
             if (room != null) {
+                log("Raum gelöscht: " + room.getName());
                 roomService.deleteRoom(room);
                 openRooms();
             }
@@ -664,17 +692,17 @@ public class SmartHomeApp extends Application {
         Button addRoomBtn = new Button("Erstellen");
         addRoomBtn.setOnAction(f -> {
             if (roomName.getText().isEmpty()) {
-                TextField noRoomName = new TextField("Bitte einen Namen eingeben");
-                newRoom.getChildren().add(noRoomName);
-                noRoomName.setEditable(false);
+                TextField errorLabel = new TextField("Bitte einen Namen eingeben");
+                newRoom.getChildren().add(errorLabel);
+                errorLabel.setEditable(false);
                 roomName.requestFocus();
-                //log
+                log("Fehler beim Erstellen eines Raums: Kein Name angegeben.");
             }
             else{
                 roomService.addRoom(new Raum(roomName.getText()));
+                log("Neuer Raum erstellt: " + roomName.getText());
                 openRooms();
             }
-            //else if ob der name bereits verwendet wird?
         });
         Button backtoView = new Button("Zurück");
         backtoView.setOnAction(f -> {
@@ -723,7 +751,9 @@ public class SmartHomeApp extends Application {
 
         editBtn.setOnAction(e -> {
             if (isEditing[0]) {
+                String oldName = room.getName();
                 room.setName(nameField.getText());
+                log("Raum umbenannt von '" + oldName + "' zu '" + room.getName() + "'");
 
                 isEditing[0] = false;
                 nameField.setEditable(false);
@@ -782,35 +812,38 @@ public class SmartHomeApp extends Application {
         viewScenario.setOnAction(e -> {
             Scenario scenario = table.getSelectionModel().getSelectedItem();
             if (null != scenario){
+                log("Szenario details angezeigt: " + scenario.getName());
                 openScenarioEditor(false, scenario);
             }
-            //log
         });
 
         Button changeScenario = new Button("Bearbeiten");
         changeScenario.setOnAction(e -> {
             Scenario scenario = table.getSelectionModel().getSelectedItem();
             if (null != scenario){
+                log("Szenario '" + scenario.getName() + "' wird bearbeitet.");
                 openScenarioEditor(true, scenario);
             }
-            //log
         });
 
         Button deleteScenario = new Button("Löschen");
         deleteScenario.setOnAction(e -> {
             Scenario scenario = table.getSelectionModel().getSelectedItem();
             if (null != scenario){
+                log("Szenario gelöscht: " + scenario.getName());
                 scenarioService.deleteScenario(scenario);
                 openScenarios();
             }
-            //log
         });
 
         Button runScenario = new Button("Ausführen");
         runScenario.setOnAction(e -> {
             Scenario scenario = table.getSelectionModel().getSelectedItem();
-            scenario.execute();
-            openScenarios();
+            if (scenario != null) {
+                scenario.execute();
+                log("Szenario ausgeführt: " + scenario.getName());
+                openScenarios();
+            }
         });
 
         Region spacer = new Region();
@@ -846,13 +879,13 @@ public class SmartHomeApp extends Application {
                 newScenario.getChildren().add(errorField);
                 errorField.setEditable(false);
                 scenarioName.requestFocus();
-                //log
+                log("Fehler beim Erstellen eines Szenarios: Kein Name angegeben.");
             }
             else{
                 scenarioService.addScenario(new Scenario(scenarioName.getText(), scenarioDescription.getText()));
+                log("Neues Szenario erstellt: " + scenarioName.getText());
                 openScenarios();
             }
-            //else if ob der name bereits verwendet wird?
         });
         Button backtoView = new Button("Zurück");
         backtoView.setOnAction(f -> {
@@ -957,6 +990,7 @@ public class SmartHomeApp extends Application {
                     }
                 }
                 scenario.getCommands().remove(command);
+                log("Aktion aus Szenario '" + scenario.getName() + "' gelöscht.");
                 openScenarioEditor(isEditing[0], scenario);
             }
         });
@@ -973,6 +1007,7 @@ public class SmartHomeApp extends Application {
             if (isEditing[0]) {
                 scenario.setName(nameField.getText());
                 scenario.setDescription(descriptionField.getText());
+                log("Szenario-Änderungen gespeichert: " + scenario.getName());
 
                 isEditing[0] = false;
                 nameField.setEditable(false);
@@ -1162,7 +1197,7 @@ public class SmartHomeApp extends Application {
                 int orderIndex = scenario.getCommands().size();
 
                 Command command = CommandFactory.create(device, actionType, valueBox.getText(), scenario.getCommands().size());
-                scenario.getCommands().add(command);
+                return command;
             }
 
             return null;
@@ -1172,6 +1207,7 @@ public class SmartHomeApp extends Application {
 
         result.ifPresent(deviceCommand -> {
             scenario.getCommands().add(deviceCommand);
+            log("Aktion '" + deviceCommand.toString() + "' zu Szenario '" + scenario.getName() + "' hinzugefügt.");
         });
     }
 
@@ -1245,9 +1281,7 @@ public class SmartHomeApp extends Application {
                 ActionType.forDevice(command.getDevice())
         );
 
-        // 🔥 Command selbst liefert KEIN ActionType mehr
-        // -> wir bestimmen ihn über den konkreten Command-Typ
-        actionTypeBox.setValue(command.getActionType()); // <-- NEU (siehe Hinweis unten)
+        actionTypeBox.setValue(command.getActionType());
 
         actionTypeBox.setDisable(!isEditing[0]);
 
@@ -1262,7 +1296,6 @@ public class SmartHomeApp extends Application {
 
         valueField.setDisable(!isEditing[0]);
 
-        // 🔥 Initialwert aus Command-Typ
         if (command instanceof SetBrightnessLampCommand c) {
             valueField.setText(String.valueOf(c.getBrightness()));
         } else if (command instanceof SetPositionShutterCommand c) {
@@ -1331,10 +1364,6 @@ public class SmartHomeApp extends Application {
 
             if (isEditing[0]) {
 
-                // =================================================
-                // 🔥 WICHTIG: NEUEN COMMAND ERZEUGEN statt mutieren
-                // =================================================
-
                 Device device = command.getDevice();
                 ActionType type = actionTypeBox.getValue();
                 String value = valueField.getText();
@@ -1343,6 +1372,7 @@ public class SmartHomeApp extends Application {
                         CommandFactory.create(device, type, value, command.getOrderIndex());
 
                 scenario.replaceCommand(command, newCommand);
+                log("Szenario Aktion geändert zu: " + newCommand.toString()); // NEU
 
                 isEditing[0] = false;
 
