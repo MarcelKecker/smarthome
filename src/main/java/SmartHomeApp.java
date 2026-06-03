@@ -149,8 +149,13 @@ public class SmartHomeApp extends Application {
         runScenario.setOnAction(e -> {
             Scenario selected = scenarioSelect.getValue();
             if (selected != null) {
+                log("Szenario '" + selected.getName() + "' über TopBar gestartet.");
+                // Details der Aktionen loggen
+                for (Command cmd : selected.getCommands()) {
+                    log(" -> Führe Aktion aus: " + cmd.toString() + " auf Gerät '" + cmd.getDevice().getName() + "'");
+                }
                 selected.execute();
-                log("Szenario '" + selected.getName() + "' über TopBar ausgeführt.");
+                log("Szenario '" + selected.getName() + "' erfolgreich ausgeführt.");
                 refreshCurrentView();
             }
         });
@@ -170,10 +175,8 @@ public class SmartHomeApp extends Application {
         dashboard.setHgap(20);
         dashboard.setVgap(20);
 
-        //Beipsiele:
-        dashboard.add(createCard("Licht", "Wohnzimmer", "30%"), 0, 0);
-        dashboard.add(createCard("Heizung", "Bad", "22°C"), 1, 0);
-        dashboard.add(createCard("Rollladen", "Schlafzimmer", "0%"), 2, 0);
+
+
 
         // ===== Log Panel =====
         VBox logPanel = new VBox(10);
@@ -278,9 +281,34 @@ public class SmartHomeApp extends Application {
         deleteDevice.setOnAction(e -> {
             Device gerät = table.getSelectionModel().getSelectedItem();
             if (gerät != null) {
-                log("Gerät gelöscht: " + gerät.getName());
-                deviceService.getDevices().remove(gerät);
-                openDevices();
+                // LOGIK: Prüfen, ob das Gerät in irgendeinem Szenario verwendet wird
+                boolean isUsedInScenario = false;
+                String scenarioName = "";
+
+                for (Scenario scenario : scenarioService.getScenarios()) {
+                    for (Command cmd : scenario.getCommands()) {
+                        if (cmd.getDevice().equals(gerät)) {
+                            isUsedInScenario = true;
+                            scenarioName = scenario.getName();
+                            break;
+                        }
+                    }
+                    if (isUsedInScenario) break;
+                }
+
+                if (isUsedInScenario) {
+                    log("Fehler: '" + gerät.getName() + "' kann nicht gelöscht werden, da es im Szenario '" + scenarioName + "' verwendet wird!");
+
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Löschen nicht möglich");
+                    alert.setHeaderText("Gerät wird verwendet");
+                    alert.setContentText("Das Gerät '" + gerät.getName() + "' kann nicht gelöscht werden, da es im Szenario '" + scenarioName + "' verknüpft ist.");
+                    alert.showAndWait();
+                } else {
+                    log("Gerät gelöscht: " + gerät.getName());
+                    deviceService.getDevices().remove(gerät);
+                    openDevices();
+                }
             }
         });
 
@@ -636,9 +664,28 @@ public class SmartHomeApp extends Application {
         deleteRoom.setOnAction(e -> {
             Raum room = roomList.getSelectionModel().getSelectedItem();
             if (room != null) {
-                log("Raum gelöscht: " + room.getName());
-                roomService.deleteRoom(room);
-                openRooms();
+                // LOGIK: Prüfen, ob noch Geräte diesem Raum zugeordnet sind
+                boolean roomHasDevices = false;
+                for (Device device : deviceService.getDevices()) {
+                    if (device.getRoom() != null && device.getRoom().equals(room)) {
+                        roomHasDevices = true;
+                        break;
+                    }
+                }
+
+                if (roomHasDevices) {
+                    log("Fehler: Raum '" + room.getName() + "' kann nicht gelöscht werden, da er noch Geräte enthält!");
+
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Löschen nicht möglich");
+                    alert.setHeaderText("Raum ist nicht leer");
+                    alert.setContentText("Der Raum '" + room.getName() + "' enthält noch registrierte Geräte. Bitte weisen Sie die Geräte zuerst um oder löschen Sie diese.");
+                    alert.showAndWait();
+                } else {
+                    log("Raum gelöscht: " + room.getName());
+                    roomService.deleteRoom(room);
+                    openRooms();
+                }
             }
         });
 
@@ -813,8 +860,13 @@ public class SmartHomeApp extends Application {
         runScenario.setOnAction(e -> {
             Scenario scenario = table.getSelectionModel().getSelectedItem();
             if (scenario != null) {
+                log("Szenario '" + scenario.getName() + "' gestartet.");
+                // Details der Aktionen loggen
+                for (Command cmd : scenario.getCommands()) {
+                    log(" -> Führe Aktion aus: " + cmd.toString() + " auf Gerät '" + cmd.getDevice().getName() + "'");
+                }
                 scenario.execute();
-                log("Szenario ausgeführt: " + scenario.getName());
+                log("Szenario '" + scenario.getName() + "' erfolgreich ausgeführt.");
                 openScenarios();
             }
         });
@@ -1122,36 +1174,36 @@ public class SmartHomeApp extends Application {
 
                 switch (valueType) {
 
-                case NONE -> valueValid = true;
+                    case NONE -> valueValid = true;
 
-                case INT -> {
-                    int value = Integer.parseInt(text);
+                    case INT -> {
+                        int value = Integer.parseInt(text);
 
-                    if (actionType == ActionType.SET_BRIGHTNESS
-                            || actionType == ActionType.SET_POSITION) {
+                        if (actionType == ActionType.SET_BRIGHTNESS
+                                || actionType == ActionType.SET_POSITION) {
 
-                        valueValid = value >= 0 && value <= 100;
-                        if (!valueValid) {
-                            log("Bitte einen Wert zwischen 0 und 100 eingeben.");
+                            valueValid = value >= 0 && value <= 100;
+                            if (!valueValid) {
+                                log("Bitte einen Wert zwischen 0 und 100 eingeben.");
+                            }
+                        }
+                    }
+
+                    case DOUBLE -> {
+                        double value = Double.parseDouble(text);
+
+                        if (actionType == ActionType.SET_TEMPERATURE) {
+                            valueValid = value >= 10 && value <= 35;
+                            if (!valueValid) {
+                                log("Bitte einen Wert zwischen 10 und 35 eingeben.");
+                            }
                         }
                     }
                 }
 
-                case DOUBLE -> {
-                    double value = Double.parseDouble(text);
-
-                    if (actionType == ActionType.SET_TEMPERATURE) {
-                        valueValid = value >= 10 && value <= 35;
-                        if (!valueValid) {
-                            log("Bitte einen Wert zwischen 10 und 35 eingeben.");
-                        }
-                    }
-                }
+            } catch (NumberFormatException ex) {
+                valueValid = false;
             }
-
-        } catch (NumberFormatException ex) {
-            valueValid = false;
-        }
 
             boolean invalid =
                     device == null
