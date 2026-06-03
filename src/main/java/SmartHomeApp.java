@@ -1116,14 +1116,42 @@ public class SmartHomeApp extends Application {
 
             String text = valueBox.getText() == null ? "" : valueBox.getText().trim();
 
-            boolean valueValid = switch (valueType) {
+            boolean valueValid = false;
 
-                case NONE -> true;
+            try {
 
-                case INT -> text.matches("^\\d+$");
+                switch (valueType) {
 
-                case DOUBLE -> text.matches("^\\d+(\\.\\d+)?$");
-            };
+                case NONE -> valueValid = true;
+
+                case INT -> {
+                    int value = Integer.parseInt(text);
+
+                    if (actionType == ActionType.SET_BRIGHTNESS
+                            || actionType == ActionType.SET_POSITION) {
+
+                        valueValid = value >= 0 && value <= 100;
+                        if (!valueValid) {
+                            log("Bitte einen Wert zwischen 0 und 100 eingeben.");
+                        }
+                    }
+                }
+
+                case DOUBLE -> {
+                    double value = Double.parseDouble(text);
+
+                    if (actionType == ActionType.SET_TEMPERATURE) {
+                        valueValid = value >= 10 && value <= 35;
+                        if (!valueValid) {
+                            log("Bitte einen Wert zwischen 10 und 35 eingeben.");
+                        }
+                    }
+                }
+            }
+
+        } catch (NumberFormatException ex) {
+            valueValid = false;
+        }
 
             boolean invalid =
                     device == null
@@ -1373,25 +1401,43 @@ public class SmartHomeApp extends Application {
 
         Runnable validate = () -> {
 
-            ActionType type = actionTypeBox.getValue();
-            ValueType valueType = getValueType.apply(type);
+            if (!isEditing[0]) {
+                editBtn.setDisable(false);
+                return;
+            }
 
+            ActionType type = actionTypeBox.getValue();
             String text = valueField.getText() == null
                     ? ""
                     : valueField.getText().trim();
 
-            boolean valueValid = switch (valueType) {
+            boolean valueValid = true;
 
-                case NONE -> true;
-                case INT -> text.matches("^\\d+$");
-                case DOUBLE -> text.matches("^\\d+(\\.\\d+)?$");
-            };
+            try {
+                switch (type) {
+                    case SET_BRIGHTNESS, SET_POSITION -> {
+                        int value = Integer.parseInt(text);
+                        valueValid = value >= 0 && value <= 100;
+                        if (!valueValid) {
+                            log("Bitte einen Wert zwischen 0 und 100 eingeben.");
+                        }
+                    }
 
-            boolean invalid =
-                    type == null
-                            || !valueValid;
+                    case SET_TEMPERATURE -> {
+                        double value = Double.parseDouble(text);
+                        valueValid = value >= 10 && value <= 35;
+                        if (!valueValid) {
+                            log("Bitte einen Wert zwischen 10 und 35 eingeben.");
+                        }
+                    }
 
-            editBtn.setDisable(invalid);
+                    default -> {}
+                }
+            } catch (Exception ex) {
+                valueValid = false;
+            }
+
+            editBtn.setDisable(type == null || !valueValid);
         };
 
         // =====================================================
