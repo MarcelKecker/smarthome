@@ -5,9 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2ee234e0-05c6-4263-9101-2c08fd03ccf2" name="Changes" comment="Aktionen hinzugefügt">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/SmartHomeApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SmartHomeApp.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,7 +24,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="Fischbude1" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -36,12 +35,12 @@
     &quot;assignee&quot;: &quot;Vvnillacola&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/Vvnillacola/smarthome.git",
-    "accountId": "13d1f5b0-be4b-464d-b74c-0be964079e00"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Vvnillacola/smarthome.git&quot;,
+    &quot;accountId&quot;: &quot;13d1f5b0-be4b-464d-b74c-0be964079e00&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
 }</component>
@@ -66,7 +65,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "Fischbude1",
+    "git-widget-placeholder": "Fischbude2",
     "ignore.virus.scanning.warn.message": "true",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
@@ -138,7 +137,8 @@
       <workItem from="1777896141258" duration="6011000" />
       <workItem from="1778673340282" duration="4070000" />
       <workItem from="1779106127809" duration="9920000" />
-      <workItem from="1780477855604" duration="2388000" />
+      <workItem from="1780477855604" duration="3006000" />
+      <workItem from="1780508790175" duration="1963000" />
     </task>
     <task id="LOCAL-00001" summary="erste anlage">
       <option name="closed" value="true" />
@@ -236,7 +236,15 @@
       <option name="project" value="LOCAL" />
       <updated>1780408225443</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Aktionen hinzugefügt">
+      <option name="closed" value="true" />
+      <created>1780480456668</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1780480456668</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
