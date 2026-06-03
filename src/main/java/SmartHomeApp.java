@@ -1,4 +1,5 @@
 import atlantafx.base.theme.PrimerLight;
+import config.DeviceConfig;
 import factory.CommandFactory;
 import factory.DeviceFactory;
 import javafx.application.Application;
@@ -352,169 +353,134 @@ public class SmartHomeApp extends Application {
                 : "Bearbeiten"
         );
 
-        //gerät- spezifisch
+        DeviceConfig config = null;
+
         if (device instanceof Lamp lamp) {
 
-            Label brightnessLabel = new Label("Helligkeit:");
-
-            Slider brightnessSlider =
-                    new Slider(0, 100, lamp.getBrightness());
-            brightnessSlider.setShowTickLabels(true);
-            brightnessSlider.setDisable(true);
-
-            HBox brightnessBar = new HBox(
-                    10,
-                    brightnessLabel,
-                    brightnessSlider
+            config = new DeviceConfig(
+                    "Helligkeit:",
+                    0,
+                    100,
+                    lamp.getBrightness(),
+                    State.TURNED_ON,
+                    State.TURNED_OFF,
+                    value -> lamp.setBrightness(value),
+                    () -> "Lampen-Änderungen gespeichert: "
+                            + device.getName()
+                            + " (Helligkeit: "
+                            + lamp.getBrightness()
+                            + "%, Status: "
+                            + device.getState()
+                            + ")"
             );
-            deviceEditor.getChildren().addAll(brightnessBar);
-            stateToggle.setOnAction(e -> {
-                if (State.valueOf(stateToggle.getText()) == State.TURNED_OFF) {
-                    stateToggle.setText(State.TURNED_ON.toString());
-                    brightnessSlider.setDisable(false);
-                } else {
-                    stateToggle.setText(State.TURNED_OFF.toString());
-                    brightnessSlider.setDisable(true);
-                }
-            });
-            editBtn.setOnAction(e -> {
-                if (isEditing[0]) {
 
-                    device.setName(nameField.getText());
-                    device.setRoom(roomBox.getValue());
-                    device.setState(State.valueOf(stateToggle.getText()));
-                    lamp.setBrightness((int) brightnessSlider.getValue());
-
-                    log("Lampen-Änderungen gespeichert: " + device.getName() + " (Helligkeit: " + lamp.getBrightness() + "%, Status: " + device.getState() + ")");
-
-                    isEditing[0] = false;
-
-                    nameField.setEditable(false);
-                    roomBox.setDisable(true);
-                    stateToggle.setDisable(true);
-                    brightnessSlider.setDisable(true);
-
-                    editBtn.setText("Bearbeiten");
-
-                } else {
-
-                    isEditing[0] = true;
-
-                    nameField.setEditable(true);
-                    roomBox.setDisable(false);
-                    stateToggle.setDisable(false);
-                    if (State.valueOf(stateToggle.getText()) ==  State.TURNED_ON) {
-                        brightnessSlider.setDisable(false);
-                    }
-
-                    editBtn.setText("Speichern");
-                }
-            });
         } else if (device instanceof Heating heating) {
 
-            Label tempLabel = new Label("Temperatur: ");
-
-            Slider tempSlider = new Slider();
-
-            State heatingState = device.getState();
-            boolean isEditingg = edit;
-            tempSlider.setDisable(!isEditingg || heatingState == State.TURNED_OFF);
-            stateToggle.setText(heatingState.toString());
-
-            tempSlider.setShowTickLabels(true);
-            tempSlider.setMin(new Double(10));
-            tempSlider.setMax(new Double(35));
-            tempSlider.setValue(new Double(heating.getTemperature()));
-
-            HBox temperatureBar = new HBox(
+            config = new DeviceConfig(
+                    "Temperatur:",
                     10,
-                    tempLabel,
-                    tempSlider
+                    35,
+                    heating.getTemperature(),
+                    State.TURNED_ON,
+                    State.TURNED_OFF,
+                    value -> heating.setTemperature(value),
+                    () -> "Heizungs-Änderungen gespeichert: "
+                            + device.getName()
+                            + " ("
+                            + heating.getTemperature()
+                            + "°C, Status: "
+                            + device.getState()
+                            + ")"
             );
 
-            deviceEditor.getChildren().addAll(temperatureBar);
-            Runnable syncState = () -> {
-                tempSlider.setDisable(!isEditing[0] || heatingState == State.TURNED_OFF);
-            };
-            stateToggle.setOnAction(e -> {
-                stateToggle.setText(
-                        stateToggle.getText().equals(State.TURNED_ON.toString()) ? State.TURNED_OFF.toString() : State.TURNED_ON.toString()
-                );
-            });
-
-            editBtn.setOnAction(e -> {
-                if (isEditing[0]) {
-
-                    device.setName(nameField.getText());
-                    device.setRoom(roomBox.getValue());
-                    device.setState(State.valueOf(stateToggle.getText()));
-                    heating.setTemperature((int) tempSlider.getValue());
-
-                    log("Heizungs-Änderungen gespeichert: " + device.getName() + " (" + heating.getTemperature() + "°C, Status: " + device.getState() + ")");
-
-                    isEditing[0] = false;
-
-                    nameField.setEditable(false);
-                    roomBox.setDisable(true);
-                    stateToggle.setDisable(true);
-                    tempSlider.setDisable(true);
-
-                    editBtn.setText("Bearbeiten");
-
-                } else {
-
-                    isEditing[0] = true;
-
-                    nameField.setEditable(true);
-                    roomBox.setDisable(false);
-                    stateToggle.setDisable(false);
-                    if (State.valueOf(stateToggle.getText()) ==  State.TURNED_ON) {
-                        tempSlider.setDisable(false);
-                    }
-
-                    editBtn.setText("Speichern");
-                }
-            });
         } else if (device instanceof Shutter shutter) {
 
-            Label positionLabel = new Label("Positon:");
-
-            Slider positionSlider =
-                    new Slider(0, 100, shutter.getPosition());
-            positionSlider.setShowTickLabels(true);
-            positionSlider.setDisable(true);
-
-            HBox brightnessBar = new HBox(
-                    10,
-                    positionLabel,
-                    positionSlider
+            config = new DeviceConfig(
+                    "Position:",
+                    0,
+                    100,
+                    shutter.getPosition(),
+                    State.ROLLED_DOWN,
+                    State.ROLLED_UP,
+                    value -> shutter.setPosition(value),
+                    () -> "Rollladen-Änderungen gespeichert: "
+                            + device.getName()
+                            + " (Position: "
+                            + shutter.getPosition()
+                            + "%, Status: "
+                            + device.getState()
+                            + ")"
             );
-            deviceEditor.getChildren().addAll(brightnessBar);
+        }
+
+        if (config != null) {
+
+            Slider slider = new Slider(
+                    config.min,
+                    config.max,
+                    config.value
+            );
+
+            slider.setShowTickLabels(true);
+            slider.setDisable(true);
+
+            HBox sliderBar = new HBox(
+                    10,
+                    new Label(config.label),
+                    slider
+            );
+
+            deviceEditor.getChildren().add(sliderBar);
+
+            DeviceConfig finalConfig = config;
+
             stateToggle.setOnAction(e -> {
-                if (State.valueOf(stateToggle.getText()) == State.ROLLED_UP) {
-                    stateToggle.setText(State.ROLLED_DOWN.toString());
-                    positionSlider.setDisable(false);
+
+                State current =
+                        State.valueOf(stateToggle.getText());
+
+                if (current == finalConfig.inactiveState) {
+
+                    stateToggle.setText(
+                            finalConfig.activeState.toString()
+                    );
+
+                    if (isEditing[0]) {
+                        slider.setDisable(false);
+                    }
+
                 } else {
-                    stateToggle.setText(State.ROLLED_UP.toString());
-                    positionSlider.setDisable(true);
+
+                    stateToggle.setText(
+                            finalConfig.inactiveState.toString()
+                    );
+
+                    slider.setDisable(true);
                 }
             });
+
             editBtn.setOnAction(e -> {
+
                 if (isEditing[0]) {
 
                     device.setName(nameField.getText());
                     device.setRoom(roomBox.getValue());
-                    device.setState(State.valueOf(stateToggle.getText()));
-                    shutter.setPosition((int) positionSlider.getValue());
+                    device.setState(
+                            State.valueOf(stateToggle.getText())
+                    );
 
-                    log("Rollladen-Änderungen gespeichert: " + device.getName() + " (Position: " + shutter.getPosition() + "%, Status: " + device.getState() + ")");
+                    finalConfig.saveAction.accept(
+                            (int) slider.getValue()
+                    );
+
+                    log(finalConfig.logMessage.get());
 
                     isEditing[0] = false;
 
                     nameField.setEditable(false);
                     roomBox.setDisable(true);
                     stateToggle.setDisable(true);
-                    positionSlider.setDisable(true);
+                    slider.setDisable(true);
 
                     editBtn.setText("Bearbeiten");
 
@@ -525,8 +491,11 @@ public class SmartHomeApp extends Application {
                     nameField.setEditable(true);
                     roomBox.setDisable(false);
                     stateToggle.setDisable(false);
-                    if (State.valueOf(stateToggle.getText()) ==  State.ROLLED_DOWN) {
-                        positionSlider.setDisable(false);
+
+                    if (State.valueOf(stateToggle.getText())
+                            == finalConfig.activeState) {
+
+                        slider.setDisable(false);
                     }
 
                     editBtn.setText("Speichern");
@@ -569,19 +538,23 @@ public class SmartHomeApp extends Application {
         ComboBox<DeviceType> typeBox = new ComboBox<>();
         typeBox.getItems().addAll(DeviceType.values());
 
+
+        ComboBox<Raum> roomBox = new ComboBox<>();
+        roomBox.getItems().addAll(roomService.getAllRooms());
+
         Runnable validate = () -> {
             boolean invalid =
                     nameField.getText().trim().isEmpty()
-                            || typeBox.getValue() == null;
+                            || typeBox.getValue() == null || roomBox.getValue() == null;
 
             saveButton.setDisable(invalid);
         };
+
         nameField.textProperty().addListener((obs, oldVal, newVal) -> validate.run());
 
         typeBox.valueProperty().addListener((obs, oldVal, newVal) -> validate.run());
 
-        ComboBox<Raum> roomBox = new ComboBox<>();
-        roomBox.getItems().addAll(roomService.getAllRooms());
+        roomBox.valueProperty().addListener((obs, oldVal, newVal) -> validate.run());
 
         grid.add(new Label("Name:"), 0, 0);
         grid.add(nameField, 1, 0);
