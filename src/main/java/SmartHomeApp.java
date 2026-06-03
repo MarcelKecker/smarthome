@@ -569,19 +569,23 @@ public class SmartHomeApp extends Application {
         ComboBox<DeviceType> typeBox = new ComboBox<>();
         typeBox.getItems().addAll(DeviceType.values());
 
+
+        ComboBox<Raum> roomBox = new ComboBox<>();
+        roomBox.getItems().addAll(roomService.getAllRooms());
+
         Runnable validate = () -> {
             boolean invalid =
                     nameField.getText().trim().isEmpty()
-                            || typeBox.getValue() == null;
+                            || typeBox.getValue() == null || roomBox.getValue() == null;
 
             saveButton.setDisable(invalid);
         };
+
         nameField.textProperty().addListener((obs, oldVal, newVal) -> validate.run());
 
         typeBox.valueProperty().addListener((obs, oldVal, newVal) -> validate.run());
 
-        ComboBox<Raum> roomBox = new ComboBox<>();
-        roomBox.getItems().addAll(roomService.getAllRooms());
+        roomBox.valueProperty().addListener((obs, oldVal, newVal) -> validate.run());
 
         grid.add(new Label("Name:"), 0, 0);
         grid.add(nameField, 1, 0);
