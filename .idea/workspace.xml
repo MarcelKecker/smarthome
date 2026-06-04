@@ -4,18 +4,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2ee234e0-05c6-4263-9101-2c08fd03ccf2" name="Changes" comment="Readable label for ActionType, DeviceType and State">
-      <change afterPath="$PROJECT_DIR$/src/main/java/service/PersistenceService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/service/SmartHomeProject.java" afterDir="false" />
+    <list default="true" id="2ee234e0-05c6-4263-9101-2c08fd03ccf2" name="Changes" comment="Aktionen hinzugefügt">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Begleitdokument.md" beforeDir="false" afterPath="$PROJECT_DIR$/Begleitdokument.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/SmartHomeApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SmartHomeApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/factory/CommandFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/factory/CommandFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/action/BaseCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/action/BaseCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/model/action/Command.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/action/Command.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/action/impl/RollDownShutterCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/action/impl/RollDownShutterCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/action/impl/RollUpShutterCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/action/impl/RollUpShutterCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/action/impl/SetBrightnessLampCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/action/impl/SetBrightnessLampCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/action/impl/SetPositionShutterCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/action/impl/SetPositionShutterCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/action/impl/SetTemperatureHeatingCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/action/impl/SetTemperatureHeatingCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/action/impl/TurnOFfLampCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/action/impl/TurnOFfLampCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/action/impl/TurnOffHeatingCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/action/impl/TurnOffHeatingCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/action/impl/TurnOnHeatingCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/action/impl/TurnOnHeatingCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/action/impl/TurnOnLampCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/action/impl/TurnOnLampCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/model/device/Device.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/device/Device.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/device/impl/Heating.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/device/impl/Heating.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/model/device/impl/Lamp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/device/impl/Lamp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/model/device/impl/Shutter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/device/impl/Shutter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/room/Raum.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/room/Raum.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/scenario/Scenario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/scenario/Scenario.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/service/DeviceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/DeviceService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/service/RoomService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/RoomService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/service/ScenarioService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/ScenarioService.java" afterDir="false" />
@@ -25,46 +34,74 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Enum" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
     &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;l1dll0hnts1ch&quot;
+    &quot;assignee&quot;: &quot;Vvnillacola&quot;
   }
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/Vvnillacola/smarthome&quot;,
-    &quot;accountId&quot;: &quot;666eacb1-1a42-426b-b603-f6a0a86eb6c1&quot;
+    &quot;url&quot;: &quot;https://github.com/MarcelKecker/smarthome&quot;,
+    &quot;accountId&quot;: &quot;e81f2ebe-cbe5-4ac2-9bdb-e1d3d279126d&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
-  &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 4
 }</component>
-  <component name="ProjectId" id="3Eg4N7Wkmhj6fWC0DPyeVE49Jcw" />
+  <component name="ProjectId" id="3C72EGM7ChLJbuQJXSmmO5GpMEB" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "JUnit.SmartHomeGuiTest.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Application.SmartHomeApp.executor": "Run",
+    "Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor": "Run",
+    "Maven.smarthome [clean,verify].executor": "Run",
+    "Maven.smarthome [javafx:run].executor": "Run",
+    "Maven.smarthome [org.openjfx:javafx-maven-plugin:0.0.8:run].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "git-widget-placeholder": "#15 on marcel",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "Fischbude",
+    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.0",
+    "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\annak\Documents\HSW\Java Projekte\smarthoe\smarthome\src\main\resources" />
@@ -72,48 +109,79 @@
       <recent name="C:\Users\annak\Documents\HSW\Java Projekte\smarthoe\smarthome\src\main" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="service" />
       <recent name="" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="service" />
       <recent name="factory" />
+      <recent name="model" />
+      <recent name="model.action.impl" />
+      <recent name="service" />
       <recent name="model.device.impl" />
     </key>
   </component>
   <component name="RunManager">
-    <configuration name="SmartHomeGuiTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="SmartHomeApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="SmartHomeApp" />
       <module name="smarthome" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="SmartHomeGuiTest" />
-      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.SmartHomeGuiTest" />
+        <item itemvalue="Application.SmartHomeApp" />
+        <item itemvalue="Application.SmartHomeApp" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.27397.103" />
-        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.27397.103" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26830.84" />
       </set>
     </attachedChunks>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="a2d652f0-6aab-4d3f-ab25-b4c4b31f3b15" name="Changes" comment="" />
-      <created>1780586836427</created>
+      <changelist id="2ee234e0-05c6-4263-9101-2c08fd03ccf2" name="Changes" comment="" />
+      <created>1775722175789</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1780586836427</updated>
-      <workItem from="1780586838399" duration="497000" />
-      <workItem from="1780587345073" duration="373000" />
+      <updated>1775722175789</updated>
+      <workItem from="1775722177329" duration="352000" />
+      <workItem from="1776073976919" duration="14000" />
+      <workItem from="1776417752766" duration="3442000" />
+      <workItem from="1777292222428" duration="9722000" />
+      <workItem from="1777363730084" duration="8348000" />
+      <workItem from="1777377015981" duration="6451000" />
+      <workItem from="1777896141258" duration="6011000" />
+      <workItem from="1778673340282" duration="4070000" />
+      <workItem from="1779106127809" duration="9920000" />
+    </task>
+    <task id="LOCAL-00001" summary="erste anlage">
+      <option name="closed" value="true" />
+      <created>1777292265259</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1777292265259</updated>
+    </task>
+    <task id="LOCAL-00002" summary="ui update">
+      <option name="closed" value="true" />
+      <created>1777295012731</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1777295012731</updated>
+    </task>
+    <task id="LOCAL-00003" summary="ui update">
+      <option name="closed" value="true" />
+      <created>1777297764785</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1777297764785</updated>
     </task>
     <task id="LOCAL-00004" summary="raum übersicht gui">
       <option name="closed" value="true" />
@@ -171,13 +239,13 @@
       <option name="project" value="LOCAL" />
       <updated>1780061804821</updated>
     </task>
-    <task id="LOCAL-00011" summary="Readable label for ActionType, DeviceType and State">
+    <task id="LOCAL-00011" summary="Aktionen hinzugefügt">
       <option name="closed" value="true" />
-      <created>1780585428215</created>
+      <created>1780312780742</created>
       <option name="number" value="00011" />
       <option name="presentableId" value="LOCAL-00011" />
       <option name="project" value="LOCAL" />
-      <updated>1780585428215</updated>
+      <updated>1780312780742</updated>
     </task>
     <option name="localTasksCounter" value="12" />
     <servers />
@@ -204,7 +272,7 @@
     <MESSAGE value="gui raum erstellen" />
     <MESSAGE value="gui raum übersicht" />
     <MESSAGE value="Rolläden + Szenarien" />
-    <MESSAGE value="Readable label for ActionType, DeviceType and State" />
-    <option name="LAST_COMMIT_MESSAGE" value="Readable label for ActionType, DeviceType and State" />
+    <MESSAGE value="Aktionen hinzugefügt" />
+    <option name="LAST_COMMIT_MESSAGE" value="Aktionen hinzugefügt" />
   </component>
 </project>

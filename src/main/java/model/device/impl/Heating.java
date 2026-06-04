@@ -1,11 +1,15 @@
 package model.device.impl;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import model.DeviceType;
 import model.device.Device;
 import model.State;
 import model.room.Raum;
 import model.action.Command;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Heating implements Device {
     private String id;
     private String name;
@@ -13,12 +17,17 @@ public class Heating implements Device {
     private State state;
     private double temperature;
 
-    public Heating(String id, String name, Raum room) {
+    @JsonCreator
+    public Heating(
+            @JsonProperty("id") String id,
+            @JsonProperty("name") String name,
+            @JsonProperty("room") Raum room
+    ) {
         this.id = id;
         this.name = name;
         this.room = room;
-        state = State.TURNED_OFF;
-        temperature = 0;
+        this.state = State.TURNED_OFF;
+        this.temperature = 0;
     }
 
     @Override
@@ -65,7 +74,9 @@ public class Heating implements Device {
     public void setRoom(Raum room) {
         this.room = room;
     }
-    @Override public String toString() {
+
+    @Override
+    public String toString() {
         if (room == null) {
             return name + " | " + getType();
         }

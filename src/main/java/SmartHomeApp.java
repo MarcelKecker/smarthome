@@ -123,7 +123,7 @@ public class SmartHomeApp extends Application {
             roomService.clear();
             deviceService.clear();
             scenarioService.clear();
-
+            log("Neues Projekt erstellt. Alle Daten wurden zurückgesetzt.");
             openRooms();
         });
 
@@ -148,6 +148,9 @@ public class SmartHomeApp extends Application {
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
+                roomService.clear();
+                deviceService.clear();
+                scenarioService.clear();
 
                 roomService.setRooms(
                         project.getRooms()
@@ -160,8 +163,8 @@ public class SmartHomeApp extends Application {
                 scenarioService.setScenarios(
                         project.getScenarios()
                 );
-
-                openRooms();
+                log("Projekt erfolgreich aus Datei '" + file.getName() + "' geladen.");
+                openDevices();
             }
         });
 
@@ -198,6 +201,7 @@ public class SmartHomeApp extends Application {
                             project,
                             file
                     );
+                    log("Projekt erfolgreich in Datei '" + file.getName() + "' gespeichert.");
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -293,10 +297,14 @@ public class SmartHomeApp extends Application {
         if (scenario != null) {
             if (!scenario.getCommands().isEmpty()) {
                 log("Szenario '" + scenario.getName() + "' gestartet.");
+                Set<Device> affectedDevices = new LinkedHashSet<>();
                 String result = "";
                 // Details der Aktionen loggen
                 for (Command cmd : scenario.getCommands()) {
                     cmd.execute();
+                    if (cmd.getDevice() != null) {
+                        affectedDevices.add(cmd.getDevice());
+                    }
                     switch (cmd.getActionType()){
                         case ROLL_UP -> result = cmd.getDevice().toString() + " hochgefahren.";
                         case TURN_ON ->  result = cmd.getDevice().toString() + " angeschaltet.";
@@ -327,6 +335,18 @@ public class SmartHomeApp extends Application {
                     log("Szenario: " + scenario.getName() + " Aktion: " + cmd.getActionType() + " Ergebnis: " + result);
                 }
                 log("Szenario '" + scenario.getName() + "' ausgeführt.");
+                log("--- Endzustand der Geräte nach '" + scenario.getName() + "': ---");
+                for (Device dev : affectedDevices) {
+                    if (dev instanceof Lamp lamp) {
+                        log("  • Lamp '" + lamp.getName() + "' -> Status: " + lamp.getState() + ", Helligkeit: " + lamp.getBrightness() + "%");
+                    } else if (dev instanceof Heating heating) {
+                        log("  • Heating '" + heating.getName() + "' -> Status: " + heating.getState() + ", Temperatur: " + heating.getTemperature() + "°C");
+                    } else if (dev instanceof Shutter shutter) {
+                        log("  • Shutter '" + shutter.getName() + "' -> Status: " + shutter.getState() + ", Position: " + shutter.getPosition() + "%");
+                    } else {
+                        log("  • Gerät '" + dev.getName() + "' -> Status: " + dev.getState());
+                    }
+                }
                 openScenarios();
             } else {
                 log("Szenario " + scenario.getName() + " besitzt keine Aktion.");
@@ -758,6 +778,7 @@ public class SmartHomeApp extends Application {
                 }
             }
         });
+        roomList.getItems().clear();
         roomList.getItems().addAll(roomService.getAllRooms());
 
         Button addRoom = new Button("Neu");

@@ -22,8 +22,12 @@ public class ScenarioService {
         scenarios.remove(scenario);
     }
 
-    public void setScenarios(List<Scenario> scenarios) {
-        this.scenarios = (ObservableList<Scenario>) scenarios;
+    public void setScenarios(List<Scenario> newScenarios) {
+        this.scenarios.clear();
+
+        if (newScenarios != null) {
+            this.scenarios.addAll(newScenarios);
+        }
     }
 
     public void clear() {

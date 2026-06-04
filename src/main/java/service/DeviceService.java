@@ -19,13 +19,10 @@ public class DeviceService {
 
     public void setDevices(List<Device> devices) {
         this.clear();
-        for (Device device : devices) {
-            this.addDevice(device);
-        }
+        this.devices.addAll(devices);
     }
 
     public void clear() {
         this.devices.clear();
     }
 }
-

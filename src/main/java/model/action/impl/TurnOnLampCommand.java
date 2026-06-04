@@ -1,24 +1,34 @@
 package model.action.impl;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import model.ActionType;
 import model.action.BaseCommand;
 import model.State;
-import model.device.Device;
 import model.device.impl.Lamp;
 
-import java.util.UUID;
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TurnOnLampCommand extends BaseCommand {
 
     private final Lamp lamp;
 
-    public TurnOnLampCommand(Lamp lamp, int orderIndex) {
-        super(lamp, ActionType.TURN_ON, orderIndex);
+    // Der Jackson-Konstruktor für das Einschalten der Lampe
+    @JsonCreator
+    public TurnOnLampCommand(
+            @JsonProperty("id") String id,
+            @JsonProperty("device") Lamp lamp,
+            @JsonProperty("actionType") ActionType actionType,
+            @JsonProperty("orderIndex") int orderIndex
+    ) {
+        super(id, lamp, actionType, orderIndex);
         this.lamp = lamp;
     }
 
     @Override
     public void execute() {
-        lamp.setState(State.TURNED_ON);
+        if (lamp != null) {
+            lamp.setState(State.TURNED_ON);
+        }
     }
 }

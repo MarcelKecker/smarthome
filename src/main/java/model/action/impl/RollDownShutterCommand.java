@@ -1,23 +1,36 @@
 package model.action.impl;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import model.ActionType;
 import model.action.BaseCommand;
 import model.State;
 import model.device.impl.Shutter;
 
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class RollDownShutterCommand extends BaseCommand {
 
     private final Shutter shutter;
 
-    public RollDownShutterCommand(Shutter shutter, int orderIndex) {
-        super(shutter, ActionType.ROLL_DOWN, orderIndex);
+    // Der Jackson-Konstruktor fängt die JSON-Felder ab
+    @JsonCreator
+    public RollDownShutterCommand(
+            @JsonProperty("id") String id,
+            @JsonProperty("device") Shutter shutter,
+            @JsonProperty("actionType") ActionType actionType,
+            @JsonProperty("orderIndex") int orderIndex
+    ) {
+        // Übergabe an den Jackson-Konstruktor von BaseCommand
+        super(id, shutter, actionType, orderIndex);
         this.shutter = shutter;
     }
 
     @Override
     public void execute() {
-        shutter.setState(State.ROLLED_DOWN);
-        shutter.setPosition(100);
+        if (shutter != null) {
+            shutter.setState(State.ROLLED_DOWN);
+            shutter.setPosition(100);
+        }
     }
 }

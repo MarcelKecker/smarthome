@@ -2,6 +2,8 @@
 **Thema:** Smart-Home-Szenario-Editor  
 **Modul:** Anwendungsentwicklung III: Software Engineering
 
+**Studierende** Anna Knötgen, Marcel Kecker, Marcel Woker, Viktor Kalka
+
 ---
 
 ### 1. Anwendungsstruktur & Architektur
