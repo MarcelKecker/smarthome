@@ -212,22 +212,37 @@ public class SmartHomeApp extends Application {
                 String result = "";
                 // Details der Aktionen loggen
                 for (Command cmd : scenario.getCommands()) {
+                    cmd.execute();
                     switch (cmd.getActionType()){
                         case ROLL_UP -> result = cmd.getDevice().toString() + " hochgefahren.";
                         case TURN_ON ->  result = cmd.getDevice().toString() + " angeschaltet.";
                         case TURN_OFF ->  result = cmd.getDevice().toString() + " ausgeschaltet.";
                         case ROLL_DOWN -> result = cmd.getDevice().toString() + " runtergefahren.";
-                        case SET_POSITION ->
+                        case SET_POSITION -> {
+                            if (cmd.getDevice().getState() ==State. ROLLED_UP ){
+                                result = cmd.getDevice().toString() +" sind noch hochgerollt. Position wurde nicht eingestellt.";
+                            } else {
                                 result = cmd.getDevice().toString() + " auf Position " + ((SetPositionShutterCommand) cmd).getPosition()+ " gestellt.";
-                        case SET_BRIGHTNESS ->
+                            }
+                        }
+                        case SET_BRIGHTNESS -> {
+                            if (cmd.getDevice().getState() ==State.TURNED_OFF ){
+                                result = cmd.getDevice().toString() +" ist ausgeschaltet. Helligkeit wurde nicht gesetzt.";
+                            } else {
                                 result = cmd.getDevice().toString() + " auf Helligkeit " + ((SetBrightnessLampCommand) cmd).getBrightness()+ " gestellt.";
-                        case SET_TEMPERATURE ->
+                            }
+                        }
+                        case SET_TEMPERATURE -> {
+                            if (cmd.getDevice().getState() == State.TURNED_OFF) {
+                                result = cmd.getDevice().toString() + " ist ausgeschaltet. Temperatur wurde nicht gesetzt.";
+                            } else {
                                 result = cmd.getDevice().toString() + " auf Temperatur " + ((SetTemperatureHeatingCommand) cmd).getTemperature()+ " gestellt.";
+                            }
+                        }
                     }
                     log("Szenario: " + scenario.getName() + " Aktion: " + cmd.getActionType() + " Ergebnis: " + result);
                 }
-                scenario.execute();
-                log("Szenario '" + scenario.getName() + "' erfolgreich ausgeführt.");
+                log("Szenario '" + scenario.getName() + "' ausgeführt.");
                 openScenarios();
             } else {
                 log("Szenario " + scenario.getName() + " besitzt keine Aktion.");
