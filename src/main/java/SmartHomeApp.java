@@ -504,7 +504,7 @@ public class SmartHomeApp extends Application {
             stateToggle.setOnAction(e -> {
 
                 State current =
-                        State.valueOf(stateToggle.getText());
+                        State.getValue(stateToggle.getText());
 
                 if (current == finalConfig.inactiveState) {
 
@@ -533,7 +533,7 @@ public class SmartHomeApp extends Application {
                     device.setName(nameField.getText());
                     device.setRoom(roomBox.getValue());
                     device.setState(
-                            State.valueOf(stateToggle.getText())
+                            State.getValue(stateToggle.getText())
                     );
 
                     finalConfig.saveAction.accept(
@@ -559,7 +559,7 @@ public class SmartHomeApp extends Application {
                     roomBox.setDisable(false);
                     stateToggle.setDisable(false);
 
-                    if (State.valueOf(stateToggle.getText())
+                    if (State.getValue(stateToggle.getText())
                             == finalConfig.activeState) {
 
                         slider.setDisable(false);
@@ -1176,7 +1176,7 @@ public class SmartHomeApp extends Application {
 
         Runnable applyValueState = () -> {
 
-            ValueType type = getValueType.apply(ActionType.valueOf(actionTypeBox.getValue()));
+            ValueType type = getValueType.apply(ActionType.getValue(actionTypeBox.getValue()));
             boolean requiresValue = type != ValueType.NONE;
 
             valueBox.setDisable(!requiresValue);
@@ -1193,7 +1193,7 @@ public class SmartHomeApp extends Application {
 
             ActionType actionType = null;
             if (actionTypeBox.getValue() != null) {
-                actionType = ActionType.valueOf(actionTypeBox.getValue());
+                actionType = ActionType.getValue(actionTypeBox.getValue());
             }
 
             ValueType valueType = getValueType.apply(actionType);
@@ -1277,7 +1277,7 @@ public class SmartHomeApp extends Application {
             if (button == saveButtonType) {
 
                 Device device = deviceBox.getValue();
-                ActionType actionType = ActionType.valueOf(actionTypeBox.getValue());
+                ActionType actionType = ActionType.getValue(actionTypeBox.getValue());
 
                 int orderIndex = scenario.getCommands().size();
 
