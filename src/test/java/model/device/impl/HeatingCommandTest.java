@@ -41,4 +41,11 @@ public class HeatingCommandTest extends TestCase {
 
         assertEquals(22.5, heating.getTemperature());
     }
+
+    public void testSetTemperatureCommandGetTemperature() {
+        Heating heating = new Heating("H1", "Heizung", null);
+        SetTemperatureHeatingCommand command = new SetTemperatureHeatingCommand(heating, 19.0, 0);
+
+        assertEquals(19.0, command.getTemperature());
+    }
 }

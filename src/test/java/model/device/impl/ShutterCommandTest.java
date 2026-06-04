@@ -48,4 +48,11 @@ public class ShutterCommandTest extends TestCase {
 
         assertEquals(75, shutter.getPosition());
     }
+
+    public void testSetPositionCommandGetPosition() {
+        Shutter shutter = new Shutter("S1", "Rollladen", null);
+        SetPositionShutterCommand command = new SetPositionShutterCommand(shutter, 60, 0);
+
+        assertEquals(60, command.getPosition());
+    }
 }

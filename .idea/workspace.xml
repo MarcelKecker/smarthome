@@ -4,8 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2ee234e0-05c6-4263-9101-2c08fd03ccf2" name="Changes" comment="Tests">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="2ee234e0-05c6-4263-9101-2c08fd03ccf2" name="Changes" comment="Tests erweitert">
+      <change beforePath="$PROJECT_DIR$/src/test/java/model/device/impl/HeatingCommandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/model/device/impl/HeatingCommandTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/model/device/impl/LampCommandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/model/device/impl/LampCommandTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/model/device/impl/ShutterCommandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/model/device/impl/ShutterCommandTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/model/scenario/ScenarioTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/model/scenario/ScenarioTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,6 +57,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.SmartHomeApp.executor": "Run",
+    "JUnit.CommandFactoryTest.executor": "Run",
     "JUnit.DeviceServiceTest.executor": "Run",
     "JUnit.RoomServiceTest.executor": "Run",
     "JUnit.ScenarioServiceTest.executor": "Run",
@@ -270,7 +274,23 @@
       <option name="project" value="LOCAL" />
       <updated>1780577888441</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Tests erweitert">
+      <option name="closed" value="true" />
+      <created>1780578145272</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1780578145272</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Tests erweitert">
+      <option name="closed" value="true" />
+      <created>1780578222936</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1780578222936</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -295,6 +315,7 @@
     <MESSAGE value="gui raum erstellen" />
     <MESSAGE value="gui raum übersicht" />
     <MESSAGE value="Tests" />
-    <option name="LAST_COMMIT_MESSAGE" value="Tests" />
+    <MESSAGE value="Tests erweitert" />
+    <option name="LAST_COMMIT_MESSAGE" value="Tests erweitert" />
   </component>
 </project>

@@ -188,4 +188,19 @@ public class ScenarioTest extends TestCase {
         assertEquals("second", scenario.getCommands().get(1).getID());
         assertEquals("third", scenario.getCommands().get(2).getID());
     }
+
+    public void testSetCommands() {
+        Scenario scenario = new Scenario("Test", "");
+        scenario.addCommand(new TestCommand("old"));
+
+        javafx.collections.ObservableList<model.action.Command> newList =
+                javafx.collections.FXCollections.observableArrayList();
+        TestCommand newCmd = new TestCommand("new");
+        newList.add(newCmd);
+
+        scenario.setCommands(newList);
+
+        assertEquals(1, scenario.getCommands().size());
+        assertSame(newCmd, scenario.getCommands().get(0));
+    }
 }
