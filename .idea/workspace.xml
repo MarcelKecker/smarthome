@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2ee234e0-05c6-4263-9101-2c08fd03ccf2" name="Changes" comment="Aktionen hinzugefügt">
+    <list default="true" id="2ee234e0-05c6-4263-9101-2c08fd03ccf2" name="Changes" comment="gui raum übersicht">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/SmartHomeApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SmartHomeApp.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,7 +23,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="Fischbude1" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -37,8 +36,8 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/Vvnillacola/smarthome.git&quot;,
-    &quot;accountId&quot;: &quot;13d1f5b0-be4b-464d-b74c-0be964079e00&quot;
+    &quot;url&quot;: &quot;https://github.com/Vvnillacola/smarthome&quot;,
+    &quot;accountId&quot;: &quot;6a5de640-f4bb-4c3d-8307-085e96f93cf3&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
@@ -55,19 +54,13 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.SmartHomeApp.executor": "Run",
+    "JUnit.ScenarioTest.executor": "Run",
     "Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor": "Run",
-    "Maven.smarthome [clean,verify,-X].executor": "Run",
-    "Maven.smarthome [clean,verify].executor": "Run",
-    "Maven.smarthome [javafx:run].executor": "Run",
     "Maven.smarthome [org.openjfx:javafx-maven-plugin:0.0.8:run].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "Fischbude2",
+    "git-widget-placeholder": "marcel",
     "ignore.virus.scanning.warn.message": "true",
-    "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -75,10 +68,8 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
+    "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "reference.projectsettings.compiler.javacompiler",
-    "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -91,13 +82,8 @@
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="" />
     </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="service" />
-      <recent name="factory" />
-      <recent name="model.device.impl" />
-    </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JUnit.ScenarioTest">
     <configuration name="SmartHomeApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="SmartHomeApp" />
       <module name="smarthome" />
@@ -105,9 +91,24 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="ScenarioTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="smarthome" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="model.scenario.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="model.scenario" />
+      <option name="MAIN_CLASS_NAME" value="model.scenario.ScenarioTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.SmartHomeApp" />
+        <item itemvalue="JUnit.ScenarioTest" />
         <item itemvalue="Application.SmartHomeApp" />
       </list>
     </recent_temporary>
@@ -115,8 +116,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.24807.4" />
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.24807.4" />
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23726.103" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23726.103" />
       </set>
     </attachedChunks>
   </component>
@@ -137,8 +138,6 @@
       <workItem from="1777896141258" duration="6011000" />
       <workItem from="1778673340282" duration="4070000" />
       <workItem from="1779106127809" duration="9920000" />
-      <workItem from="1780477855604" duration="3006000" />
-      <workItem from="1780508790175" duration="1963000" />
     </task>
     <task id="LOCAL-00001" summary="erste anlage">
       <option name="closed" value="true" />
@@ -204,47 +203,7 @@
       <option name="project" value="LOCAL" />
       <updated>1777898876965</updated>
     </task>
-    <task id="LOCAL-00009" summary="Rolläden + Szenarien">
-      <option name="closed" value="true" />
-      <created>1780061191025</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1780061191025</updated>
-    </task>
-    <task id="LOCAL-00010" summary="Rolläden + Szenarien">
-      <option name="closed" value="true" />
-      <created>1780061804821</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1780061804821</updated>
-    </task>
-    <task id="LOCAL-00011" summary="Aktionen hinzugefügt">
-      <option name="closed" value="true" />
-      <created>1780312780742</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1780312780742</updated>
-    </task>
-    <task id="LOCAL-00012" summary="Aktionen hinzugefügt">
-      <option name="closed" value="true" />
-      <created>1780408225443</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1780408225443</updated>
-    </task>
-    <task id="LOCAL-00013" summary="Aktionen hinzugefügt">
-      <option name="closed" value="true" />
-      <created>1780480456668</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1780480456668</updated>
-    </task>
-    <option name="localTasksCounter" value="14" />
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -268,8 +227,6 @@
     <MESSAGE value="gui scenarios" />
     <MESSAGE value="gui raum erstellen" />
     <MESSAGE value="gui raum übersicht" />
-    <MESSAGE value="Rolläden + Szenarien" />
-    <MESSAGE value="Aktionen hinzugefügt" />
-    <option name="LAST_COMMIT_MESSAGE" value="Aktionen hinzugefügt" />
+    <option name="LAST_COMMIT_MESSAGE" value="gui raum übersicht" />
   </component>
 </project>
