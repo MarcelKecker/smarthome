@@ -297,14 +297,10 @@ public class SmartHomeApp extends Application {
         if (scenario != null) {
             if (!scenario.getCommands().isEmpty()) {
                 log("Szenario '" + scenario.getName() + "' gestartet.");
-                Set<Device> affectedDevices = new LinkedHashSet<>();
                 String result = "";
                 // Details der Aktionen loggen
                 for (Command cmd : scenario.getCommands()) {
                     cmd.execute();
-                    if (cmd.getDevice() != null) {
-                        affectedDevices.add(cmd.getDevice());
-                    }
                     switch (cmd.getActionType()){
                         case ROLL_UP -> result = cmd.getDevice().toString() + " hochgefahren.";
                         case TURN_ON ->  result = cmd.getDevice().toString() + " angeschaltet.";
@@ -335,19 +331,6 @@ public class SmartHomeApp extends Application {
                     log("Szenario: " + scenario.getName() + " Aktion: " + cmd.getActionType() + " Ergebnis: " + result);
                 }
                 log("Szenario '" + scenario.getName() + "' ausgeführt.");
-                log("--- Endzustand der Geräte nach '" + scenario.getName() + "': ---");
-                for (Device dev : affectedDevices) {
-                    if (dev instanceof Lamp lamp) {
-                        log("  • Lamp '" + lamp.getName() + "' -> Status: " + lamp.getState() + ", Helligkeit: " + lamp.getBrightness() + "%");
-                    } else if (dev instanceof Heating heating) {
-                        log("  • Heating '" + heating.getName() + "' -> Status: " + heating.getState() + ", Temperatur: " + heating.getTemperature() + "°C");
-                    } else if (dev instanceof Shutter shutter) {
-                        log("  • Shutter '" + shutter.getName() + "' -> Status: " + shutter.getState() + ", Position: " + shutter.getPosition() + "%");
-                    } else {
-                        log("  • Gerät '" + dev.getName() + "' -> Status: " + dev.getState());
-                    }
-                }
-                openScenarios();
             } else {
                 log("Szenario " + scenario.getName() + " besitzt keine Aktion.");
             }
