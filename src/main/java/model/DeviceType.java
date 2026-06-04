@@ -15,4 +15,14 @@ public enum DeviceType {
     public String toString() {
         return label;
     }
+
+    public static DeviceType getValue(String value) {
+        for (DeviceType type : values()) {
+            if (type.label.equalsIgnoreCase(value)
+                    || type.name().equalsIgnoreCase(value)) {
+                return type;
+            }
+        }
+        throw new IllegalArgumentException("Unknown DeviceType: " + value);
+    }
 }

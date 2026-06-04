@@ -4,11 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2ee234e0-05c6-4263-9101-2c08fd03ccf2" name="Changes" comment="Tests erweitert">
-      <change beforePath="$PROJECT_DIR$/src/test/java/model/device/impl/HeatingCommandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/model/device/impl/HeatingCommandTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/model/device/impl/LampCommandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/model/device/impl/LampCommandTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/model/device/impl/ShutterCommandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/model/device/impl/ShutterCommandTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/model/scenario/ScenarioTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/model/scenario/ScenarioTest.java" afterDir="false" />
+    <list default="true" id="2ee234e0-05c6-4263-9101-2c08fd03ccf2" name="Changes" comment="Rolläden + Szenarien">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/ActionType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/ActionType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/DeviceType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/DeviceType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/State.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/State.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,8 +39,8 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/Vvnillacola/smarthome&quot;,
-    &quot;accountId&quot;: &quot;6a5de640-f4bb-4c3d-8307-085e96f93cf3&quot;
+    &quot;url&quot;: &quot;https://github.com/MarcelKecker/smarthome&quot;,
+    &quot;accountId&quot;: &quot;e81f2ebe-cbe5-4ac2-9bdb-e1d3d279126d&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
@@ -54,32 +54,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.SmartHomeApp.executor": "Run",
-    "JUnit.CommandFactoryTest.executor": "Run",
-    "JUnit.DeviceServiceTest.executor": "Run",
-    "JUnit.RoomServiceTest.executor": "Run",
-    "JUnit.ScenarioServiceTest.executor": "Run",
-    "JUnit.ScenarioTest.executor": "Run",
-    "Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor": "Run",
-    "Maven.smarthome [org.openjfx:javafx-maven-plugin:0.0.8:run].executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "marcel",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.SmartHomeApp.executor&quot;: &quot;Run&quot;,
+    &quot;Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.smarthome [org.openjfx:javafx-maven-plugin:0.0.8:run].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\annak\Documents\HSW\Java Projekte\smarthoe\smarthome\src\main\resources" />
@@ -89,98 +89,30 @@
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="" />
     </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="service" />
+      <recent name="factory" />
+      <recent name="model.device.impl" />
+    </key>
   </component>
-  <component name="RunManager" selected="JUnit.CommandFactoryTest">
-    <configuration name="CommandFactoryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager">
+    <configuration name="SmartHomeApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="SmartHomeApp" />
       <module name="smarthome" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="factory.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="factory" />
-      <option name="MAIN_CLASS_NAME" value="factory.CommandFactoryTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="DeviceServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="smarthome" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="service.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="service" />
-      <option name="MAIN_CLASS_NAME" value="service.DeviceServiceTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="RoomServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="smarthome" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="service.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="service" />
-      <option name="MAIN_CLASS_NAME" value="service.RoomServiceTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="ScenarioServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="smarthome" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="service.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="service" />
-      <option name="MAIN_CLASS_NAME" value="service.ScenarioServiceTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="ScenarioTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="smarthome" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="model.scenario.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="model.scenario" />
-      <option name="MAIN_CLASS_NAME" value="model.scenario.ScenarioTest" />
-      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.CommandFactoryTest" />
-        <item itemvalue="JUnit.ScenarioServiceTest" />
-        <item itemvalue="JUnit.RoomServiceTest" />
-        <item itemvalue="JUnit.DeviceServiceTest" />
-        <item itemvalue="JUnit.ScenarioTest" />
+        <item itemvalue="Application.SmartHomeApp" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23726.103" />
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23726.103" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26830.84" />
       </set>
     </attachedChunks>
   </component>
@@ -266,31 +198,23 @@
       <option name="project" value="LOCAL" />
       <updated>1777898876965</updated>
     </task>
-    <task id="LOCAL-00009" summary="Tests">
+    <task id="LOCAL-00009" summary="Rolläden + Szenarien">
       <option name="closed" value="true" />
-      <created>1780577888441</created>
+      <created>1780061191025</created>
       <option name="number" value="00009" />
       <option name="presentableId" value="LOCAL-00009" />
       <option name="project" value="LOCAL" />
-      <updated>1780577888441</updated>
+      <updated>1780061191025</updated>
     </task>
-    <task id="LOCAL-00010" summary="Tests erweitert">
+    <task id="LOCAL-00010" summary="Rolläden + Szenarien">
       <option name="closed" value="true" />
-      <created>1780578145272</created>
+      <created>1780061804821</created>
       <option name="number" value="00010" />
       <option name="presentableId" value="LOCAL-00010" />
       <option name="project" value="LOCAL" />
-      <updated>1780578145272</updated>
+      <updated>1780061804821</updated>
     </task>
-    <task id="LOCAL-00011" summary="Tests erweitert">
-      <option name="closed" value="true" />
-      <created>1780578222936</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1780578222936</updated>
-    </task>
-    <option name="localTasksCounter" value="12" />
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -314,8 +238,7 @@
     <MESSAGE value="gui scenarios" />
     <MESSAGE value="gui raum erstellen" />
     <MESSAGE value="gui raum übersicht" />
-    <MESSAGE value="Tests" />
-    <MESSAGE value="Tests erweitert" />
-    <option name="LAST_COMMIT_MESSAGE" value="Tests erweitert" />
+    <MESSAGE value="Rolläden + Szenarien" />
+    <option name="LAST_COMMIT_MESSAGE" value="Rolläden + Szenarien" />
   </component>
 </project>

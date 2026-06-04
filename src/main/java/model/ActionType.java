@@ -2,17 +2,34 @@ package model;
 
 import model.device.Device;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public enum ActionType {
-    ROLL_UP,
-    ROLL_DOWN,
-    TURN_OFF,
-    TURN_ON,
-    SET_BRIGHTNESS,
-    SET_POSITION,
-    SET_TEMPERATURE;
+    ROLL_UP("Hochfahren"),
+    ROLL_DOWN("Herunterfahren"),
+    TURN_OFF("Ausschalten"),
+    TURN_ON("Einschalten"),
+    SET_BRIGHTNESS("Helligkeit setzen"),
+    SET_POSITION("Position setzen"),
+    SET_TEMPERATURE("Temperatur setzen");
+
+    private final String label;
+
+    ActionType(String label) {
+        this.label = label;
+    }
+
+    @Override
+    public String toString() {
+        return label;
+    }
+
+    public static ActionType getValue(String label) {
+        for (ActionType type : values()) {
+            if (type.label.equals(label)) {
+                return type;
+            }
+        }
+        throw new IllegalArgumentException("Unknown ActionType label: " + label);
+    }
 
     public static ActionType[] forDevice(Device device) {
         switch (device.getType()) {
