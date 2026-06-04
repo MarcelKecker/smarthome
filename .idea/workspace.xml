@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2ee234e0-05c6-4263-9101-2c08fd03ccf2" name="Changes" comment="Tests erweitert">
-      <change beforePath="$PROJECT_DIR$/src/test/java/model/device/impl/HeatingCommandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/model/device/impl/HeatingCommandTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/model/device/impl/LampCommandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/model/device/impl/LampCommandTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/model/device/impl/ShutterCommandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/model/device/impl/ShutterCommandTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/model/scenario/ScenarioTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/model/scenario/ScenarioTest.java" afterDir="false" />
+    <list default="true" id="2ee234e0-05c6-4263-9101-2c08fd03ccf2" name="Changes" comment="Tests vervollständigt">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/SmartHomeApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SmartHomeApp.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,12 +36,25 @@
     &quot;assignee&quot;: &quot;Vvnillacola&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/Vvnillacola/smarthome&quot;,
-    &quot;accountId&quot;: &quot;6a5de640-f4bb-4c3d-8307-085e96f93cf3&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Vvnillacola/smarthome",
+    "accountId": "666eacb1-1a42-426b-b603-f6a0a86eb6c1"
+  },
+  "recentNewPullRequestHead": {
+    "server": {
+      "useHttp": false,
+      "host": "github.com",
+      "port": null,
+      "suffix": null
+    },
+    "owner": "Vvnillacola",
+    "repository": "smarthome"
   }
-}</component>
+}]]></component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
 }</component>
@@ -62,11 +74,12 @@
     "JUnit.RoomServiceTest.executor": "Run",
     "JUnit.ScenarioServiceTest.executor": "Run",
     "JUnit.ScenarioTest.executor": "Run",
+    "JUnit.SmartHomeGuiTest.executor": "Run",
     "Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor": "Run",
     "Maven.smarthome [org.openjfx:javafx-maven-plugin:0.0.8:run].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "marcel",
+    "git-widget-placeholder": "#12 on marcel",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
@@ -90,7 +103,7 @@
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.CommandFactoryTest">
+  <component name="RunManager" selected="JUnit.SmartHomeGuiTest">
     <configuration name="CommandFactoryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="smarthome" />
       <extension name="coverage">
@@ -151,16 +164,10 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ScenarioTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="SmartHomeGuiTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="smarthome" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="model.scenario.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="model.scenario" />
-      <option name="MAIN_CLASS_NAME" value="model.scenario.ScenarioTest" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="SmartHomeGuiTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -168,11 +175,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.SmartHomeGuiTest" />
         <item itemvalue="JUnit.CommandFactoryTest" />
         <item itemvalue="JUnit.ScenarioServiceTest" />
         <item itemvalue="JUnit.RoomServiceTest" />
         <item itemvalue="JUnit.DeviceServiceTest" />
-        <item itemvalue="JUnit.ScenarioTest" />
       </list>
     </recent_temporary>
   </component>
@@ -290,7 +297,15 @@
       <option name="project" value="LOCAL" />
       <updated>1780578222936</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Tests vervollständigt">
+      <option name="closed" value="true" />
+      <created>1780578480602</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1780578480602</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -316,6 +331,7 @@
     <MESSAGE value="gui raum übersicht" />
     <MESSAGE value="Tests" />
     <MESSAGE value="Tests erweitert" />
-    <option name="LAST_COMMIT_MESSAGE" value="Tests erweitert" />
+    <MESSAGE value="Tests vervollständigt" />
+    <option name="LAST_COMMIT_MESSAGE" value="Tests vervollständigt" />
   </component>
 </project>
