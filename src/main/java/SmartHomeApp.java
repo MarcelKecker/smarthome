@@ -149,13 +149,7 @@ public class SmartHomeApp extends Application {
         runScenario.setOnAction(e -> {
             Scenario selected = scenarioSelect.getValue();
             if (selected != null) {
-                log("Szenario '" + selected.getName() + "' über TopBar gestartet.");
-                // Details der Aktionen loggen
-                for (Command cmd : selected.getCommands()) {
-                    log(" -> Führe Aktion aus: " + cmd.toString() + " auf Gerät '" + cmd.getDevice().getName() + "'");
-                }
-                selected.execute();
-                log("Szenario '" + selected.getName() + "' erfolgreich ausgeführt.");
+                runaScenario(selected);
                 refreshCurrentView();
             }
         });
@@ -209,6 +203,51 @@ public class SmartHomeApp extends Application {
         stage.show();
 
         log("Anwendung erfolgreich gestartet.");
+    }
+
+    private void runaScenario(Scenario scenario) {
+        if (scenario != null) {
+            if (!scenario.getCommands().isEmpty()) {
+                log("Szenario '" + scenario.getName() + "' gestartet.");
+                String result = "";
+                // Details der Aktionen loggen
+                for (Command cmd : scenario.getCommands()) {
+                    cmd.execute();
+                    switch (cmd.getActionType()){
+                        case ROLL_UP -> result = cmd.getDevice().toString() + " hochgefahren.";
+                        case TURN_ON ->  result = cmd.getDevice().toString() + " angeschaltet.";
+                        case TURN_OFF ->  result = cmd.getDevice().toString() + " ausgeschaltet.";
+                        case ROLL_DOWN -> result = cmd.getDevice().toString() + " runtergefahren.";
+                        case SET_POSITION -> {
+                            if (cmd.getDevice().getState() ==State. ROLLED_UP ){
+                                result = cmd.getDevice().toString() +" sind noch hochgerollt. Position wurde nicht eingestellt.";
+                            } else {
+                                result = cmd.getDevice().toString() + " auf Position " + ((SetPositionShutterCommand) cmd).getPosition()+ " gestellt.";
+                            }
+                        }
+                        case SET_BRIGHTNESS -> {
+                            if (cmd.getDevice().getState() ==State.TURNED_OFF ){
+                                result = cmd.getDevice().toString() +" ist ausgeschaltet. Helligkeit wurde nicht gesetzt.";
+                            } else {
+                                result = cmd.getDevice().toString() + " auf Helligkeit " + ((SetBrightnessLampCommand) cmd).getBrightness()+ " gestellt.";
+                            }
+                        }
+                        case SET_TEMPERATURE -> {
+                            if (cmd.getDevice().getState() == State.TURNED_OFF) {
+                                result = cmd.getDevice().toString() + " ist ausgeschaltet. Temperatur wurde nicht gesetzt.";
+                            } else {
+                                result = cmd.getDevice().toString() + " auf Temperatur " + ((SetTemperatureHeatingCommand) cmd).getTemperature()+ " gestellt.";
+                            }
+                        }
+                    }
+                    log("Szenario: " + scenario.getName() + " Aktion: " + cmd.getActionType() + " Ergebnis: " + result);
+                }
+                log("Szenario '" + scenario.getName() + "' ausgeführt.");
+                openScenarios();
+            } else {
+                log("Szenario " + scenario.getName() + " besitzt keine Aktion.");
+            }
+        }
     }
 
     private void refreshCurrentView() {
@@ -860,14 +899,7 @@ public class SmartHomeApp extends Application {
         runScenario.setOnAction(e -> {
             Scenario scenario = table.getSelectionModel().getSelectedItem();
             if (scenario != null) {
-                log("Szenario '" + scenario.getName() + "' gestartet.");
-                // Details der Aktionen loggen
-                for (Command cmd : scenario.getCommands()) {
-                    log(" -> Führe Aktion aus: " + cmd.toString() + " auf Gerät '" + cmd.getDevice().getName() + "'");
-                }
-                scenario.execute();
-                log("Szenario '" + scenario.getName() + "' erfolgreich ausgeführt.");
-                openScenarios();
+                runaScenario(scenario);
             }
         });
 

@@ -1,6 +1,7 @@
 package model.action.impl;
 
 import model.ActionType;
+import model.State;
 import model.action.BaseCommand;
 import model.device.Device;
 import model.device.impl.Lamp;
@@ -20,7 +21,9 @@ public class SetBrightnessLampCommand extends BaseCommand {
 
     @Override
     public void execute() {
-        lamp.setBrightness(brightness);
+        if (lamp.getState() == State.TURNED_ON) {
+            lamp.setBrightness(brightness);
+        }
     }
 
     public int getBrightness() {

@@ -1,6 +1,7 @@
 package model.action.impl;
 
 import model.ActionType;
+import model.State;
 import model.action.BaseCommand;
 import model.device.Device;
 import model.device.impl.Heating;
@@ -20,7 +21,9 @@ public class SetTemperatureHeatingCommand extends BaseCommand {
 
     @Override
     public void execute() {
-        heating.setTemperature(temperature);
+        if (heating.getState() == State.TURNED_ON){
+            heating.setTemperature(temperature);
+        }
     }
 
     public double getTemperature() {
