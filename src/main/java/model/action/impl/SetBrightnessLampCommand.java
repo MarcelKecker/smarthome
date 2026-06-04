@@ -1,27 +1,36 @@
 package model.action.impl;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import model.ActionType;
 import model.State;
 import model.action.BaseCommand;
-import model.device.Device;
 import model.device.impl.Lamp;
 
-import java.util.UUID;
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SetBrightnessLampCommand extends BaseCommand {
 
     private final Lamp lamp;
     private final int brightness;
 
-    public SetBrightnessLampCommand(Lamp lamp, int brightness, int orderIndex) {
-        super(lamp, ActionType.SET_BRIGHTNESS, orderIndex);
+    // Der Jackson-Konstruktor fängt hier auch die Helligkeit ab
+    @JsonCreator
+    public SetBrightnessLampCommand(
+            @JsonProperty("id") String id,
+            @JsonProperty("device") Lamp lamp,
+            @JsonProperty("actionType") ActionType actionType,
+            @JsonProperty("orderIndex") int orderIndex,
+            @JsonProperty("brightness") int brightness // Liest das "brightness"-Feld aus dem JSON
+    ) {
+        super(id, lamp, actionType, orderIndex);
         this.lamp = lamp;
         this.brightness = brightness;
     }
 
     @Override
     public void execute() {
-        if (lamp.getState() == State.TURNED_ON) {
+        if (lamp != null && lamp.getState() == State.TURNED_ON) {
             lamp.setBrightness(brightness);
         }
     }

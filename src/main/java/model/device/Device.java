@@ -12,14 +12,14 @@ import com.fasterxml.jackson.annotation.*;
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
-        property = "type"
+        property = "type",
+        visible = true
 )
 @JsonSubTypes({
         @JsonSubTypes.Type(value = Heating.class, name = "HEATING"),
         @JsonSubTypes.Type(value = Lamp.class, name = "LAMP"),
         @JsonSubTypes.Type(value = Shutter.class, name = "SHUTTER")
 })
-
 public interface Device {
     String getName();
     String getId();
@@ -38,5 +38,4 @@ public interface Device {
 
     @Override
     public String toString();
-
 }

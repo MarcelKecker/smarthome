@@ -1,18 +1,18 @@
 package service;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import model.room.Raum;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class RoomService {
-    private List<Raum> rooms = new ArrayList<>();
+    private ObservableList<Raum> rooms = FXCollections.observableArrayList();
 
     public void addRoom(Raum room) {
         rooms.add(room);
     }
 
-    public List<Raum> getAllRooms() {
+    public ObservableList<Raum> getAllRooms() {
         return rooms;
     }
 
@@ -20,11 +20,10 @@ public class RoomService {
         rooms.remove(room);
     }
 
-
     public void setRooms(List<Raum> rooms) {
         this.clear();
-        for (Raum room : rooms) {
-            this.addRoom(room);
+        if (rooms != null) {
+            this.rooms.addAll(rooms);
         }
     }
 

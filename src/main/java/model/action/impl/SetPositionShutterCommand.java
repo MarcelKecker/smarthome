@@ -1,27 +1,36 @@
 package model.action.impl;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import model.ActionType;
 import model.State;
 import model.action.BaseCommand;
-import model.device.Device;
 import model.device.impl.Shutter;
 
-import java.util.UUID;
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SetPositionShutterCommand extends BaseCommand {
 
     private final Shutter shutter;
     private final int position;
 
-    public SetPositionShutterCommand(Shutter shutter, int position, int orderIndex) {
-        super(shutter, ActionType.SET_POSITION, orderIndex);
+    // Der Jackson-Konstruktor fängt die Zielposition ab
+    @JsonCreator
+    public SetPositionShutterCommand(
+            @JsonProperty("id") String id,
+            @JsonProperty("device") Shutter shutter,
+            @JsonProperty("actionType") ActionType actionType,
+            @JsonProperty("orderIndex") int orderIndex,
+    @JsonProperty("position") int position // Liest das "position"-Feld aus dem JSON
+    ) {
+        super(id, shutter, actionType, orderIndex);
         this.shutter = shutter;
         this.position = position;
     }
 
     @Override
     public void execute() {
-        if (shutter.getState() == State.ROLLED_DOWN){
+        if (shutter != null && shutter.getState() == State.ROLLED_DOWN) {
             shutter.setPosition(position);
         }
     }

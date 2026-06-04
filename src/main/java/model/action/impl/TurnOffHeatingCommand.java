@@ -1,24 +1,34 @@
 package model.action.impl;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import model.ActionType;
 import model.action.BaseCommand;
 import model.State;
-import model.device.Device;
 import model.device.impl.Heating;
 
-import java.util.UUID;
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TurnOffHeatingCommand extends BaseCommand {
 
     private final Heating heating;
 
-    public TurnOffHeatingCommand(Heating heating, int orderIndex) {
-        super(heating, ActionType.TURN_OFF, orderIndex);
+    // Der Jackson-Konstruktor für das Ausschalten der Heizung
+    @JsonCreator
+    public TurnOffHeatingCommand(
+            @JsonProperty("id") String id,
+            @JsonProperty("device") Heating heating,
+            @JsonProperty("actionType") ActionType actionType,
+            @JsonProperty("orderIndex") int orderIndex
+    ) {
+        super(id, heating, actionType, orderIndex);
         this.heating = heating;
     }
 
     @Override
     public void execute() {
-        heating.setState(State.TURNED_OFF);
+        if (heating != null) {
+            heating.setState(State.TURNED_OFF);
+        }
     }
 }
