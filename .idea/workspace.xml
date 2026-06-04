@@ -4,11 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2ee234e0-05c6-4263-9101-2c08fd03ccf2" name="Changes" comment="Rolläden + Szenarien">
+    <list default="true" id="2ee234e0-05c6-4263-9101-2c08fd03ccf2" name="Changes" comment="Readable label for ActionType, DeviceType and State">
+      <change afterPath="$PROJECT_DIR$/src/main/java/service/PersistenceService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/service/SmartHomeProject.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/ActionType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/ActionType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/DeviceType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/DeviceType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/State.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/State.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/SmartHomeApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SmartHomeApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/action/Command.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/action/Command.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/device/Device.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/device/Device.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/device/impl/Lamp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/device/impl/Lamp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/device/impl/Shutter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/device/impl/Shutter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/room/Raum.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/room/Raum.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/scenario/Scenario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/scenario/Scenario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/service/DeviceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/DeviceService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/service/RoomService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/RoomService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/service/ScenarioService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/ScenarioService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,6 +97,7 @@
       <recent name="C:\Users\annak\Documents\HSW\Java Projekte\smarthoe\smarthome\src\main" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="service" />
       <recent name="" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -214,7 +225,15 @@
       <option name="project" value="LOCAL" />
       <updated>1780061804821</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Readable label for ActionType, DeviceType and State">
+      <option name="closed" value="true" />
+      <created>1780585428215</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1780585428215</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -239,6 +258,7 @@
     <MESSAGE value="gui raum erstellen" />
     <MESSAGE value="gui raum übersicht" />
     <MESSAGE value="Rolläden + Szenarien" />
-    <option name="LAST_COMMIT_MESSAGE" value="Rolläden + Szenarien" />
+    <MESSAGE value="Readable label for ActionType, DeviceType and State" />
+    <option name="LAST_COMMIT_MESSAGE" value="Readable label for ActionType, DeviceType and State" />
   </component>
 </project>

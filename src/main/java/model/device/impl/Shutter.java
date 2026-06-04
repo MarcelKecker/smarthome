@@ -13,6 +13,8 @@ public class Shutter implements Device {
     private State state;
     private int position;
 
+    public Shutter() {}
+
     public Shutter(String id, String name, Raum room) {
         this.id = id;
         this.name = name;

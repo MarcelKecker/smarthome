@@ -4,12 +4,15 @@ import factory.CommandFactory;
 import factory.DeviceFactory;
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.ActionType;
 import model.DeviceType;
@@ -24,10 +27,10 @@ import model.device.impl.Shutter;
 import model.room.Raum;
 import model.action.Command;
 import model.scenario.Scenario;
-import service.DeviceService;
-import service.RoomService;
-import service.ScenarioService;
+import service.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -41,6 +44,8 @@ public class SmartHomeApp extends Application {
     private DeviceService deviceService = new DeviceService();
 
     private ScenarioService scenarioService = new ScenarioService();
+
+    private PersistenceService persistenceService = new PersistenceService();
 
     private Runnable currentRefreshAction;
 
@@ -102,22 +107,89 @@ public class SmartHomeApp extends Application {
         Button neuBtn = new Button("\uD83D\uDDD2 Neu");
 
         neuBtn.setOnAction(e -> {
-            System.out.println("Neu geklickt");
-            log("Neues Projekt erstellt/angefordert.");
+
+            roomService.clear();
+            deviceService.clear();
+            scenarioService.clear();
+
+            openRooms();
         });
 
         Button openBtn = new Button("📂 Öffnen");
 
         openBtn.setOnAction(e -> {
-            System.out.println("Öffnen geklickt");
-            log("Projekt geöffnet.");
+
+            FileChooser chooser =
+                    new FileChooser();
+
+            File file =
+                    chooser.showOpenDialog(
+                            root.getScene().getWindow()
+                    );
+
+            if(file != null) {
+
+                SmartHomeProject project =
+                        null;
+                try {
+                    project = persistenceService.load(file);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+                roomService.setRooms(
+                        project.getRooms()
+                );
+
+                deviceService.setDevices(
+                        project.getDevices()
+                );
+
+                scenarioService.setScenarios(
+                        project.getScenarios()
+                );
+
+                openRooms();
+            }
         });
 
         Button saveBtn = new Button("💾 Speichern");
 
         saveBtn.setOnAction(e -> {
-            System.out.println("Speichern geklickt");
-            log("Projekt gespeichert.");
+
+            FileChooser chooser = new FileChooser();
+
+            chooser.setTitle("Projekt speichern");
+
+            chooser.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter(
+                            "SmartHome Projekt",
+                            "*.json"
+                    )
+            );
+
+            File file = chooser.showSaveDialog(
+                    root.getScene().getWindow()
+            );
+
+            if(file != null) {
+
+                SmartHomeProject project =
+                        new SmartHomeProject(
+                                roomService.getAllRooms(),
+                                deviceService.getDevices(),
+                                scenarioService.getScenarios()
+                        );
+
+                try {
+                    persistenceService.save(
+                            project,
+                            file
+                    );
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
         });
 
         ComboBox<Scenario> scenarioSelect = new ComboBox<>();
@@ -960,7 +1032,9 @@ public class SmartHomeApp extends Application {
         );
 
         tableDeviceCommands.getColumns().addAll(orderCol, deviceCommandCol);
-        tableDeviceCommands.setItems(scenario.getCommands());
+        ObservableList<Command> commands =
+                FXCollections.observableArrayList(scenario.getCommands());
+        tableDeviceCommands.setItems(commands);
 
 
         scenarioEditor.getChildren().addAll(

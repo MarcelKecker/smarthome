@@ -6,6 +6,8 @@ public class Raum {
     private int id;
     private String name;
 
+    public Raum() {}
+
     public Raum(String name) {
         this.id = idcounter++;
         this.name = name;

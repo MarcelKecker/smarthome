@@ -4,6 +4,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.device.Device;
 
+import java.util.List;
+
 public class DeviceService {
     private ObservableList<Device> devices = FXCollections.observableArrayList();
 
@@ -15,5 +17,15 @@ public class DeviceService {
         devices.add(device);
     }
 
+    public void setDevices(List<Device> devices) {
+        this.clear();
+        for (Device device : devices) {
+            this.addDevice(device);
+        }
+    }
+
+    public void clear() {
+        this.devices.clear();
+    }
 }
 

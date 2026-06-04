@@ -13,6 +13,8 @@ public class Lamp implements Device {
     private State state;
     private int brightness;
 
+    public Lamp() {}
+
     public Lamp(String id,String name, Raum room) {
         this.id = id;
         this.name = name;
