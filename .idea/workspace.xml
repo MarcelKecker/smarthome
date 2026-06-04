@@ -4,8 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a2d652f0-6aab-4d3f-ab25-b4c4b31f3b15" name="Changes" comment="">
+    <list default="true" id="2ee234e0-05c6-4263-9101-2c08fd03ccf2" name="Changes" comment="Readable label for ActionType, DeviceType and State">
+      <change afterPath="$PROJECT_DIR$/src/main/java/service/PersistenceService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/service/SmartHomeProject.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/SmartHomeApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SmartHomeApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/action/Command.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/action/Command.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/device/Device.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/device/Device.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/device/impl/Lamp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/device/impl/Lamp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/device/impl/Shutter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/device/impl/Shutter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/room/Raum.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/room/Raum.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/scenario/Scenario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/scenario/Scenario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/service/DeviceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/DeviceService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/service/RoomService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/RoomService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/service/ScenarioService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/ScenarioService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,7 +64,23 @@
     "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\annak\Documents\HSW\Java Projekte\smarthoe\smarthome\src\main\resources" />
+      <recent name="C:\Users\annak\Documents\HSW\Java Projekte\smarthoe\smarthome\src\main\java" />
+      <recent name="C:\Users\annak\Documents\HSW\Java Projekte\smarthoe\smarthome\src\main" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="service" />
+      <recent name="" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="service" />
+      <recent name="factory" />
+      <recent name="model.device.impl" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="SmartHomeGuiTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="smarthome" />
@@ -86,9 +115,96 @@
       <workItem from="1780586838399" duration="497000" />
       <workItem from="1780587345073" duration="373000" />
     </task>
+    <task id="LOCAL-00004" summary="raum übersicht gui">
+      <option name="closed" value="true" />
+      <created>1777300193651</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1777300193651</updated>
+    </task>
+    <task id="LOCAL-00005" summary="raum übersicht gui">
+      <option name="closed" value="true" />
+      <created>1777302753326</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1777302753326</updated>
+    </task>
+    <task id="LOCAL-00006" summary="gui scenarios">
+      <option name="closed" value="true" />
+      <created>1777368101774</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1777368101774</updated>
+    </task>
+    <task id="LOCAL-00007" summary="gui raum erstellen">
+      <option name="closed" value="true" />
+      <created>1777373267419</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1777373267419</updated>
+    </task>
+    <task id="LOCAL-00008" summary="gui raum übersicht">
+      <option name="closed" value="true" />
+      <created>1777898876965</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1777898876965</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Rolläden + Szenarien">
+      <option name="closed" value="true" />
+      <created>1780061191025</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1780061191025</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Rolläden + Szenarien">
+      <option name="closed" value="true" />
+      <created>1780061804821</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1780061804821</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Readable label for ActionType, DeviceType and State">
+      <option name="closed" value="true" />
+      <created>1780585428215</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1780585428215</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="erste anlage" />
+    <MESSAGE value="ui update" />
+    <MESSAGE value="raum übersicht gui" />
+    <MESSAGE value="gui scenarios" />
+    <MESSAGE value="gui raum erstellen" />
+    <MESSAGE value="gui raum übersicht" />
+    <MESSAGE value="Rolläden + Szenarien" />
+    <MESSAGE value="Readable label for ActionType, DeviceType and State" />
+    <option name="LAST_COMMIT_MESSAGE" value="Readable label for ActionType, DeviceType and State" />
   </component>
 </project>

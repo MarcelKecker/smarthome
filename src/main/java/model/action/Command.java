@@ -1,7 +1,9 @@
 package model.action;
 
 import model.ActionType;
+import model.action.impl.RollDownShutterCommand;
 import model.device.Device;
+import com.fasterxml.jackson.annotation.*;
 
 public interface Command {
     void execute();

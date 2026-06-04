@@ -21,4 +21,14 @@ public class RoomService {
     }
 
 
+    public void setRooms(List<Raum> rooms) {
+        this.clear();
+        for (Raum room : rooms) {
+            this.addRoom(room);
+        }
+    }
+
+    public void clear() {
+        this.rooms.clear();
+    }
 }

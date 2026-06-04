@@ -1,19 +1,22 @@
 package model.scenario;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import model.action.Command;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Scenario {
 
     private String name;
     private String description;
-    private ObservableList<Command> commands;
+    private List<Command> commands;
+
+    public Scenario() {}
 
     public Scenario(String name, String description) {
         this.name = name;
         this.description = description;
-        this.commands = FXCollections.observableArrayList();
+        this.commands = new ArrayList<>();
     }
 
     public void addCommand(Command command) {
@@ -26,7 +29,7 @@ public class Scenario {
         }
     }
 
-    public ObservableList<Command> getCommands() {
+    public List<Command> getCommands() {
         return commands;
     }
 
@@ -44,7 +47,7 @@ public class Scenario {
         this.description = description;
     }
 
-    public void setCommands(ObservableList<Command> commands) {
+    public void setCommands(List<Command> commands) {
         this.commands = commands;
     }
 

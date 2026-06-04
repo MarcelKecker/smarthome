@@ -5,6 +5,8 @@ import javafx.collections.ObservableList;
 import model.room.Raum;
 import model.scenario.Scenario;
 
+import java.util.List;
+
 public class ScenarioService {
     private ObservableList<Scenario> scenarios = FXCollections.observableArrayList();
 
@@ -20,5 +22,12 @@ public class ScenarioService {
         scenarios.remove(scenario);
     }
 
+    public void setScenarios(List<Scenario> scenarios) {
+        this.scenarios = (ObservableList<Scenario>) scenarios;
+    }
+
+    public void clear() {
+        this.scenarios.clear();
+    }
 }
 
