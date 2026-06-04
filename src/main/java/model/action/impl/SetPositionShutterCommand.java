@@ -1,6 +1,7 @@
 package model.action.impl;
 
 import model.ActionType;
+import model.State;
 import model.action.BaseCommand;
 import model.device.Device;
 import model.device.impl.Shutter;
@@ -20,7 +21,9 @@ public class SetPositionShutterCommand extends BaseCommand {
 
     @Override
     public void execute() {
-        shutter.setPosition(position);
+        if (shutter.getState() == State.ROLLED_DOWN){
+            shutter.setPosition(position);
+        }
     }
 
     public int getPosition() {
