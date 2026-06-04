@@ -86,10 +86,18 @@
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.ScenarioServiceTest">
-    <configuration name="SmartHomeApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="SmartHomeApp" />
+  <component name="RunManager" selected="JUnit.CommandFactoryTest">
+    <configuration name="CommandFactoryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="smarthome" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="factory.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="factory" />
+      <option name="MAIN_CLASS_NAME" value="factory.CommandFactoryTest" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -156,11 +164,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.CommandFactoryTest" />
         <item itemvalue="JUnit.ScenarioServiceTest" />
         <item itemvalue="JUnit.RoomServiceTest" />
         <item itemvalue="JUnit.DeviceServiceTest" />
         <item itemvalue="JUnit.ScenarioTest" />
-        <item itemvalue="Application.SmartHomeApp" />
       </list>
     </recent_temporary>
   </component>
