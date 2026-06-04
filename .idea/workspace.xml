@@ -4,166 +4,62 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2ee234e0-05c6-4263-9101-2c08fd03ccf2" name="Changes" comment="Tests vervollständigt">
+    <list default="true" id="a2d652f0-6aab-4d3f-ab25-b4c4b31f3b15" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/rGraphicsSettings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/rSettings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/SmartHomeApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SmartHomeApp.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Interface" />
-        <option value="Class" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="master" />
-      </map>
-    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
     &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;Vvnillacola&quot;
+    &quot;assignee&quot;: &quot;l1dll0hnts1ch&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/Vvnillacola/smarthome",
-    "accountId": "666eacb1-1a42-426b-b603-f6a0a86eb6c1"
-  },
-  "recentNewPullRequestHead": {
-    "server": {
-      "useHttp": false,
-      "host": "github.com",
-      "port": null,
-      "suffix": null
-    },
-    "owner": "Vvnillacola",
-    "repository": "smarthome"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Vvnillacola/smarthome&quot;,
+    &quot;accountId&quot;: &quot;666eacb1-1a42-426b-b603-f6a0a86eb6c1&quot;
   }
-}]]></component>
-  <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
-  </component>
+}</component>
   <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 4
 }</component>
-  <component name="ProjectId" id="3C72EGM7ChLJbuQJXSmmO5GpMEB" />
-  <component name="ProjectLevelVcsManager">
-    <ConfirmationsSetting value="2" id="Add" />
-  </component>
+  <component name="ProjectId" id="3Eg4N7Wkmhj6fWC0DPyeVE49Jcw" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.SmartHomeApp.executor": "Run",
-    "JUnit.CommandFactoryTest.executor": "Run",
-    "JUnit.DeviceServiceTest.executor": "Run",
-    "JUnit.RoomServiceTest.executor": "Run",
-    "JUnit.ScenarioServiceTest.executor": "Run",
-    "JUnit.ScenarioTest.executor": "Run",
-    "JUnit.SmartHomeGuiTest.executor": "Run",
-    "Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor": "Run",
-    "Maven.smarthome [org.openjfx:javafx-maven-plugin:0.0.8:run].executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "#12 on marcel",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;JUnit.SmartHomeGuiTest.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;marcel&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
-  <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\annak\Documents\HSW\Java Projekte\smarthoe\smarthome\src\main\resources" />
-      <recent name="C:\Users\annak\Documents\HSW\Java Projekte\smarthoe\smarthome\src\main\java" />
-      <recent name="C:\Users\annak\Documents\HSW\Java Projekte\smarthoe\smarthome\src\main" />
-    </key>
-    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="" />
-    </key>
-  </component>
-  <component name="RunManager" selected="JUnit.SmartHomeGuiTest">
-    <configuration name="CommandFactoryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="smarthome" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="factory.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="factory" />
-      <option name="MAIN_CLASS_NAME" value="factory.CommandFactoryTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="DeviceServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="smarthome" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="service.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="service" />
-      <option name="MAIN_CLASS_NAME" value="service.DeviceServiceTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="RoomServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="smarthome" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="service.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="service" />
-      <option name="MAIN_CLASS_NAME" value="service.RoomServiceTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="ScenarioServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="smarthome" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="service.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="service" />
-      <option name="MAIN_CLASS_NAME" value="service.ScenarioServiceTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+}</component>
+  <component name="RunManager">
     <configuration name="SmartHomeGuiTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="smarthome" />
       <option name="PACKAGE_NAME" value="" />
@@ -176,162 +72,30 @@
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.SmartHomeGuiTest" />
-        <item itemvalue="JUnit.CommandFactoryTest" />
-        <item itemvalue="JUnit.ScenarioServiceTest" />
-        <item itemvalue="JUnit.RoomServiceTest" />
-        <item itemvalue="JUnit.DeviceServiceTest" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23726.103" />
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23726.103" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.27397.103" />
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.27397.103" />
       </set>
     </attachedChunks>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="2ee234e0-05c6-4263-9101-2c08fd03ccf2" name="Changes" comment="" />
-      <created>1775722175789</created>
+      <changelist id="a2d652f0-6aab-4d3f-ab25-b4c4b31f3b15" name="Changes" comment="" />
+      <created>1780586836427</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1775722175789</updated>
-      <workItem from="1775722177329" duration="352000" />
-      <workItem from="1776073976919" duration="14000" />
-      <workItem from="1776417752766" duration="3442000" />
-      <workItem from="1777292222428" duration="9722000" />
-      <workItem from="1777363730084" duration="8348000" />
-      <workItem from="1777377015981" duration="6451000" />
-      <workItem from="1777896141258" duration="6011000" />
-      <workItem from="1778673340282" duration="4070000" />
-      <workItem from="1779106127809" duration="9920000" />
+      <updated>1780586836427</updated>
+      <workItem from="1780586838399" duration="497000" />
+      <workItem from="1780587345073" duration="373000" />
     </task>
-    <task id="LOCAL-00001" summary="erste anlage">
-      <option name="closed" value="true" />
-      <created>1777292265259</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1777292265259</updated>
-    </task>
-    <task id="LOCAL-00002" summary="ui update">
-      <option name="closed" value="true" />
-      <created>1777295012731</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1777295012731</updated>
-    </task>
-    <task id="LOCAL-00003" summary="ui update">
-      <option name="closed" value="true" />
-      <created>1777297764785</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1777297764785</updated>
-    </task>
-    <task id="LOCAL-00004" summary="raum übersicht gui">
-      <option name="closed" value="true" />
-      <created>1777300193651</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1777300193651</updated>
-    </task>
-    <task id="LOCAL-00005" summary="raum übersicht gui">
-      <option name="closed" value="true" />
-      <created>1777302753326</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1777302753326</updated>
-    </task>
-    <task id="LOCAL-00006" summary="gui scenarios">
-      <option name="closed" value="true" />
-      <created>1777368101774</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1777368101774</updated>
-    </task>
-    <task id="LOCAL-00007" summary="gui raum erstellen">
-      <option name="closed" value="true" />
-      <created>1777373267419</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1777373267419</updated>
-    </task>
-    <task id="LOCAL-00008" summary="gui raum übersicht">
-      <option name="closed" value="true" />
-      <created>1777898876965</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1777898876965</updated>
-    </task>
-    <task id="LOCAL-00009" summary="Tests">
-      <option name="closed" value="true" />
-      <created>1780577888441</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1780577888441</updated>
-    </task>
-    <task id="LOCAL-00010" summary="Tests erweitert">
-      <option name="closed" value="true" />
-      <created>1780578145272</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1780578145272</updated>
-    </task>
-    <task id="LOCAL-00011" summary="Tests erweitert">
-      <option name="closed" value="true" />
-      <created>1780578222936</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1780578222936</updated>
-    </task>
-    <task id="LOCAL-00012" summary="Tests vervollständigt">
-      <option name="closed" value="true" />
-      <created>1780578480602</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1780578480602</updated>
-    </task>
-    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="erste anlage" />
-    <MESSAGE value="ui update" />
-    <MESSAGE value="raum übersicht gui" />
-    <MESSAGE value="gui scenarios" />
-    <MESSAGE value="gui raum erstellen" />
-    <MESSAGE value="gui raum übersicht" />
-    <MESSAGE value="Tests" />
-    <MESSAGE value="Tests erweitert" />
-    <MESSAGE value="Tests vervollständigt" />
-    <option name="LAST_COMMIT_MESSAGE" value="Tests vervollständigt" />
   </component>
 </project>
