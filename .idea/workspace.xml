@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2ee234e0-05c6-4263-9101-2c08fd03ccf2" name="Changes" comment="gui raum übersicht">
+    <list default="true" id="2ee234e0-05c6-4263-9101-2c08fd03ccf2" name="Changes" comment="Tests">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -54,6 +54,9 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.SmartHomeApp.executor": "Run",
+    "JUnit.DeviceServiceTest.executor": "Run",
+    "JUnit.RoomServiceTest.executor": "Run",
+    "JUnit.ScenarioServiceTest.executor": "Run",
     "JUnit.ScenarioTest.executor": "Run",
     "Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor": "Run",
     "Maven.smarthome [org.openjfx:javafx-maven-plugin:0.0.8:run].executor": "Run",
@@ -83,10 +86,55 @@
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.ScenarioTest">
+  <component name="RunManager" selected="JUnit.ScenarioServiceTest">
     <configuration name="SmartHomeApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="SmartHomeApp" />
       <module name="smarthome" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DeviceServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="smarthome" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="service" />
+      <option name="MAIN_CLASS_NAME" value="service.DeviceServiceTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RoomServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="smarthome" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="service" />
+      <option name="MAIN_CLASS_NAME" value="service.RoomServiceTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ScenarioServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="smarthome" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="service" />
+      <option name="MAIN_CLASS_NAME" value="service.ScenarioServiceTest" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -108,6 +156,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.ScenarioServiceTest" />
+        <item itemvalue="JUnit.RoomServiceTest" />
+        <item itemvalue="JUnit.DeviceServiceTest" />
         <item itemvalue="JUnit.ScenarioTest" />
         <item itemvalue="Application.SmartHomeApp" />
       </list>
@@ -203,7 +254,15 @@
       <option name="project" value="LOCAL" />
       <updated>1777898876965</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Tests">
+      <option name="closed" value="true" />
+      <created>1780577888441</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1780577888441</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -227,6 +286,7 @@
     <MESSAGE value="gui scenarios" />
     <MESSAGE value="gui raum erstellen" />
     <MESSAGE value="gui raum übersicht" />
-    <option name="LAST_COMMIT_MESSAGE" value="gui raum übersicht" />
+    <MESSAGE value="Tests" />
+    <option name="LAST_COMMIT_MESSAGE" value="Tests" />
   </component>
 </project>
