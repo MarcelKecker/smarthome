@@ -47,6 +47,18 @@ public class SmartHomeApp extends Application {
     private TextArea logArea;
     private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
+    public RoomService getRoomService() {
+        return roomService;
+    }
+
+    public DeviceService getDeviceService() {
+        return deviceService;
+    }
+
+    public ScenarioService getScenarioService() {
+        return scenarioService;
+    }
+
     private void log(String message) {
         if (logArea != null) {
             String timestamp = LocalTime.now().format(timeFormatter);
