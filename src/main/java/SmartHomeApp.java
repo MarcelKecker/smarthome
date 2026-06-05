@@ -413,7 +413,7 @@ public class SmartHomeApp extends Application {
 
                 for (Scenario scenario : scenarioService.getScenarios()) {
                     for (Command cmd : scenario.getCommands()) {
-                        if (cmd.getDevice().equals(gerät)) {
+                        if (cmd.getDevice() != null && cmd.getDevice().getId().equals(gerät.getId())) {
                             isUsedInScenario = true;
                             scenarioName = scenario.getName();
                             break;
@@ -794,7 +794,7 @@ public class SmartHomeApp extends Application {
                 // LOGIK: Prüfen, ob noch Geräte diesem Raum zugeordnet sind
                 boolean roomHasDevices = false;
                 for (Device device : deviceService.getDevices()) {
-                    if (device.getRoom() != null && device.getRoom().equals(room)) {
+                    if (device.getRoom() != null && device.getRoom().getName().equals(room.getName())) {
                         roomHasDevices = true;
                         break;
                     }
