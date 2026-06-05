@@ -11,7 +11,9 @@ public class Scenario {
     private String description;
     private List<Command> commands;
 
-    public Scenario() {}
+    public Scenario() {
+        this.commands = new ArrayList<>();
+    }
 
     public Scenario(String name, String description) {
         this.name = name;

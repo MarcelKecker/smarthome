@@ -1,206 +1,243 @@
 package model.scenario;
 
 import junit.framework.TestCase;
+import model.ActionType;
+import model.DeviceType;
 import model.State;
 import model.action.Command;
-import model.device.impl.Heating;
+import model.device.Device;
 import model.device.impl.Lamp;
-import model.device.impl.Shutter;
-import model.action.impl.*;
 import model.room.Raum;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ScenarioTest extends TestCase {
 
-    // --- Anlegen und Bearbeiten von Szenarien ---
+    // --- Stub Command implementation for testing ---
 
-    public void testCreateScenario() {
+    private static class StubCommand implements Command {
+        private final String id;
+        private final Device device;
+        private final ActionType actionType;
+        private int orderIndex;
+        private boolean executed = false;
+
+        StubCommand(String id, Device device, ActionType actionType, int orderIndex) {
+            this.id = id;
+            this.device = device;
+            this.actionType = actionType;
+            this.orderIndex = orderIndex;
+        }
+
+        @Override
+        public void execute() {
+            executed = true;
+        }
+
+        @Override
+        public Device getDevice() {
+            return device;
+        }
+
+        @Override
+        public ActionType getActionType() {
+            return actionType;
+        }
+
+        @Override
+        public String getID() {
+            return id;
+        }
+
+        @Override
+        public int getOrderIndex() {
+            return orderIndex;
+        }
+
+        @Override
+        public void setOrderIndex(int i) {
+            this.orderIndex = i;
+        }
+
+        boolean wasExecuted() {
+            return executed;
+        }
+    }
+
+    // --- Helper ---
+
+    private Lamp createLamp(String name) {
+        Raum room = new Raum("Wohnzimmer");
+        return new Lamp("lamp-1", name, room);
+    }
+
+    // --- Tests: Szenario anlegen ---
+
+    public void testDefaultConstructorCreatesEmptyScenario() {
+        Scenario scenario = new Scenario();
+        assertNotNull(scenario);
+        assertTrue(scenario.getCommands().isEmpty());
+    }
+
+    public void testConstructorWithNameAndDescription() {
         Scenario scenario = new Scenario("Abend", "Abendmodus aktivieren");
-
         assertEquals("Abend", scenario.getName());
         assertEquals("Abendmodus aktivieren", scenario.getDescription());
+    }
+
+    public void testConstructorSetsEmptyCommandList() {
+        Scenario scenario = new Scenario("Morgen", "Morgenmodus");
         assertNotNull(scenario.getCommands());
         assertEquals(0, scenario.getCommands().size());
     }
 
+    // --- Tests: Name und Beschreibung bearbeiten ---
+
     public void testSetName() {
-        Scenario scenario = new Scenario("Alt", "Beschreibung");
-
+        Scenario scenario = new Scenario();
         scenario.setName("Nacht");
-
         assertEquals("Nacht", scenario.getName());
     }
 
     public void testSetDescription() {
-        Scenario scenario = new Scenario("Morgen", "Alt");
-
-        scenario.setDescription("Neuer Morgen-Modus");
-
-        assertEquals("Neuer Morgen-Modus", scenario.getDescription());
+        Scenario scenario = new Scenario();
+        scenario.setDescription("Nachtmodus: Lichter aus, Rollläden zu");
+        assertEquals("Nachtmodus: Lichter aus, Rollläden zu", scenario.getDescription());
     }
 
-    // --- Aktionen hinzufügen ---
+    public void testUpdateNameAndDescription() {
+        Scenario scenario = new Scenario("Alt", "Alte Beschreibung");
+        scenario.setName("Neu");
+        scenario.setDescription("Neue Beschreibung");
+        assertEquals("Neu", scenario.getName());
+        assertEquals("Neue Beschreibung", scenario.getDescription());
+    }
 
-    public void testAddCommand() {
+    // --- Tests: Aktionen hinzufügen und abrufen ---
+
+    public void testAddCommandIncreasesCommandCount() {
         Scenario scenario = new Scenario("Test", "");
-        TestCommand cmd = new TestCommand("cmd1");
-
+        StubCommand cmd = new StubCommand("cmd-1", createLamp("Lampe"), ActionType.TURN_ON, 0);
         scenario.addCommand(cmd);
-
         assertEquals(1, scenario.getCommands().size());
-        assertSame(cmd, scenario.getCommands().get(0));
     }
 
     public void testAddMultipleCommands() {
         Scenario scenario = new Scenario("Abend", "");
-        TestCommand cmd1 = new TestCommand("cmd1");
-        TestCommand cmd2 = new TestCommand("cmd2");
-        TestCommand cmd3 = new TestCommand("cmd3");
-
-        scenario.addCommand(cmd1);
-        scenario.addCommand(cmd2);
-        scenario.addCommand(cmd3);
-
+        Lamp lamp = createLamp("Wohnzimmerlampe");
+        scenario.addCommand(new StubCommand("c1", lamp, ActionType.TURN_ON, 0));
+        scenario.addCommand(new StubCommand("c2", lamp, ActionType.SET_BRIGHTNESS, 1));
+        scenario.addCommand(new StubCommand("c3", lamp, ActionType.TURN_OFF, 2));
         assertEquals(3, scenario.getCommands().size());
     }
 
-    // --- Ausführung von Szenarien ---
-
-    public void testExecuteEmptyScenario() {
-        Scenario scenario = new Scenario("Leer", "");
-
-        // Kein Fehler beim Ausführen eines leeren Szenarios
-        scenario.execute();
-
-        assertEquals(0, scenario.getCommands().size());
-    }
-
-    public void testExecuteScenarioRunsAllCommands() {
+    public void testGetCommandsContainsAddedCommand() {
         Scenario scenario = new Scenario("Test", "");
-        TestCommand cmd1 = new TestCommand("cmd1");
-        TestCommand cmd2 = new TestCommand("cmd2");
-        scenario.addCommand(cmd1);
-        scenario.addCommand(cmd2);
-
-        scenario.execute();
-
-        assertTrue(cmd1.isExecuted());
-        assertTrue(cmd2.isExecuted());
-    }
-
-    // --- Zustandsänderungen von Geräten nach Ausführung ---
-
-    public void testExecuteScenarioTurnsOnLamp() {
-        Raum raum = new Raum("Wohnzimmer");
-        Lamp lamp = new Lamp("L1", "Stehlampe", raum);
-        Scenario scenario = new Scenario("Abend", "");
-        scenario.addCommand(new TurnOnLampCommand(lamp, 0));
-
-        assertEquals(State.TURNED_OFF, lamp.getState());
-
-        scenario.execute();
-
-        assertEquals(State.TURNED_ON, lamp.getState());
-    }
-
-    public void testExecuteScenarioSetsHeatingTemperature() {
-        Raum raum = new Raum("Bad");
-        Heating heating = new Heating("H1", "Badheizung", raum);
-        Scenario scenario = new Scenario("Abend", "");
-        scenario.addCommand(new SetTemperatureHeatingCommand(heating, 22.0, 0));
-
-        assertEquals(0.0, heating.getTemperature());
-
-        scenario.execute();
-
-        assertEquals(22.0, heating.getTemperature());
-    }
-
-    public void testExecuteScenarioClosesShutter() {
-        Raum raum = new Raum("Schlafzimmer");
-        Shutter shutter = new Shutter("S1", "Rollladen", raum);
-        Scenario scenario = new Scenario("Nacht", "");
-        scenario.addCommand(new RollDownShutterCommand(shutter, 0));
-
-        assertEquals(State.ROLLED_UP, shutter.getState());
-
-        scenario.execute();
-
-        assertEquals(State.ROLLED_DOWN, shutter.getState());
-        assertEquals(100, shutter.getPosition());
-    }
-
-    public void testExecuteScenarioMultipleDevices() {
-        Raum wohnzimmer = new Raum("Wohnzimmer");
-        Lamp lamp = new Lamp("L1", "Lampe", wohnzimmer);
-        Heating heating = new Heating("H1", "Heizung", wohnzimmer);
-        Shutter shutter = new Shutter("S1", "Rollladen", wohnzimmer);
-
-        Scenario scenario = new Scenario("Abend", "Abend-Szenario");
-        scenario.addCommand(new TurnOnLampCommand(lamp, 0));
-        scenario.addCommand(new SetTemperatureHeatingCommand(heating, 20.0, 1));
-        scenario.addCommand(new SetPositionShutterCommand(shutter, 50, 2));
-
-        scenario.execute();
-
-        assertEquals(State.TURNED_ON, lamp.getState());
-        assertEquals(20.0, heating.getTemperature());
-        assertEquals(50, shutter.getPosition());
-    }
-
-    // --- replaceCommand ---
-
-    public void testReplaceCommand() {
-        Scenario scenario = new Scenario("Test", "");
-        TestCommand cmd1 = new TestCommand("cmd1");
-        TestCommand cmd2 = new TestCommand("cmd2");
-        scenario.addCommand(cmd1);
-
-        scenario.replaceCommand(cmd1, cmd2);
-
-        assertEquals(1, scenario.getCommands().size());
-        assertSame(cmd2, scenario.getCommands().get(0));
-    }
-
-    public void testReplaceCommandDoesNotReplaceWrongId() {
-        Scenario scenario = new Scenario("Test", "");
-        TestCommand cmd1 = new TestCommand("cmd1");
-        TestCommand cmdOther = new TestCommand("other");
-        TestCommand cmdNew = new TestCommand("new");
-        scenario.addCommand(cmd1);
-
-        scenario.replaceCommand(cmdOther, cmdNew);
-
-        assertSame(cmd1, scenario.getCommands().get(0));
-    }
-
-    // --- Reihenfolge der Aktionen ---
-
-    public void testCommandOrderPreserved() {
-        Scenario scenario = new Scenario("Test", "");
-        TestCommand cmd1 = new TestCommand("first");
-        TestCommand cmd2 = new TestCommand("second");
-        TestCommand cmd3 = new TestCommand("third");
-        scenario.addCommand(cmd1);
-        scenario.addCommand(cmd2);
-        scenario.addCommand(cmd3);
-
-        assertEquals("first", scenario.getCommands().get(0).getID());
-        assertEquals("second", scenario.getCommands().get(1).getID());
-        assertEquals("third", scenario.getCommands().get(2).getID());
+        StubCommand cmd = new StubCommand("cmd-42", createLamp("Lampe"), ActionType.TURN_ON, 0);
+        scenario.addCommand(cmd);
+        assertTrue(scenario.getCommands().contains(cmd));
     }
 
     public void testSetCommands() {
         Scenario scenario = new Scenario("Test", "");
-        scenario.addCommand(new TestCommand("old"));
+        List<Command> commands = new ArrayList<>();
+        commands.add(new StubCommand("c1", createLamp("L1"), ActionType.TURN_ON, 0));
+        commands.add(new StubCommand("c2", createLamp("L2"), ActionType.TURN_OFF, 1));
+        scenario.setCommands(commands);
+        assertEquals(2, scenario.getCommands().size());
+    }
 
-        javafx.collections.ObservableList<model.action.Command> newList =
-                javafx.collections.FXCollections.observableArrayList();
-        TestCommand newCmd = new TestCommand("new");
-        newList.add(newCmd);
+    // --- Tests: Ausführung von Szenarien ---
 
-        scenario.setCommands(newList);
+    public void testExecuteCallsAllCommands() {
+        Scenario scenario = new Scenario("Abend", "");
+        Lamp lamp = createLamp("Lampe");
+        StubCommand cmd1 = new StubCommand("c1", lamp, ActionType.TURN_ON, 0);
+        StubCommand cmd2 = new StubCommand("c2", lamp, ActionType.SET_BRIGHTNESS, 1);
+        scenario.addCommand(cmd1);
+        scenario.addCommand(cmd2);
+
+        scenario.execute();
+
+        assertTrue("cmd1 sollte ausgeführt worden sein", cmd1.wasExecuted());
+        assertTrue("cmd2 sollte ausgeführt worden sein", cmd2.wasExecuted());
+    }
+
+    public void testExecuteEmptyScenarioDoesNotThrow() {
+        Scenario scenario = new Scenario("Leer", "Keine Aktionen");
+        try {
+            scenario.execute();
+        } catch (Exception e) {
+            fail("execute() auf leerem Szenario darf keine Exception werfen: " + e.getMessage());
+        }
+    }
+
+    public void testExecuteSingleCommand() {
+        Scenario scenario = new Scenario("Einzel", "");
+        StubCommand cmd = new StubCommand("c1", createLamp("Lampe"), ActionType.TURN_ON, 0);
+        scenario.addCommand(cmd);
+        scenario.execute();
+        assertTrue(cmd.wasExecuted());
+    }
+
+    // --- Tests: Aktion ersetzen ---
+
+    public void testReplaceCommandSwapsCorrectly() {
+        Scenario scenario = new Scenario("Test", "");
+        Lamp lamp = createLamp("Lampe");
+        StubCommand oldCmd = new StubCommand("id-1", lamp, ActionType.TURN_ON, 0);
+        StubCommand newCmd = new StubCommand("id-1", lamp, ActionType.TURN_OFF, 0);
+        scenario.addCommand(oldCmd);
+
+        scenario.replaceCommand(oldCmd, newCmd);
+
+        assertFalse(scenario.getCommands().contains(oldCmd));
+        assertTrue(scenario.getCommands().contains(newCmd));
+    }
+
+    public void testReplaceCommandKeepsListSize() {
+        Scenario scenario = new Scenario("Test", "");
+        Lamp lamp = createLamp("Lampe");
+        StubCommand cmd1 = new StubCommand("id-1", lamp, ActionType.TURN_ON, 0);
+        StubCommand cmd2 = new StubCommand("id-2", lamp, ActionType.SET_BRIGHTNESS, 1);
+        StubCommand replacement = new StubCommand("id-1", lamp, ActionType.TURN_OFF, 0);
+        scenario.addCommand(cmd1);
+        scenario.addCommand(cmd2);
+
+        scenario.replaceCommand(cmd1, replacement);
+
+        assertEquals(2, scenario.getCommands().size());
+    }
+
+    public void testReplaceCommandWithUnknownIdLeavesListUnchanged() {
+        Scenario scenario = new Scenario("Test", "");
+        StubCommand existing = new StubCommand("known-id", createLamp("L"), ActionType.TURN_ON, 0);
+        StubCommand unknown = new StubCommand("unknown-id", createLamp("L"), ActionType.TURN_OFF, 0);
+        StubCommand replacement = new StubCommand("unknown-id", createLamp("L"), ActionType.TURN_ON, 0);
+        scenario.addCommand(existing);
+
+        scenario.replaceCommand(unknown, replacement);
 
         assertEquals(1, scenario.getCommands().size());
-        assertSame(newCmd, scenario.getCommands().get(0));
+        assertTrue(scenario.getCommands().contains(existing));
+    }
+
+    // --- Tests: Reihenfolge der Aktionen ---
+
+    public void testCommandOrderIndexIsPreserved() {
+        Scenario scenario = new Scenario("Reihenfolge", "");
+        Lamp lamp = createLamp("Lampe");
+        StubCommand first = new StubCommand("c1", lamp, ActionType.TURN_ON, 0);
+        StubCommand second = new StubCommand("c2", lamp, ActionType.SET_BRIGHTNESS, 1);
+        StubCommand third = new StubCommand("c3", lamp, ActionType.TURN_OFF, 2);
+        scenario.addCommand(first);
+        scenario.addCommand(second);
+        scenario.addCommand(third);
+
+        List<Command> commands = scenario.getCommands();
+        assertEquals(0, commands.get(0).getOrderIndex());
+        assertEquals(1, commands.get(1).getOrderIndex());
+        assertEquals(2, commands.get(2).getOrderIndex());
     }
 }

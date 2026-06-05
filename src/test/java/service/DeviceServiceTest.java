@@ -48,4 +48,25 @@ public class DeviceServiceTest extends TestCase {
 
         assertTrue(service.getDevices().contains(heating));
     }
+
+    public void testClearRemovesAllDevices() {
+        DeviceService service = new DeviceService();
+        service.addDevice(new Lamp("L1", "Lampe", null));
+        service.addDevice(new Heating("H1", "Heizung", null));
+
+        service.clear();
+
+        assertEquals(0, service.getDevices().size());
+    }
+
+    public void testSetDevicesReplacesExistingList() {
+        DeviceService service = new DeviceService();
+        service.addDevice(new Lamp("L1", "Alt", null));
+
+        Lamp newLamp = new Lamp("L2", "Neu", null);
+        service.setDevices(java.util.List.of(newLamp));
+
+        assertEquals(1, service.getDevices().size());
+        assertSame(newLamp, service.getDevices().get(0));
+    }
 }

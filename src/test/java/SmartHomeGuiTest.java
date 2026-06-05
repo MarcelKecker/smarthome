@@ -1,6 +1,6 @@
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import model.ActionType;
 import model.State;
 import model.action.impl.TurnOnLampCommand;
 import model.device.impl.Lamp;
@@ -8,7 +8,7 @@ import model.room.Raum;
 import model.scenario.Scenario;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
-import org.testfx.util.WaitForAsyncUtils; // Wichtig für Timing-Probleme
+import org.testfx.util.WaitForAsyncUtils;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -28,7 +28,7 @@ public class SmartHomeGuiTest extends ApplicationTest {
         app = new SmartHomeApp();
         app.start(stage);
 
-        // Daten-Setup (Sicherstellen, dass UI-Änderungen durch Services sauber verarbeitet werden)
+        // Daten-Setup [cite: 46, 47, 48]
         Raum room = new Raum("Testzimmer");
         app.getRoomService().addRoom(room);
 
@@ -36,7 +36,11 @@ public class SmartHomeGuiTest extends ApplicationTest {
         app.getDeviceService().addDevice(testLamp);
 
         testScenario = new Scenario("Abend-Test", "Automatisch erstelltes Testszenario");
-        testScenario.getCommands().add(new TurnOnLampCommand(testLamp, 0));
+
+        // ANGEPASST: Konstruktor-Signatur an die Struktur der CommandFactory angepasst
+        // Parameter: context (null), device (testLamp), actionType (TURN_ON), orderIndex (0)
+        testScenario.getCommands().add(new TurnOnLampCommand(null, testLamp, ActionType.TURN_ON, 0));
+
         app.getScenarioService().addScenario(testScenario);
     }
 
@@ -51,11 +55,10 @@ public class SmartHomeGuiTest extends ApplicationTest {
         TableView<?> table = lookup(".table-view").queryAs(TableView.class);
         int initialCount = table.getItems().size();
 
-        // 2. Formular öffnen
+        // 2. Formular öffnen [cite: 90]
         clickOn("Neu");
 
-        // 3. Textfeld fokussieren und beschreiben
-        // TIPP: Wenn möglich, ersetze ".text-field" durch eine konkrete ID wie "#fxIdDesFeldes"
+        // 3. Textfeld fokussieren und beschreiben [cite: 98]
         clickOn(".text-field").write("GUI-Testszenario");
 
         // 4. Erstellen bestätigen
@@ -74,14 +77,15 @@ public class SmartHomeGuiTest extends ApplicationTest {
 
         clickOn("🎬 Szenarien");
 
-        // Sicherstellen, dass der Eintrag in der Tabelle geklickt werden kann
+        // Sicherstellen, dass der Eintrag in der Tabelle geklickt werden kann [cite: 89]
         clickOn("Abend-Test");
-        clickOn("Ausführen");
+        clickOn("Ausführen"); // [cite: 93]
 
         // Warten, da Command-Ausführungen oft in separaten Threads oder leicht verzögert laufen
         WaitForAsyncUtils.sleep(200, TimeUnit.MILLISECONDS);
         WaitForAsyncUtils.waitForFxEvents();
 
+        // Überprüft die funktionale Anforderung der Zustandsänderung in der GUI [cite: 51, 115]
         assertEquals(State.TURNED_ON, testLamp.getState());
     }
 }

@@ -39,17 +39,9 @@ public class CommandFactoryTest extends TestCase {
         lamp.setState(State.TURNED_ON);
         Command cmd = CommandFactory.create(lamp, ActionType.TURN_OFF, null, 0);
 
-        assertTrue(cmd instanceof TurnOFfLampCommand);
+        assertTrue(cmd instanceof TurnOFfLampCommand); // Exakt wie das "OFf" in deiner Factory
         cmd.execute();
         assertEquals(State.TURNED_OFF, lamp.getState());
-    }
-
-    public void testCreateSetBrightnessLampCommand() {
-        Command cmd = CommandFactory.create(lamp, ActionType.SET_BRIGHTNESS, "75", 0);
-
-        assertTrue(cmd instanceof SetBrightnessLampCommand);
-        cmd.execute();
-        assertEquals(75, lamp.getBrightness());
     }
 
     // --- Heizung ---
@@ -69,14 +61,6 @@ public class CommandFactoryTest extends TestCase {
         assertTrue(cmd instanceof TurnOffHeatingCommand);
         cmd.execute();
         assertEquals(State.TURNED_OFF, heating.getState());
-    }
-
-    public void testCreateSetTemperatureHeatingCommand() {
-        Command cmd = CommandFactory.create(heating, ActionType.SET_TEMPERATURE, "21.5", 0);
-
-        assertTrue(cmd instanceof SetTemperatureHeatingCommand);
-        cmd.execute();
-        assertEquals(21.5, heating.getTemperature());
     }
 
     // --- Rollladen ---
@@ -101,22 +85,46 @@ public class CommandFactoryTest extends TestCase {
         assertEquals(100, shutter.getPosition());
     }
 
+
+    // --- Parametrisierte Wert-Befehle ---
+
+    public void testCreateSetBrightnessLampCommand() {
+        lamp.setState(State.TURNED_ON);
+        Command cmd = CommandFactory.create(lamp, ActionType.SET_BRIGHTNESS, "70", 0);
+
+        assertTrue(cmd instanceof SetBrightnessLampCommand);
+        cmd.execute();
+        assertEquals(70, ((Lamp) cmd.getDevice()).getBrightness());
+    }
+
+    public void testCreateSetTemperatureHeatingCommand() {
+        heating.setState(State.TURNED_ON);
+        Command cmd = CommandFactory.create(heating, ActionType.SET_TEMPERATURE, "21.5", 0);
+
+        assertTrue(cmd instanceof SetTemperatureHeatingCommand);
+        cmd.execute();
+        assertEquals(21.5, ((Heating) cmd.getDevice()).getTemperature(), 0.001);
+    }
+
     public void testCreateSetPositionShutterCommand() {
-        Command cmd = CommandFactory.create(shutter, ActionType.SET_POSITION, "40", 0);
+        shutter.setState(State.ROLLED_DOWN);
+        Command cmd = CommandFactory.create(shutter, ActionType.SET_POSITION, "50", 0);
 
         assertTrue(cmd instanceof SetPositionShutterCommand);
         cmd.execute();
-        assertEquals(40, shutter.getPosition());
+        assertEquals(50, ((Shutter) cmd.getDevice()).getPosition());
     }
 
     // --- Fehlerfall ---
 
     public void testCreateInvalidCombinationThrowsException() {
         try {
+            // Testet eine ungültige Kombination (z.B. Lampe soll Temperatur ändern)
             CommandFactory.create(lamp, ActionType.SET_TEMPERATURE, "22", 0);
             fail("Erwartet: IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             assertNotNull(e.getMessage());
+            assertTrue(e.getMessage().contains("Invalid action type"));
         }
     }
 }
